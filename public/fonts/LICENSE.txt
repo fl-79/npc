@@ -1,0 +1,4 @@
+Fonts (SIL Open Font License 1.1), latin subsets from Google Fonts:
+- Nunito (Vernon Adams, Cyreal, Jacques Le Bailly) - variable weight 400-900
+- Silkscreen (Jason Kottke) - regular and bold
+License: https://openfontlicense.org

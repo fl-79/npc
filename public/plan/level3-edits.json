@@ -1,0 +1,115 @@
+{
+ "note": "Corrections to the DXF, confirmed by the plan's owner (Felicia) on 2026-10-21 from markups. Applied when the plan loads; the DXF and level3.json are untouched. Each entry says what and why. Shafts and the middle closet keep their walls and interior. The alcove doors into the two classrooms are real doors and stay.",
+ "remove_furniture": [
+  {
+   "id": "F792",
+   "why": "60x90 table standing in front of the photography room door, over the wall line; marked for removal"
+  },
+  {
+   "id": "F846",
+   "why": "recycling bin by the south core's north wall; marked for removal"
+  },
+  {
+   "id": "F612",
+   "why": "desk south of the middle block; marked for removal"
+  },
+  {
+   "id": "F652",
+   "why": "the chair of desk F612"
+  },
+  {
+   "id": "F529",
+   "why": "table between the north office door and the plotters; marked for removal"
+  },
+  {
+   "id": "F830",
+   "why": "desk standing in the gap of the south office's east wall; marked for removal"
+  },
+  {
+   "id": "F795",
+   "why": "table at the same spot as F830, one over the other in the DXF; removed with it"
+  },
+  {
+   "id": "F357",
+   "why": "desk drawn inside the closet south of the service chase; marked for removal"
+  },
+  {
+   "id": "F648",
+   "why": "the chair of that desk, standing in the closet's doorway"
+  },
+  {
+   "id": "F579",
+   "why": "SALA_Table_30x60in west of the north stair hall; marked for removal"
+  },
+  {
+   "id": "F602",
+   "why": "SALA_Table_24x64in against the north stair hall's glass; marked for removal"
+  }
+ ],
+ "remove_doors": [],
+ "add_walls": [
+  {
+   "bbox": [
+    19.7,
+    -34.4,
+    20.0,
+    -32.6
+   ],
+   "why": "closes the gap in the south office's east wall where the desk stood"
+  },
+  {
+   "bbox": [
+    20.6,
+    -14.5,
+    20.9,
+    -13.1
+   ],
+   "why": "the closet's east wall, too thin in the export to survive the raster; closes the closet"
+  },
+  {
+   "bbox": [
+    18.6,
+    -14.5,
+    20.9,
+    -14.25
+   ],
+   "why": "the closet's south wall, in which its double door sits"
+  }
+ ],
+ "unused_doors": [
+  {
+   "near": [
+    19.7,
+    -8.6
+   ],
+   "why": "door into the service closet in the middle of the floor; drawn, but the closet is not in regular use, so no one routes through it"
+  },
+  {
+   "near": [
+    19.7,
+    -14.8
+   ],
+   "why": "double door into the same closet; drawn, not used"
+  }
+ ],
+ "cut_walls": [
+  {
+   "bbox": [
+    20.55,
+    -24.7,
+    21.1,
+    -23.8
+   ],
+   "why": "short wall between the south stair hall's north wall and the elevator shaft; marked for removal"
+  },
+  {
+   "bbox": [
+    20.55,
+    1.6,
+    21.1,
+    3.2
+   ],
+   "why": "the same short wall in the north stair hall, between the shaft and the hall's south wall"
+  }
+ ]
+}

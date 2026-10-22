@@ -1,0 +1,447 @@
+{
+ "source": "tool/public/plan/level3.json",
+ "count": 33,
+ "flags": [
+  {
+   "id": "F335",
+   "kind": "counter",
+   "name": "Kitchen Counter 1",
+   "centre": [
+    27.45,
+    2.91
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.36 m2"
+   ]
+  },
+  {
+   "id": "F336",
+   "kind": "counter",
+   "name": "Kitchen Counter 2",
+   "centre": [
+    25.19,
+    3.48
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.53 m2"
+   ]
+  },
+  {
+   "id": "F338",
+   "kind": "counter",
+   "name": "Bar edge",
+   "centre": [
+    20.35,
+    -3.47
+   ],
+   "room": null,
+   "notes": [
+    "overlaps a wall or column by 0.21 m2",
+    "centre outside every room"
+   ]
+  },
+  {
+   "id": "F339",
+   "kind": "pinup",
+   "name": "Pinup Board",
+   "centre": [
+    20.3,
+    -3.47
+   ],
+   "room": null,
+   "notes": [
+    "overlaps a wall or column by 0.07 m2",
+    "centre outside every room"
+   ]
+  },
+  {
+   "id": "F342",
+   "kind": "other",
+   "name": "Family5",
+   "centre": [
+    23.1,
+    0.63
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.48 m2"
+   ]
+  },
+  {
+   "id": "F353",
+   "kind": "desk",
+   "name": "SALA_Desk_36x60in",
+   "centre": [
+    21.07,
+    -9.14
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.03 m2",
+    "within 0.6 m of door M_Single-Flush at (19.7, -8.6)"
+   ]
+  },
+  {
+   "id": "F354",
+   "kind": "desk",
+   "name": "SALA_Desk_36x60in",
+   "centre": [
+    21.07,
+    -10.68
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.08 m2"
+   ]
+  },
+  {
+   "id": "F355",
+   "kind": "desk",
+   "name": "SALA_Desk_36x60in",
+   "centre": [
+    21.07,
+    -13.75
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "within 0.6 m of door M_Door-Double-Flush_Panel at (19.7, -14.8)"
+   ]
+  },
+  {
+   "id": "F357",
+   "kind": "desk",
+   "name": "SALA_Desk_36x60in",
+   "centre": [
+    19.8,
+    -14.03
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.03 m2",
+    "within 0.6 m of door M_Door-Double-Flush_Panel at (19.7, -14.8)"
+   ]
+  },
+  {
+   "id": "F409",
+   "kind": "desk",
+   "name": "SALA_Desk_32x60in",
+   "centre": [
+    15.43,
+    -34.42
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.18 m2"
+   ]
+  },
+  {
+   "id": "F410",
+   "kind": "desk",
+   "name": "SALA_Desk_32x60in",
+   "centre": [
+    15.43,
+    -32.9
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.15 m2",
+    "within 0.6 m of door HM_Frame_Door_-_Interior_Sin at (17.5, -31.4)"
+   ]
+  },
+  {
+   "id": "F411",
+   "kind": "desk",
+   "name": "SALA_Desk_32x60in",
+   "centre": [
+    15.43,
+    -31.38
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.15 m2",
+    "within 0.6 m of door HM_Frame_Door_-_Interior_Sin at (17.5, -31.4)"
+   ]
+  },
+  {
+   "id": "F412",
+   "kind": "desk",
+   "name": "SALA_Desk_32x60in",
+   "centre": [
+    15.43,
+    -28.33
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.16 m2"
+   ]
+  },
+  {
+   "id": "F416",
+   "kind": "pinup",
+   "name": "SALA_Pinup_Board",
+   "centre": [
+    13.74,
+    -34.86
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.10 m2"
+   ]
+  },
+  {
+   "id": "F506",
+   "kind": "desk",
+   "name": "SALA_Desk_32x60in",
+   "centre": [
+    7.6,
+    12.85
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.15 m2"
+   ]
+  },
+  {
+   "id": "F507",
+   "kind": "desk",
+   "name": "SALA_Desk_32x60in",
+   "centre": [
+    10.65,
+    12.85
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.15 m2"
+   ]
+  },
+  {
+   "id": "F508",
+   "kind": "desk",
+   "name": "SALA_Desk_32x60in",
+   "centre": [
+    12.17,
+    12.85
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.15 m2"
+   ]
+  },
+  {
+   "id": "F527",
+   "kind": "printer",
+   "name": "HP_Designjet_T770_plotter_17871",
+   "centre": [
+    15.43,
+    12.34
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.18 m2"
+   ]
+  },
+  {
+   "id": "F528",
+   "kind": "printer",
+   "name": "HP_Designjet_T770_plotter_17871",
+   "centre": [
+    15.43,
+    8.79
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.14 m2",
+    "within 0.6 m of door HM_Frame_Door_-_Interior_Sin at (17.5, 9.5)"
+   ]
+  },
+  {
+   "id": "F529",
+   "kind": "table",
+   "name": "SALA_Table_24x64in",
+   "centre": [
+    15.5,
+    10.56
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.08 m2",
+    "within 0.6 m of door HM_Frame_Door_-_Interior_Sin at (17.5, 9.5)"
+   ]
+  },
+  {
+   "id": "F540",
+   "kind": "desk",
+   "name": "SALA_Desk_30x60in",
+   "centre": [
+    9.12,
+    12.87
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.15 m2"
+   ]
+  },
+  {
+   "id": "F541",
+   "kind": "desk",
+   "name": "SALA_Desk_30x60in",
+   "centre": [
+    15.46,
+    -29.85
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.15 m2",
+    "within 0.6 m of door HM_Frame_Door_-_Interior_Sin at (17.5, -31.4)"
+   ]
+  },
+  {
+   "id": "F577",
+   "kind": "table",
+   "name": "SALA_Table_24x64in",
+   "centre": [
+    15.5,
+    6.34
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.27 m2"
+   ]
+  },
+  {
+   "id": "F578",
+   "kind": "table",
+   "name": "Cutting Table",
+   "centre": [
+    16.08,
+    1.93
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.24 m2"
+   ]
+  },
+  {
+   "id": "F582",
+   "kind": "computers",
+   "name": "SALA_Table_Computer stations",
+   "centre": [
+    15.93,
+    -12.14
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.14 m2"
+   ]
+  },
+  {
+   "id": "F602",
+   "kind": "table",
+   "name": "SALA_Table_24x64in",
+   "centre": [
+    18.36,
+    3.56
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "within 0.6 m of door M_Door-Curtain-Wall-Single-G at (19.3, 1.9)"
+   ]
+  },
+  {
+   "id": "F606",
+   "kind": "other",
+   "name": "Family11",
+   "centre": [
+    15.51,
+    5.98
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.04 m2"
+   ]
+  },
+  {
+   "id": "F609",
+   "kind": "pinup",
+   "name": "SALA_Pinup_Board",
+   "centre": [
+    16.17,
+    -4.65
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.06 m2"
+   ]
+  },
+  {
+   "id": "F611",
+   "kind": "counter",
+   "name": "Casework1",
+   "centre": [
+    19.39,
+    -19.92
+   ],
+   "room": "Studio floor",
+   "notes": [
+    "overlaps a wall or column by 0.17 m2"
+   ]
+  },
+  {
+   "id": "F613",
+   "kind": "counter",
+   "name": "Kitchen Counter 3",
+   "centre": [
+    26.53,
+    -28.95
+   ],
+   "room": "Photography room",
+   "notes": [
+    "overlaps a wall or column by 0.43 m2"
+   ]
+  },
+  {
+   "id": "F648",
+   "kind": "chair",
+   "name": "HermanMiller_Seating_ZephMultipurposeChairFullyAssembled",
+   "centre": [
+    19.61,
+    -14.63
+   ],
+   "room": null,
+   "notes": [
+    "centre outside every room",
+    "chair within 0.6 m of door M_Door-Double-Flush_Panel"
+   ]
+  },
+  {
+   "id": "F792",
+   "kind": "table",
+   "name": "SALA_Table_60x90in",
+   "centre": [
+    25.8,
+    -27.09
+   ],
+   "room": null,
+   "notes": [
+    "overlaps a wall or column by 0.26 m2",
+    "centre outside every room",
+    "within 0.6 m of door M_Single-Flush at (26.3, -26.7)"
+   ]
+  },
+  {
+   "id": "F803",
+   "kind": "table",
+   "name": "SALA_Table_30x60in",
+   "centre": [
+    20.36,
+    11.21
+   ],
+   "room": "Northeast classroom",
+   "notes": [
+    "overlaps a wall or column by 0.15 m2"
+   ]
+  }
+ ]
+}

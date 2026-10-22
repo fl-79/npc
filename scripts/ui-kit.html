@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>UI kit</title>
+  <link rel="stylesheet" href="/src/style.css" />
+  <style>
+    /* undo the app grid so each control sits on its own, on a clear page */
+    html, body.pixel { height: auto; background: transparent; }
+    body.pixel { display: block; overflow: visible; padding: 20px; }
+    .kit { display: inline-block; padding: 6px 8px 8px 6px; margin: 0 12px 16px 0; vertical-align: top; }
+    .kit.band { background: #e9dcbd; }
+    .kit.panel { background: #f3e9d2; }
+    .w260 { width: 260px; } .w320 { width: 320px; } .w300 { width: 300px; }
+    textarea { width: 100%; font-size: 12px; padding: 6px 8px; resize: none; }
+    .row { display: flex; align-items: center; gap: 10px; }
+    .studio-row input[type=range] { min-width: 0; width: 100%; }
+    .kit .clock { white-space: nowrap; }
+    #transport { display: flex; border: 0; padding: 0; background: none !important; }
+  </style>
+</head>
+<body class="pixel">
+
+<!-- setup: each input with the title it sits under -->
+<div class="kit panel w260" id="use-textarea"><div class="sec-head">1 · What is being tested</div><textarea rows="2" placeholder="What is being tested: the day, the people, the event."></textarea></div>
+<div class="kit panel w260" id="goals-textarea"><div class="sec-sub">2 · Design goals <span class="muted">one per line</span></div><textarea rows="3" placeholder="First design goal&#10;Second design goal&#10;Third design goal"></textarea></div>
+<div class="kit panel w260" id="conditions-textarea"><div class="sec-head">3 · Conditions <span class="muted">what touches everyone</span></div><textarea rows="3" placeholder="A note about the day: a review coming up, a loud week."></textarea></div>
+<div class="kit panel w260" id="condition-sliders"><div class="sec-head">3 · Conditions <span class="muted">nudge if needed</span></div><div id="studio">
+  <label class="studio-row"><span>deadline pressure</span><input type="range" value="20"><b>20%</b></label>
+  <label class="studio-row"><span>noise-sensitive</span><input type="range" value="30"><b>30%</b></label>
+  <label class="studio-row"><span>crowd-sensitive</span><input type="range" value="30"><b>30%</b></label>
+  <label class="studio-row"><span>new to the building</span><input type="range" value="25"><b>25%</b></label>
+</div></div>
+<div class="kit panel w260" id="condition-slider"><label class="studio-row"><span>condition</span><input type="range" min="0" max="100" value="40"><b>40%</b></label></div>
+
+<!-- setup: group -->
+<div class="kit panel w260" id="archetype-card"><div class="sec-head">4 · Group</div><div class="card">
+  <div class="card-head"><input type="text" value="Archetype" class="card-name"><span class="muted small"><input type="number" value="40" class="n"> people · 25%</span></div>
+  <input type="range" value="25" class="share">
+  <div class="card-desc">A sentence on how this kind of person spends the day.</div>
+  <div class="qualities"><span>access <b>walking</b></span><span>sociability <b>mid</b></span><span>patience <b>mid</b></span><span>curiosity <b>high</b></span></div>
+</div></div>
+<div class="kit panel w260" id="archetype-settings"><div class="sec-head">4 · Group <span class="muted">archetype settings</span></div><div class="card">
+  <div class="card-head"><input type="text" value="Archetype" class="card-name"><span class="muted small"><input type="number" value="40" class="n"> people · 25%</span></div>
+  <input type="range" value="25" class="share">
+  <div class="card-edit">
+    <label>pattern <select><option>pattern</option></select></label>
+    <label>access <select><option>walking</option></select></label>
+    <label>Good Times % <input type="number" value="60" class="n"></label>
+    <label>kitchen % <input type="number" value="80" class="n"></label>
+    <label>prints % <input type="number" value="50" class="n"></label>
+    <label>patience <span class="rng"><input type="number" value="0.3"><input type="number" value="0.7"></span></label>
+    <label>curiosity <span class="rng"><input type="number" value="0.4"><input type="number" value="0.9"></span></label>
+    <label>sociability <span class="rng"><input type="number" value="0.2"><input type="number" value="0.6"></span></label>
+  </div>
+</div></div>
+<div class="kit panel w260" id="new-archetype"><div class="sec-head">4 · Group <span class="muted">add an archetype</span></div><input id="newtype" type="text" placeholder="new archetype in a sentence" style="width:100%" /></div>
+<div class="kit panel w260" id="individuals-select"><div class="sec-head">5 · Individuals <span class="muted">edited ones are pinned</span></div><select id="person-select"><option>pick a person</option></select></div>
+
+<!-- people drawer -->
+<div class="kit panel w260" id="people-search"><div class="sec-head">People</div><input id="cast-search" type="search" placeholder="Find a person" style="margin:0;width:100%" /></div>
+
+<!-- feed -->
+<div class="kit w320" id="feed-selects"><div class="panel-head win-head"><span>Feed</span><span><select><option>stream</option></select> <select><option>everyone</option></select></span><span class="win-arrow">&#9656;</span></div></div>
+
+<!-- transport -->
+<div class="kit band" id="seeds-input"><div id="transport"><span class="seed">× <input type="number" value="1" /> seeds</span></div></div>
+<div class="kit band" id="seed-input"><div id="transport"><div class="seed">seed <input type="number" value="11" /></div></div></div>
+<div class="kit band w260" id="scrubber"><div id="transport"><div class="clock">Fri 13:30</div><input id="scrub" type="range" value="30" /></div></div>
+
+<!-- summary: design suggestions, numbered on the plan -->
+<div class="kit panel w320" id="design-suggestions"><div class="sum-section">Next steps <span class="muted">numbered on the plan</span></div>
+  <div class="step-line"><span class="num">1</span><span class="stitle">A design suggestion</span><span class="muted">&#9656;</span></div>
+  <div class="step-line open"><span class="num">2</span><span class="stitle">A design suggestion</span><span class="muted">&#9662;</span></div>
+  <div class="step-body"><div class="detail">What the run showed, and what to change in the space.</div><div class="quote">"A remark from someone on the floor." <span class="muted">Person, 14:05</span></div><span class="tag infer">inferred</span></div>
+  <div class="step-line"><span class="num">3</span><span class="stitle">A design suggestion</span><span class="muted">&#9656;</span></div>
+</div>
+<div class="kit panel w320" id="design-suggestion"><div class="step-line"><span class="num">1</span><span class="stitle">A design suggestion</span><span class="muted">&#9656;</span></div></div>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Studio day</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <header id="top">
+    <div class="brand">Studio Day at SALA <span class="sub" id="plan-name">loading plan</span></div>
+    <div class="measures" id="measures"></div>
+    <div class="actions">
+      <button id="btn-download" title="Download the run as JSON">Download run</button>
+      <button id="btn-help" title="What the people do, and how to read the tool">?</button>
+    </div>
+  </header>
+
+  <aside id="left">
+    <div class="panel-head win-head" data-win="setup"><span>Setup</span><span class="muted small">use, goals, conditions, group</span><span class="win-arrow" title="Collapse or expand">&#9662;</span></div>
+    <div id="setup" class="list win-body">
+      <div class="sec">
+        <div class="sec-head">1 · What is being tested</div>
+        <textarea id="use" rows="2" placeholder="A typical Friday studio day: about 175 people, desk crits, Good Times from 6:30."></textarea>
+        <div class="sec-sub">2 · Design goals <span class="muted">one per line</span></div>
+        <textarea id="goals" rows="3" placeholder="Every desk has easy access to the amenities&#10;Working and collaborating at the desks is comfortable"></textarea>
+        <div class="row-actions"><button id="btn-brief">propose the group from this</button><span class="muted small" id="api-status"></span></div>
+        <div class="muted small" id="brief-status"></div>
+      </div>
+      <div class="sec">
+        <div class="sec-head">3 · Conditions <span class="muted">what touches everyone on this day</span></div>
+        <div id="studio"></div>
+      </div>
+      <div class="sec">
+        <div class="sec-head">4 · Group <span class="muted small" id="spec-source"></span></div>
+        <div id="cards"></div>
+        <div id="warnings"></div>
+        <div class="row-actions"><input id="newtype" type="text" placeholder="new archetype in a sentence" /><button id="btn-addtype">add</button></div>
+        <div class="row-actions"><button id="btn-makecast">make cast</button><span class="muted small">regenerates people from the group; pinned ones stay</span></div>
+        <div id="distribution"></div>
+      </div>
+      <div class="sec">
+        <div class="sec-head">5 · Individuals <span class="muted">edited ones are pinned</span></div>
+        <select id="person-select"><option value="">pick a person</option></select>
+      </div>
+    </div>
+    <div id="people" class="win collapsed">
+      <div class="panel-head win-head" id="btn-people" title="Everyone on the floor: find, spotlight, follow, edit"><span>People <span class="muted" id="cast-count"></span></span><span class="win-arrow" title="Collapse or expand">&#9656;</span></div>
+      <div class="win-body" id="people-body">
+        <div class="filters" id="cast-filters"></div>
+        <input id="cast-search" type="search" placeholder="Find a person" />
+        <div id="cast-list" class="list"></div>
+        <div id="spotlight" class="spotlight hidden"></div>
+      </div>
+    </div>
+  </aside>
+
+  <main id="stage-wrap">
+    <canvas id="stage"></canvas>
+    <div id="tooltip" class="tooltip hidden"></div>
+    <div id="thoughts" class="thoughts hidden"></div>
+    <div id="progress" class="progress hidden"><div class="bar"><i></i></div><span class="muted" id="progress-text">computing</span></div>
+  </main>
+
+  <aside id="right">
+    <div class="panel-head win-head" data-win="summary"><span>Summary</span><button id="btn-pick" title="Spotlight and follow one person whose day shaped these findings">follow someone</button><span class="win-arrow" title="Collapse or expand">&#9662;</span></div>
+    <div id="summary" class="list win-body"></div>
+    <div id="feed-box">
+      <div class="panel-head win-head" id="feed-head"><span>Feed <span class="muted" id="feed-count"></span></span>
+        <span id="feed-controls">
+          <select id="feed-view" title="Stream of remarks, or grouped by topic"><option value="stream">stream</option><option value="topics">by topic</option></select>
+          <select id="feed-scope" title="Whose remarks"><option value="all">everyone</option><option value="spotlight">spotlight</option><option value="group">cast group</option><option value="profs">profs</option><option value="low">low moods</option></select>
+        </span>
+        <span id="feed-arrow" class="win-arrow" title="Collapse or expand">▸</span>
+      </div>
+      <div id="feed" class="list"></div>
+    </div>
+  </aside>
+
+  <footer id="transport">
+    <button id="btn-run" class="primary" title="Compute the whole afternoon, then open the summary">Run</button>
+    <span class="seed">× <input id="runs" type="number" value="1" min="1" max="5" title="How many seeds to run; the first one is playable" /> seeds</span>
+    <span class="sep"></span>
+    <div class="clock" id="clock">Fri 13:30</div>
+    <button id="btn-play" class="icon" title="Play / pause the recorded run (space)">&#9654;</button>
+    <button id="btn-stop" class="icon" title="Back to 13:30">&#9632;</button>
+    <button id="btn-loop" class="icon toggle" title="Loop the playback">&#8635;</button>
+    <div class="speed" id="speed">
+      <button data-speed="60" class="on">1 min/s</button>
+      <button data-speed="240">4 min/s</button>
+      <button data-speed="600">10 min/s</button>
+    </div>
+    <input id="scrub" type="range" min="0" max="21600" step="60" value="0" />
+    <button id="btn-again" title="Same cast, next run: people remember the space">run again</button>
+    <span class="muted" id="run-label">run 1</span>
+    <div class="seed">seed <input id="seed" type="number" value="11" min="1" max="9999" /> <button id="btn-newcast" title="New cast from the group with this seed">new cast</button></div>
+  </footer>
+
+  <div id="help" class="help hidden">
+    <h2>Studio day</h2>
+    <p>One Friday afternoon on Lasserre Level 3, 13:30 to 19:30, computed in a few seconds and then played back. The plan is the real floor from the Revit export; people are generated from the group you set up.</p>
+    <h3>What people do</h3>
+    <p>Each student has five needs that fill at rates set by their archetype and traits: coffee, hunger (most arrive without lunch, so the kitchen is busy in the first hour), movement, company and printing. When a need is full they act: kitchen, the pin-up wall, a walk out, a friend's desk, the 3D printer room or the computer stations. Capacity matters: the kitchen crowds above seven, the printer room holds two and the rest wait in the hall, a pin-up board needs a free metre in front. People new to the building sometimes go to the wrong end for the printers.</p>
+    <p>Profs enter by a stair, circulate through their section for desk crits in a varying order, wait three minutes at an empty desk and come back to it later, pause when everyone left is away, and leave. Two office profs keep office hours in the north and south offices.</p>
+    <p>From about 15:00 people finish; those not staying go home, those staying for Good Times wind down on the floor. At 17:45 a crew of three sets up the bar; from 18:10 the food line forms down the central aisle; at 18:30 the bar opens. People stand at the bar, split off to sit on sofas, in the classroom or at empty desks, go back to a desk for a print, and from 19:00 leave in a rising wave.</p>
+    <h3>What is measured and what is inferred</h3>
+    <p>Computed: routes, distances, who is where, room occupancy, clearances, the line, moods as a weighted sum of events. Inferred and tagged as such: the remarks and reviews (templates for now) and the wording of the next steps. The office furniture is inferred, since the export has none there.</p>
+    <h3>Reading the tool</h3>
+    <p><b>Setup</b> on the left: what is being tested, the goals, studio-wide qualities, archetype cards and individuals. <b>Run</b> computes the afternoon; several seeds show what holds. <b>Summary</b> on the right answers the goals and lists next steps, numbered on the plan; expand one for the evidence, a jump into the playback, quotes and someone to follow. <b>Feed</b> below it holds every remark; open it to see what the suggestions were made from. <b>People</b> in the top bar lists everyone: spotlight, follow, edit and pin.</p>
+    <p><b>Pixel view</b>: a 16 px tile is half a metre; walls show their front faces, doors open as people pass, speech bubbles show remarks as they happen. The plan drawing is the other view, exact to the export.</p>
+    <button id="btn-help-close">Close</button>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
