@@ -96,62 +96,89 @@ export function summarize(sim) {
   const steps = [];
   const profs = sim.agents.filter((x) => sim.personById[x.id].role === "prof"); const profWalk = profs.length ? Math.round(profs.reduce((x, y) => x + y.walked, 0) / profs.length) : 0;
   const sectionSize = Math.round(students.length / Math.max(1, Object.keys(bySection).length));
+  // who felt it: the students that a step rests on, counted by archetype, the most affected first
+  const who = (pred) => { const tot = {}, hit = {}; for (const s of students) { const k = s.typeName || "Students"; tot[k] = (tot[k] || 0) + 1; if (pred(s, sim.byId[s.id])) hit[k] = (hit[k] || 0) + 1; } const rows = Object.keys(tot).map((k) => [k, hit[k] || 0, tot[k], (hit[k] || 0) / tot[k]]).filter((r) => r[1] > 0).sort((x, y) => y[3] - x[3]); if (!rows.length) return ""; const none = Object.keys(tot).filter((k) => !hit[k]); const plural = (k) => k.toLowerCase().replace(/(student|prof)(?!s)/, "$1s"); return rows.map(([k, h, n]) => `${plural(k)} ${h} of ${n}`).join(", ") + (none.length ? `; ${none.map(plural).join(", ")} not at all` : "") + "."; };
+  const logHas = (a2, kinds) => a2.log.some((e) => kinds.includes(e.kind));
+
+  // ---- from how people experienced the day, during working time first; each step is a few short points
+  const mk = (o) => { o.detail = o.points.join(" "); return o; };
   if (S.kitchenMax.n >= 10 || crowdedKitchen >= 15) {
     const far = farKitchen.map(([k]) => k).join(", "); const farM = farKitchen.length ? Math.round(farKitchen.reduce((x, [, m]) => x + m, 0) / farKitchen.length) : 0;
-    let detail = `The kitchen (${sim.kitchenArea} m², two counters, one kettle and one sink) peaked at ${S.kitchenMax.n} people at ${fmtClock(S.kitchenMax.t)}, and ${crowdedKitchen} people called it crowded; at that size about ${Math.max(3, Math.round(sim.kitchenArea / 1.5))} people can use it without queueing for a counter.${far ? ` Sections ${far} walk more than 30 m each way to it (${farM} m on average), so a coffee is a ten-minute round trip for them.` : ""}`;
-    if (run >= 2 && hist.length) detail += ` Across runs the peak went ${fmtTrend(trend("kitchenMax").concat(S.kitchenMax.n))}: people learn to dodge the rush, the peak itself does not go away.`;
     const prop = farKitchen.length ? proposedPointDistance(sim, farKitchen.map(([k]) => k), [19.4, -30.0]) : null;
-    detail += ` What to do: a second kitchen point by the south lobby, a counter of about 3 m with a kettle, a sink and a fridge, takes the south sections off this one${prop != null ? ` and cuts their walk from ${farM} m to about ${prop} m` : ""}; a third counter in the present kitchen alone would add a place to stand but not shorten anyone's walk.`;
-    steps.push({ score: crowdedKitchen * 2 + S.kitchenMax.n, title: "Split the kitchen: a second point at the south end", detail, topic: "kitchen" });
+    const points = [`Kitchen peak ${S.kitchenMax.n} people at ${fmtClock(S.kitchenMax.t)}, in ${sim.kitchenArea} m² with two counters; ${crowdedKitchen} called it crowded.`];
+    if (far) points.push(`Sections ${far} walk over 30 m each way (${farM} m on average).`);
+    if (run >= 2 && hist.length) points.push(`Peak across runs: ${fmtTrend(trend("kitchenMax").concat(S.kitchenMax.n))}; people dodge the rush, the peak stays.`);
+    points.push(`Do: a second kitchen point by the south lobby, about 3 m of counter with kettle, sink and fridge${prop != null ? `; cuts the south sections' walk from ${farM} m to about ${prop} m` : ""}.`);
+    steps.push(mk({ basis: "experience", score: crowdedKitchen * 2 + S.kitchenMax.n, title: "Split the kitchen: a second point at the south end", points, topic: "kitchen", who: who((s, a2) => a2.kitchenCrowd > 0) }));
   }
+  {
+    const tightOnes = students.filter((s) => s.nearDesks >= 3); const bunched = students.filter((s) => sim.byId[s.id].log.some((e) => e.kind === "crowd" && /desk/i.test(e.place || ""))); const critTight = students.filter((s) => logHas(sim.byId[s.id], ["critTight"]));
+    const unsettled = new Set([...tightOnes, ...bunched, ...critTight].map((s) => s.id));
+    if (unsettled.size >= 8) {
+      const points = [`${unsettled.size} of ${students.length} students could not settle at the desk.`, `${tightOnes.length} sit with three or more neighbours within 1.6 m; ${bunched.length} had people bunch up in their row; ${critTight.length} had under 1.0 m clear for a crit.`, `Do: one desk out of each row pair at the crossing points, end desks turned, so every row keeps a 1.5 m aisle and a metre behind each chair.`];
+      steps.push(mk({ basis: "experience", score: unsettled.size * 1.5, title: "Protect working time at the desks", points, topic: "desks", who: who((s) => unsettled.has(s.id)) }));
+    }
+  }
+  if (printerWaits >= 3) {
+    const points = [`${printerWaits} people waited to print${S.printQueue ? `; the big printer by the north desks had ${S.printQueue} at it at its worst` : ""}.`, `One letter printer and two plotters at the north end serve every desk; the 3D printer room (${sim.plan.printerRoom?.area_m2} m²) holds two, with the hall as the waiting space.`];
+    if (farPrinter.length) points.push(`Sections ${farPrinter.map(([k]) => k).join(", ")} walk over 35 m to the printers.`);
+    if (run >= 2 && hist.length) points.push(`Waits across runs: ${fmtTrend(trend("printerWaits").concat(printerWaits))}.`);
+    points.push(`Do: a second letter printer at the south core, and a shelf and bench outside the 3D printer room's door.`);
+    steps.push(mk({ basis: "experience", score: printerWaits * 3, title: "A second printer at the south end", points, topic: "printers", who: who((s, a2) => a2.printerWaits > 0) }));
+  }
+  if (topCrowd.length) {
+    const points = [`Bunch-ups mostly in ${topCrowd.map(([k, n]) => `${k} (${n})`).join(" and ")}; narrowest clearance ${(S.minClearance ?? 1.2).toFixed(1)} m, under the 1.5 m two people need to pass with a model.`];
+    if (run >= 2 && hist.length) points.push(`Across runs: ${fmtTrend(trend("crowd").concat(S.crowd))}; crowd-sensitive people route around the spots, which moves the problem.`);
+    points.push(`Do: a 1.5 m cross aisle through the rows between the two cores, one desk out of each row at the crossing.`);
+    steps.push(mk({ basis: "experience", score: S.crowd, title: "Open a cross aisle through the desk rows", points, topic: "aisles", who: who((s, a2) => a2.crowdEvents > 0) }));
+  }
+  const overtime = profs.filter((x) => x.leftAt != null && x.leftAt > sim.personById[x.id].leave + 300).length;
+  if (missed >= 6 || overtime >= 3) {
+    const waited = students.filter((s) => sim.byId[s.id].said.waitingCrit).length;
+    const points = [`${overtime} of ${profs.length} profs ran over their time to finish the round; ${missed} students were still not reached by the end of the day.`, `A round covers about ${sectionSize} desks spread along the floor, ${profWalk} m of walking plus the waits at empty desks${waited ? `; ${waited} students sat packed up, waiting their turn` : ""}.`, `Do: seat each section within one row pair so a round is about ${Math.round(profWalk / 2)} m, or split the crits over two afternoons.`];
+    steps.push(mk({ basis: "experience", score: missed + overtime * 3, title: "Shorten the prof's round", points, topic: "crits", who: who((s, a2) => a2.critsMissed > 0 || a2.said.waitingCrit) }));
+  }
+  if (lost >= 3) steps.push(mk({ basis: "experience", score: lost * 2, title: "Tell the two ends of the floor apart", points: [`${lost} wrong-end trips to the printer room; from the aisle the two cores look alike.`, run >= 2 ? `Across runs: ${fmtTrend(trend("lost").concat(lost))}; regulars learn it, each new cohort relearns it.` : `The printer room is in the south core, with nothing on the floor saying so.`, `Do: a colour band or room names at eye height on each core, and the room's name on the door seen from the aisle.`], topic: "wayfinding", who: who((s, a2) => logHas(a2, ["lost"])) }));
+  // ---- after hours: Good Times matters less than the working day, so these rank below it
   if (sim.queue.maxLen >= 12) {
-    let detail = `The food line reached ${sim.queue.maxLen} people, with its tail in ${sim.plan.placeName(...sim.queueSlots[Math.min(sim.queue.maxLen, sim.queueSlots.length) - 1])}, and the mean wait was ${Math.round(meanWait)} min at ${Math.round(S.serveSeconds || 25)} s per serving${lineDesks ? `; it ran past ${lineDesks} desks where people were still working` : "; by the time it formed the desks it passes were empty"}.`;
-    if (run >= 2 && hist.length) detail += ` The line started ${fmtTrend(trend("lineStart").concat(S.lineStart != null ? fmtClock(S.lineStart) : null))} and the wait went ${fmtTrend(trend("meanWait").concat(meanWait), " min")}: people come earlier each time, so everyone waits longer.`;
-    detail += ` What to do: a second serving point at the counter halves the wait to about ${Math.max(1, Math.round(meanWait / 2))} min, and routing the line along the east glazing instead of the aisle (about ${Math.round(sim.queue.maxLen * 0.6)} m of line at 0.6 m a person) passes no desks at all.`;
-    steps.push({ score: sim.queue.maxLen + lineDesks * 2, title: "Give the food line a place that is not the desk aisle", detail, topic: "food line" });
+    const points = [`Food line peak ${sim.queue.maxLen} people, tail in ${sim.plan.placeName(...sim.queueSlots[Math.min(sim.queue.maxLen, sim.queueSlots.length) - 1])}; mean wait ${Math.round(meanWait)} min at ${Math.round(S.serveSeconds || 25)} s a serving.`, lineDesks ? `It ran past ${lineDesks} desks where people were still working.` : `By the time it formed, the desks it passes were empty.`];
+    if (run >= 2 && hist.length) points.push(`Across runs the line started ${fmtTrend(trend("lineStart").concat(S.lineStart != null ? fmtClock(S.lineStart) : null))}; the wait went ${fmtTrend(trend("meanWait").concat(meanWait), " min")}.`);
+    points.push(`Do: a second serving point (wait about ${Math.max(1, Math.round(meanWait / 2))} min), and the line along the east glazing instead of the aisle.`);
+    steps.push(mk({ basis: "experience", after: true, score: (sim.queue.maxLen + lineDesks * 2) * 0.5, title: "Give the food line a place that is not the desk aisle", points, topic: "food line", who: who((s, a2) => a2.queueWait != null) }));
   }
   if (S.noSeat >= 4 || (S.barMax.n >= 20 && sim.seatsWithin15 < 12)) {
     const where = Object.entries(S.splinter).sort((a, b) => b[1] - a[1]).slice(0, 3);
-    let detail = `${sim.seatsWithin15} seats within 15 m of the bar (the sofas, the benches and the classroom chairs) for ${S.barMax.n} people at the peak; ${S.noSeat} people looked for a seat and found none${where.length ? `, and the groups that did sit ended up in ${where.map(([k, n]) => `${k} (${n})`).join(", ")}` : ""}. The crew set up with ${S.setupClearance != null ? S.setupClearance.toFixed(1) + " m" : "little"} of clear floor around the counter.`;
-    if (run >= 2 && hist.length) detail += ` No seat across runs: ${fmtTrend(trend("noSeat").concat(S.noSeat))}.`;
-    detail += ` What to do: about ${Math.max(12, Math.round(S.barMax.n * 0.6))} seats within sight of the counter would seat the groups that now drift to the stair hall and the desks: two more sofas and a bench along the enclosure wall, or the southeast classroom (${sim.plan.rooms.find((r) => /Southeast classroom/i.test(r.name))?.area_m2 || 45} m²) opened to the bar for the evening.`;
-    steps.push({ score: S.noSeat * 2 + Math.max(0, 20 - sim.seatsWithin15), title: "Seats within reach of the bar", detail, topic: "seating" });
+    const points = [`${sim.seatsWithin15} seats within 15 m of the bar for ${S.barMax.n} people at the peak; ${S.noSeat} looked for a seat and found none.`];
+    if (where.length) points.push(`Groups that did sit ended up in ${where.map(([k, n]) => `${k} (${n})`).join(", ")}.`);
+    if (run >= 2 && hist.length) points.push(`No seat across runs: ${fmtTrend(trend("noSeat").concat(S.noSeat))}.`);
+    points.push(`Do: about ${Math.max(12, Math.round(S.barMax.n * 0.6))} seats in sight of the counter: two more sofas and a bench, or the southeast classroom opened to the bar.`);
+    steps.push(mk({ basis: "experience", after: true, score: (S.noSeat * 2 + Math.max(0, 20 - sim.seatsWithin15)) * 0.5, title: "Seats within reach of the bar", points, topic: "seating", who: who((s, a2) => a2.noSeat > 0) }));
   }
   if (noisy.length >= 5 || S.barMax.n >= 20) {
-    let detail = `${S.barMax.n} people at the bar at the peak (${fmtClock(S.barMax.t)}) around a counter with ${sim.barArea} m² of open floor beside it, ${(S.barMax.n / Math.max(1, sim.barArea)).toFixed(1)} per m², so the overflow stands in the desk aisles. ${deskNearBar} desks lie within 12 m of the counter${noisy.length ? `, and ${noisy.length} people were still working at them after 18:30, ${Math.round(noisy.reduce((x, s) => x + sim.byId[s.id].noiseMinutes, 0) / noisy.length)} min each in the noise` : ""}.`;
-    if (run >= 2 && hist.length) detail += ` Bar peak across runs: ${fmtTrend(trend("barMax").concat(S.barMax.n))}.`;
-    detail += ` What to do: a storage wall or a 2.4 m screen between the counter and the first desk row keeps the party out of the rows; or move Good Times to the southeast classroom, ${sim.plan.rooms.find((r) => /Southeast classroom/i.test(r.name))?.area_m2 || 45} m² with a door and glazing on two sides, which holds ${S.barMax.n} standing with room to spare.`;
-    steps.push({ score: noisy.length * 2 + S.barMax.n / 3, title: noisy.length ? "Put something between the bar and the desk rows" : "Give Good Times a room, not a counter in the aisle", detail, topic: "bar" });
+    const points = [`${S.barMax.n} at the bar at ${fmtClock(S.barMax.t)}, ${(S.barMax.n / Math.max(1, sim.barArea)).toFixed(1)} per m² of open floor beside the counter; the overflow stands in the desk aisles.`, `${deskNearBar} desks lie within 12 m of the counter${noisy.length ? `; ${noisy.length} people still worked there after 18:30` : ""}.`];
+    if (run >= 2 && hist.length) points.push(`Bar peak across runs: ${fmtTrend(trend("barMax").concat(S.barMax.n))}.`);
+    points.push(`Do: a storage wall or 2.4 m screen between the counter and the first row, or Good Times in the southeast classroom (${sim.plan.rooms.find((r) => /Southeast classroom/i.test(r.name))?.area_m2 || 45} m², a door, glazing on two sides).`);
+    steps.push(mk({ basis: "experience", after: true, score: (noisy.length * 2 + S.barMax.n / 3) * 0.4, title: noisy.length ? "Put something between the bar and the desk rows" : "Give Good Times a room, not a counter in the aisle", points, topic: "bar", who: who((s, a2) => a2.noiseMinutes > 5) }));
   }
-  if (printerWaits >= 3) {
-    let detail = `${printerWaits} people waited to print: at the two plotters and the big printer by the north desks, which take one person at a time, or at the 3D printer room (${sim.plan.printerRoom?.area_m2} m², holds two) with the stair hall as the waiting space.${farPrinter.length ? ` Sections ${farPrinter.map(([k]) => k).join(", ")} walk more than 35 m to the room.` : ""}`;
-    if (run >= 2 && hist.length) detail += ` Waits across runs: ${fmtTrend(trend("printerWaits").concat(printerWaits))}; people shift their print times, the room does not grow.`;
-    detail += ` What to do: a second plotter at the south core next to the printer room, and a bench with a shelf outside the room's door, so a wait is a seat and a drawing laid flat rather than a crowd in the hall.`;
-    steps.push({ score: printerWaits * 3, title: "A waiting place or a second printer room", detail, topic: "printers" });
+  if (doorMax && doorMax[1].n >= 14) steps.push(mk({ basis: "experience", after: true, score: doorMax[1].n * 0.6, title: "Spread the exit", points: [`${doorMax[1].n} people through ${doorMax[0]} in five minutes at ${fmtClock(doorMax[1].t)}, one every ${Math.round(300 / doorMax[1].n)} s through a single leaf.`, `Do: both stair doors held open at the end of the day, and the second stair signed from the far end of the floor.`], topic: "doors" }));
+
+  // ---- from the plan alone: geometry says this before anyone walks it
+  if (farKitchen.length || farPrinter.length) {
+    const fk = farKitchen.map(([k, m]) => `${k} (${Math.round(m)} m)`).join(", "), fp = farPrinter.map(([k, m]) => `${k} (${Math.round(m)} m)`).join(", ");
+    const points = []; if (fk) points.push(`Sections ${fk} are over 30 m from the kitchen by the aisles.`); if (fp) points.push(`Sections ${fp} are over 35 m from the printer room.`);
+    points.push(`Both amenities sit at one end of a ${Math.round(sim.plan.meta.extent[3] - sim.plan.meta.extent[1])} m floor.`, `Do: a second kitchen point and printer at the other core, or swap the far sections with those nearest the cores.`);
+    steps.push(mk({ basis: "plan", score: farKitchen.length * 4 + farPrinter.length * 3, title: "Long walks from the far sections", points, topic: "kitchen" }));
   }
-  if (topCrowd.length) {
-    let detail = `People bunched most in ${topCrowd.map(([k, n]) => `${k} (${n} times)`).join(" and ")}; the narrowest clearance where it happened was ${(S.minClearance ?? 1.2).toFixed(1)} m, less than the 1.5 m two people need to pass with a model.`;
-    if (run >= 2 && hist.length) detail += ` Crowd events across runs: ${fmtTrend(trend("crowd").concat(S.crowd))}; crowd-sensitive people now route around the spots, which moves the problem rather than removing it.`;
-    detail += ` What to do: take one desk out of each row at the crossing point to open a 1.5 m cross aisle through the rows, between the two cores where most of the traffic to the kitchen and the printers crosses the floor.`;
-    steps.push({ score: S.crowd, title: "Open a cross aisle through the desk rows", detail, topic: "aisles" });
-  }
-  if (missed >= 6) {
-    let detail = `${missed} of ${students.length} students never got their crit: the prof's round over a section of about ${sectionSize} desks, ${profWalk} m of walking with the waits at empty desks, ran out before the end of the day. Nobody was skipped for being away; the prof came back, and still ran out of time.`;
-    if (run >= 2 && hist.length) detail += ` Not reached across runs: ${fmtTrend(trend("missed").concat(missed))}.`;
-    detail += ` What to do: seat a section's desks within one row pair rather than along the whole floor, so a round is ${Math.round(profWalk / 2)} m instead of ${profWalk} m; or split the crits over two afternoons.`;
-    steps.push({ score: missed, title: "Shorten the prof's round", detail, topic: "crits" });
-  }
-  if (lost >= 3) steps.push({ score: lost * 2, title: "Tell the two ends of the floor apart", detail: `${lost} wrong-end trips to the printer room this run: it sits in the south core, and from the aisle the two cores look alike, same cream walls, same glass to the stair hall${run >= 2 ? ` (${fmtTrend(trend("lost").concat(lost))} across runs: regulars learn it, every new cohort relearns it)` : ""}. What to do: a colour band or the room names at eye height on each core's corridor face, and the printer room's name on the door you see from the aisle.`, topic: "wayfinding" });
-  if (glassDesks >= 20) steps.push({ score: glassDesks / 4, title: "Shade or orient the desks along the glazing", detail: `${glassDesks} desks sit within 2.6 m of the full-height glazing; in the late afternoon that is low sun in the screen on the west side (facade orientation assumed). What to do: turn the west rows so screens face north or south, or a roller shade on the ${Math.round(glassDesks / 2)} west bays, which keeps the daylight and loses the glare.`, topic: "light" });
-  if (doorMax && doorMax[1].n >= 14) steps.push({ score: doorMax[1].n, title: "Spread the exit", detail: `${doorMax[1].n} people passed ${doorMax[0]} in five minutes at ${fmtClock(doorMax[1].t)}, which is one every ${Math.round(300 / doorMax[1].n)} s through a single leaf. What to do: hold both stair doors open at the end of the day, and sign the second stair from the far end of the floor so the exit splits.`, topic: "doors" });
-  steps.sort((a, b) => b.score - a.score);
+  if (glassDesks >= 20) steps.push(mk({ basis: "plan", score: glassDesks / 4, title: "Shade or orient the desks along the glazing", points: [`${glassDesks} desks sit within 2.6 m of the full-height glazing; late afternoon means low sun in the screens on the west side (orientation assumed).`, `Do: turn the west rows so screens face north or south, or roller shades on the ${Math.round(glassDesks / 2)} west bays.`], topic: "light" }));
+  // the experience steps first, by weight; the plan-alone steps after them
+  steps.sort((a, b) => (a.basis !== b.basis ? (a.basis === "experience" ? -1 : 1) : (!!a.after !== !!b.after ? (a.after ? 1 : -1) : b.score - a.score)));
   for (const s of steps) s.jump = jumpFor(sim, s.topic);
   const goals = evaluateGoals(sim);
 
   return {
     goals,
     run, headline: { people: sim.cast.people.length, remarks: feed.length, kitchenMax: S.kitchenMax, barMax: S.barMax, lineMax: sim.queue.maxLen, meanWait: Math.round(meanWait), missed, crowd: S.crowd, lost, meanMood: sim.agents.reduce((x, a) => x + a.mood, 0) / sim.agents.length },
-    topics, steps: steps.slice(0, 6), history: hist,
+    topics, steps: steps.filter((s) => s.basis === "experience").slice(0, 6).concat(steps.filter((s) => s.basis === "plan").slice(0, 3)), history: hist,
   };
 }
 

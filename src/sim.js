@@ -211,8 +211,14 @@ function chooseBreak(sim, a, p) {
     else if (!p.usesKitchen) { kind = "outside"; target = entryFor(sim, p); }
     else { kind = "kitchen"; target = plan.kitchen ? nav.randomFreeIn(sim.rng, plan.kitchen.bounds) : null; }
   } else if (need === "print") {
-    if (plan.plotters.length && sim.rng() < 0.7) { kind = "plotter"; const pl = pick(sim.rng, plan.plotters); const cx = (pl.bbox[0] + pl.bbox[2]) / 2; target = nav.nearestFree(cx, pl.bbox[1] - 0.7, 1.6) || nav.nearestFree(cx, pl.bbox[3] + 0.7, 1.6); extra.plotter = pl.id; a.plotterId = pl.id; }
-    else { kind = "printer"; target = plan.printerRoom ? nav.randomFreeInRoom(sim.rng, plan.printerRoom) : null; }
+    // most print trips are letter or tabloid at the big printer by the north desks; a plotter sheet or the 3D printer room
+    // only for the people who need them, which is mostly a deadline thing
+    const r = sim.rng();
+    if (p.usesPlotter && plan.plotters.length && r < 0.35) { kind = "plotter"; const pl = pick(sim.rng, plan.plotters); const cx = (pl.bbox[0] + pl.bbox[2]) / 2; target = nav.nearestFree(cx, pl.bbox[1] - 0.7, 1.6) || nav.nearestFree(cx, pl.bbox[3] + 0.7, 1.6); extra.plotter = pl.id; a.plotterId = pl.id; }
+    else if (p.uses3D && plan.printerRoom && r < 0.55) { kind = "printer"; target = nav.randomFreeInRoom(sim.rng, plan.printerRoom); }
+    else if (plan.printers.length) { kind = "print"; const pr = pick(sim.rng, plan.printers); const cx = (pr.bbox[0] + pr.bbox[2]) / 2; target = nav.nearestFree(cx, pr.bbox[1] - 0.7, 1.6) || nav.nearestFree(cx, pr.bbox[3] + 0.7, 1.6) || nav.nearestFree(pr.bbox[2] + 0.7, (pr.bbox[1] + pr.bbox[3]) / 2, 1.6); extra.printer = pr.id; a.printerId = pr.id; }
+    else { kind = "plotter"; const pl = pick(sim.rng, plan.plotters); const cx = (pl.bbox[0] + pl.bbox[2]) / 2; target = nav.nearestFree(cx, pl.bbox[1] - 0.7, 1.6); extra.plotter = pl.id; a.plotterId = pl.id; }
+    if (!target) return null;
   }
   else if (need === "social") {
     kind = "friend"; const ids = (sim.sectionStudents[p.section] || []).filter((id) => id !== p.id && sim.byId[id].state === "work");
@@ -254,6 +260,12 @@ function arrive(sim, a, p) {
         a.until = t + rand(sim.rng, 12 * MIN, 20 * MIN); a.activity = "lunch at the desk";
         if (!a.said.lunchDesk && p.dKitchen > 25 && sim.rng() < 0.5) { a.said.lunchDesk = true; event(sim, a, p, "lunchDesk", { m: Math.round(p.dKitchen), because: `packed lunch at the desk; the kitchen is ${Math.round(p.dKitchen)} m away by the aisles` }); }
       }
+      if (a.breakKind === "print") {
+        // the big printer: a couple of minutes a sheet, and a queue when three or more are at it
+        a.until = t + rand(sim.rng, 40, 90); a.activity = "at the printer"; a.visited.printer = 1; // a job is sent from the desk; the machine time is under two minutes
+        const others = sim.agents.filter((o) => o !== a && o.onFloor && o.state === "dwell" && o.breakKind === "print" && o.printerId === a.printerId).length;
+        if (others >= 3) { a.printerWaits++; sim.stats.printQueue = Math.max(sim.stats.printQueue || 0, others + 1); if (a.printerWaits <= 2 && !a.said.printQueue) { a.said.printQueue = true; event(sim, a, p, "printQueue", { n: others + 1, because: `${others + 1} people at the big printer by the north desks; one letter printer for ${sim.students.length} desks` }); } a.until = t + 60 * others; a.activity = "waiting at the printer"; }
+      }
       if (a.breakKind === "plotter") {
         a.until = t + rand(sim.rng, 4 * MIN, 9 * MIN); a.activity = "at the plotter"; a.visited.plotter = 1;
         const others = sim.agents.filter((o) => o !== a && o.onFloor && o.state === "dwell" && o.breakKind === "plotter" && o.plotterId === a.plotterId).length;
@@ -268,7 +280,7 @@ function arrive(sim, a, p) {
       }
       if (a.breakKind === "printerWait") { a.until = t + 4 * MIN; a.activity = "waiting for the printer in the hall"; }
       if (a.breakKind === "pinup" && a.pinupClear != null) { event(sim, a, p, "pinupTight", { w: a.pinupClear.toFixed(1), because: `${a.pinupClear.toFixed(1)} m clear in front of the board` }); a.pinupClear = null; }
-      if (a.breakKind === "friend") event(sim, a, p, "friendChat", { because: "reached a section-mate's desk" });
+      if (a.breakKind === "friend") event(sim, a, p, "friendChat", { friend: a.friendName, because: `reached ${a.friendName ? a.friendName + "'s" : "a section-mate's"} desk` });
       break;
     }
     case "queue": a.state = "queue"; a.activity = "in the food line"; break;
@@ -384,12 +396,15 @@ function stepStudent(sim, a, p, dt) {
       if (a.inCrit) break;
       if (a.setupCrew && t >= SETUP_START) { goSetup(sim, a, p); break; }
       if (p.goesToBar && !a.setupCrew && t >= LINE_START - a.lineEarly) { joinLine(sim, a, p); event(sim, a, p, "toBar", { because: `food line forming at ${fmtClock(t)}, opens 18:30` }); break; }
-      if (t >= p.leave && !p.goesToBar) { a.leftAt = t; goTo(sim, a, p, entryFor(sim, p), "off", "leaving"); event(sim, a, p, "leave", { because: `${(Math.round((t - p.arrival) / 360) / 10)} h on the floor, ${a.breaks} breaks` }); break; }
-      if (t >= p.leave && p.goesToBar && !a.windDown) { a.windDown = true; a.activity = "done for the day, waiting for Good Times"; event(sim, a, p, "windDown", { because: `finished at ${fmtClock(t)}, staying for Good Times at 18:30` }); }
+      // the crit is a required part of the class: nobody leaves, or winds down, before the prof has seen them or has gone
+      const critDone = a.critsDone > 0 || a.profDone || p.section == null;
+      if (t >= p.leave && !critDone && !a.said.waitingCrit && t >= p.leave + 20 * MIN) { a.said.waitingCrit = true; event(sim, a, p, "waitingCrit", { m: Math.round((t - p.leave) / 60), because: `ready to leave at ${fmtClock(p.leave)}, still waiting for the crit at ${fmtClock(t)}` }); }
+      if (t >= p.leave && critDone && !p.goesToBar) { a.leftAt = t; goTo(sim, a, p, entryFor(sim, p), "off", "leaving"); event(sim, a, p, "leave", { because: `${(Math.round((t - p.arrival) / 360) / 10)} h on the floor, ${a.breaks} breaks` }); break; }
+      if (t >= p.leave && critDone && p.goesToBar && !a.windDown) { a.windDown = true; a.activity = "done for the day, waiting for Good Times"; event(sim, a, p, "windDown", { because: `finished at ${fmtClock(t)}, staying for Good Times at 18:30` }); }
       const b = t % MIN === 0 ? chooseBreak(sim, a, p) : null;
       if (b) {
         a.breakKind = b.kind; a.breaks++;
-        const label = { lunch: "late lunch in the kitchen", lunchOut: "out for lunch", lunchBring: "out to grab food", lunchDesk: "lunch at the desk", kitchen: "to the kitchen", pinup: "to the pin-up wall", computers: "to the computer stations", printer: "to the 3D printers", friend: "visiting a desk", outside: "going out for a bit" }[b.kind];
+        const label = { lunch: "late lunch in the kitchen", lunchOut: "out for lunch", lunchBring: "out to grab food", lunchDesk: "lunch at the desk", print: "to the printer", kitchen: "to the kitchen", pinup: "to the pin-up wall", computers: "to the computer stations", printer: "to the 3D printers", friend: "visiting a desk", outside: "going out for a bit" }[b.kind];
         if (b.kind === "outside" || b.kind === "lunchOut" || b.kind === "lunchBring") {
           a.returnT = t + (b.kind === "lunchOut" ? rand(sim.rng, 35 * MIN, 55 * MIN) : b.kind === "lunchBring" ? rand(sim.rng, 12 * MIN, 22 * MIN) : p.breakLen + 4 * MIN);
           if (b.kind === "lunchOut" && p.dStairs > 25 && !a.said.lunchOut && sim.rng() < 0.5) { a.said.lunchOut = true; event(sim, a, p, "lunchOut", { m: Math.round(p.dStairs), because: `eats out; ${Math.round(p.dStairs)} m from the desk to the stairs` }); }
@@ -398,7 +413,7 @@ function stepStudent(sim, a, p, dt) {
         else if (b.kind === "plotter") goTo(sim, a, p, b.target, "dwell", "to the plotters");
         else if (b.kind === "printer" && a.familiarity < 0.35 && !a.visited.printer && sim.rng() < 0.6) { a.detour = { target: b.target, next: "dwell", activity: label }; goTo(sim, a, p, otherEntry(sim, p), "detour", "looking for the printer room"); }
         else goTo(sim, a, p, b.target, "dwell", label);
-        event(sim, a, p, "break", { breakKind: b.kind, ...b.extra, because: `${b.need} need full after ${Math.round((t - a.workSince) / 60)} min at the desk` });
+        a.friendName = b.extra.friend || null; event(sim, a, p, "break", { breakKind: b.kind, ...b.extra, because: `${b.need} need full after ${Math.round((t - a.workSince) / 60)} min at the desk` });
       }
       break;
     }
@@ -414,7 +429,7 @@ function stepStudent(sim, a, p, dt) {
 
 // the prof leaves: whoever was not reached counts as not reached, the ones still on the floor say so
 function closeRound(sim, a, p) {
-  for (const id of sim.sectionStudents[p.section]) { if (a.visitedStudents.includes(id)) continue; const sa = sim.byId[id]; a.critsMissed++; sa.critsMissed++; if (sa.onFloor && sa.leftAt == null) event(sim, sa, sim.personById[id], "critTimeout", { because: `prof's round over ${sim.sectionStudents[p.section].length} desks ran out at ${fmtClock(sim.t)}; ${Math.round(a.walked)} m walked` }); }
+  for (const id of sim.sectionStudents[p.section]) { sim.byId[id].profDone = true; if (a.visitedStudents.includes(id)) continue; const sa = sim.byId[id]; a.critsMissed++; sa.critsMissed++; if (sa.onFloor && sa.leftAt == null) event(sim, sa, sim.personById[id], "critTimeout", { because: `prof's round over ${sim.sectionStudents[p.section].length} desks ran out at ${fmtClock(sim.t)}; ${Math.round(a.walked)} m walked` }); }
 }
 function stepProf(sim, a, p, dt) {
   const t = sim.t;
@@ -422,14 +437,16 @@ function stepProf(sim, a, p, dt) {
   switch (a.state) {
     case "go": move(sim, a, p, dt); break;
     case "idle": {
-      if (t >= p.leave) { closeRound(sim, a, p); a.leftAt = t; goTo(sim, a, p, entryFor(sim, p), "off", "leaving"); event(sim, a, p, "leave", { because: `${a.critsDone} crits, ${a.critsMissed} not reached, ${Math.round(a.walked)} m walked` }); break; }
+      // the round runs over if it has to: the prof leaves at their time only once everyone is seen, else at the end of the day
+      const unseen = sim.sectionStudents[p.section].filter((id) => !a.visitedStudents.includes(id));
+      if ((t >= p.leave && !unseen.length) || t >= DURATION - 10 * MIN) { closeRound(sim, a, p); a.leftAt = t; goTo(sim, a, p, entryFor(sim, p), "off", "leaving"); event(sim, a, p, "leave", { because: `${a.critsDone} crits, ${a.critsMissed} not reached, ${Math.round(a.walked)} m walked${t > p.leave + 5 * MIN ? `, ${Math.round((t - p.leave) / 60)} min over` : ""}` }); break; }
       // everyone in the section gets a crit: the first pass takes desks in a varying order and waits at an empty one;
       // a student who was away is tried again once they are back at the desk; when everyone left is away the prof pauses
       const ids = sim.sectionStudents[p.section].filter((id) => !a.visitedStudents.includes(id));
       const atWork = ids.filter((id) => sim.byId[id].state === "work"); const fresh = ids.filter((id) => !(a.deferred || {})[id]);
       const candidates = atWork.length ? atWork : fresh;
       if (!candidates.length) {
-        if (ids.length && t < p.leave - 15 * MIN) { a.state = "pause"; a.until = t + 4 * MIN; a.activity = "waiting for people to come back to their desks"; break; }
+        if (ids.length && t < DURATION - 20 * MIN) { a.state = "pause"; a.until = t + 4 * MIN; a.activity = "waiting for people to come back to their desks"; break; }
         closeRound(sim, a, p); a.leftAt = t; goTo(sim, a, p, entryFor(sim, p), "off", "leaving"); event(sim, a, p, "leave", { because: `${a.critsDone} crits, ${a.critsMissed} not reached, ${Math.round(a.walked)} m walked` }); break;
       }
       const sorted = candidates.map((id) => [id, dist(sim.personById[id].seat, [a.x, a.y])]).sort((x, y) => x[1] - y[1]); const best = sorted[Math.min(sorted.length - 1, Math.floor(Math.pow(sim.rng(), 2) * 3))][0];
@@ -467,7 +484,7 @@ function minuteTick(sim) {
       n.hunger += (1 / 150) * sc;
       n.move += (st === "restless" ? 1 / 30 : st === "social" ? 1 / 60 : st === "office" ? 1 / 70 : 1 / 110) * sc * (wd ? 2 : 1);
       n.social += ((0.3 + 0.7 * tr.sociability) / 70) * sc * (wd ? 3 : 1);
-      if (n.print >= 0) n.print += p.hasPrintJob ? (1 / 120) * sc : 0;
+      if (n.print >= 0) n.print += p.hasPrintJob ? (p.usesPlotter || p.uses3D ? 1 / 120 : 1 / 200) * sc : 0; // a sheet every few hours; more under deadline
     }
     const base = 0.55 + 0.2 * (p.traits.patience - 0.5);
     a.mood += (base - a.mood) * 0.03;

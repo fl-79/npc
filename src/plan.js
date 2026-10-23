@@ -44,7 +44,12 @@ export async function loadPlan(url) {
   plan.printerRoom = plan.rooms.find((r) => /3D printer/i.test(r.name));
   plan.photoRoom = plan.rooms.find((r) => /photograph/i.test(r.name));
   plan.pinups = plan.furniture.filter((f) => f.kind === "pinup");
-  plan.plotters = plan.furniture.filter((f) => f.kind === "printer" && !(plan.printerRoom && pointInRing([(f.bbox[0] + f.bbox[2]) / 2, (f.bbox[1] + f.bbox[3]) / 2], plan.printerRoom.polygon)));
+  // the printers at the north end: the two plotters (large sheets, used under deadline) and the big printer (letter and
+  // tabloid, used by everyone all day); the 3D printers are in their own room
+  const outside = plan.furniture.filter((f) => f.kind === "printer" && !(plan.printerRoom && pointInRing([(f.bbox[0] + f.bbox[2]) / 2, (f.bbox[1] + f.bbox[3]) / 2], plan.printerRoom.polygon)));
+  plan.plotters = outside.filter((f) => /designjet|plotter/i.test(f.name || ""));
+  plan.printers = outside.filter((f) => !/designjet|plotter/i.test(f.name || ""));
+  if (!plan.printers.length) plan.printers = plan.plotters;
   plan.computers = plan.furniture.filter((f) => f.kind === "computers");
   plan.stairDoors = plan.entries.filter((e) => /stair/i.test(e.name));
   // the plan check's flags (tool/scripts/check_furniture.py), when they sit beside the plan: id -> notes

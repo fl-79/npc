@@ -117,7 +117,8 @@ export function makeCastFromSpec(plan, spec, rng, seed) {
       people.push({
         id: "S" + (plan.desks.indexOf(d) + 1), name: name(false), role: "student", typeId: t.id, typeName: t.name, year: d.year, section: d.section, deskId: d.id, seat: d.seat, facing: d.facing,
         traits, style: t.pattern, mobility: t.mobility, speed: rand(rng, 1.15, 1.45), arrival, leave,
-        goesToBar: rng() < t.goesToBar * (1 - 0.6 * dl), usesKitchen: rng() < t.usesKitchen, hasPrintJob: rng() < Math.max(t.hasPrintJob, 0.9 * dl), deadline: dl, needScale: 1 / (1 + 0.8 * dl),
+        // nearly everyone prints letter and tabloid sheets all day; the plotters and the 3D printers see use mostly under deadline
+        goesToBar: rng() < t.goesToBar * (1 - 0.6 * dl), usesKitchen: rng() < t.usesKitchen, hasPrintJob: true, prints: rng() < 0.85, usesPlotter: rng() < Math.min(0.9, 0.08 + 0.7 * dl), uses3D: rng() < Math.min(0.6, 0.04 + 0.4 * dl), deadline: dl, needScale: 1 / (1 + 0.8 * dl),
         breakEvery: (S.breakEvery + S.breakSpread * randn()) * (1 + dl), breakLen: S.breakLen * rand(rng, 0.7, 1.4),
         hungerInit: rand(rng, 0.45, 1.0), thresholdJitter: rand(rng, 0.85, 1.15),
         // how lunch happens: the kitchen, food brought back to the desk, a packed lunch at the desk, or out and back later

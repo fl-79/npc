@@ -895,3 +895,78 @@ showed the floor.
 **Built.** A contiguous north-south run takes one cap offset, its mean. A wall draws its face when
 the tile south of it is a narrow north-south wall; the narrow cap then sits over the middle of that
 face. Checked at the office wall's end, the window corners, the north core and the full map.
+
+## 2026-10-23: published again
+
+Pushed as 968d0ea; the artifact republished as version 5 from a relative-base build.
+
+## 2026-10-23: next steps in two groups, with who felt them
+
+**Asked (Felicia).** Group the design suggestions into what the plan alone says and what people
+experienced, the latter centred on working time (could students settle and focus?); the bar's
+after-hours noise matters less; no archetype focus mode.
+
+**Built (`summary.js`, `ui.js`).**
+- Two groups under Next steps: "From how people experienced the day" and "From the plan alone ·
+  geometry, before anyone walks it". Numbering runs across both; the plan-alone group holds the
+  glazing step and a new "Long walks from the far sections" step (sections over 30 m from the
+  kitchen or 35 m from the printer room, by the aisles), each tagged "computed from the plan".
+- A new working-time step, "Protect working time at the desks": students who could not settle,
+  from desks with three or more neighbours within 1.6 m, bunch-ups in their row while working, and
+  no room to stand for a crit; it ranks with the kitchen, printers, aisles and crits steps.
+- After-hours steps (food line, bar seats, bar noise, the exit) carry an "after hours" tag and are
+  weighted down (0.4 to 0.6) so they sit below the working-day steps.
+- Every experience step says who felt it, by archetype: "social students 21 of 60, restless 9 of
+  45; focused not at all", from the run's own logs; a step nobody felt says nothing.
+After-hours steps always sit below every working-time step, whatever their score. Checked on a run:
+working time (desks, kitchen, printers, aisles, crits), then the food line after hours, then the two
+plan-alone steps; the first step names focused students 50 of 70, restless 27 of 42, social 28 of 60.
+
+## 2026-10-23: bullets, mandatory crits, the printers, more voices
+
+**Asked (Felicia).** Keep the step details to concise bullet points. Nobody leaves until the prof
+has seen them, even if the round runs over: the crit is a required part of the class. Not everyone
+uses the plotters or the 3D printers, only under deadline; the letter and tabloid printers at the
+north end get heavy traffic no matter what. The feed repeated the same comments for what seemed
+the same archetype.
+
+**Built.**
+- Steps (`summary.js`, `ui.js`): every step is three or four short points, the last one "Do: ...".
+- Crits (`sim.js`): a student does not leave or wind down before their crit, or before their
+  prof has gone; after twenty minutes past their own time they say so (waitingCrit). The prof
+  leaves at their time only once everyone is seen, otherwise runs over, up to ten minutes before
+  the day ends; the leave note says how far over. On the test run 171 of 172 were seen and two
+  profs ran over.
+- Printers (`plan.js`, `spec.js`, `sim.js`): the plotters (the two Designjets) and the big letter
+  printer are separate. Nearly everyone prints letter and tabloid at the big printer, a sheet
+  every few hours, under two minutes at the machine, a queue when four are at it (printQueue);
+  the plotters are used by 8 percent of people plus deadline pressure (up to 90 percent), the 3D
+  printer room by 4 percent plus deadline. The printer step now asks for a second letter printer
+  at the south core.
+- Remarks (`remarks.js`): more variants for the frequent kinds, including arrive, leave, crits and
+  the food line; a voice per archetype for crits, tight desks, the kitchen, the bar noise and
+  friend visits (focused, social and restless each say it their way); no two remarks of a kind in
+  a row with the same words, and nobody repeats themselves.
+- Tuning after the first check (`sim.js`, `remarks.js`): a letter print takes 40 to 90 s and the
+  queue remark needs three others at the machine (the first run had 74 printQueue remarks); the
+  MORE pool had critStart and critTight twice, so the second entry silently replaced the first and
+  the crits had four lines between them; merged. On the check run: 172 of 172 students seen, no
+  prof over by more than five minutes, print queue peaks at five, 483 remarks with 7 to 19 distinct
+  lines for the frequent kinds (crits, tight desks, the kitchen, the food line).
+
+## 2026-10-23: nuance inside an archetype
+
+The feed still repeated itself: with 170 speakers and five to ten lines per kind, the same line
+came up thirteen times in a day (measured: the most repeated line 13 times, 483 remarks).
+- `remarks.js`: a second, wider pool (MORE2) for the kinds that come up most, so most have 12 to 20
+  lines now; the friend's name reaches the friend-visit lines (`sim.js` keeps `a.friendName`).
+- Each person now has a voice of their own on top of the archetype, from their continuous traits
+  and a hash of their id (`voiceOf`): the quiet ones (low sociability) keep the first sentence of a
+  line and drop the rest; the talkative add a second thought drawn from their own situation
+  (TAILS: a deadline, being new to the building, a far kitchen, a window desk at the hour it
+  matters, mood, noise or crowd sensitivity, patience, the hour, distance walked, year, section);
+  some fall back on a signature phrase (TICS) now and then. Tails are kept off remarks already about
+  that topic.
+- The last ten lines of each kind, floor-wide, are not reused; nobody repeats themselves; a short
+  food-line wait (under 8 min) no longer earns a line from everyone.
+- On the check run: 495 remarks, 434 distinct, the most repeated line 6 times (was 13).
