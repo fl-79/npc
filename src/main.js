@@ -6,6 +6,7 @@ import { createUI } from "./ui.js";
 import { DEFAULT_SPEC, normalizeSpec, specFromBriefLocal } from "./spec.js";
 import { buildSimFromSpec, computeSeries } from "./runner.js";
 import { apiStatus, requestSpec } from "./api.js";
+import { runIntro, runTour, shouldShowIntro } from "./intro.js";
 
 const $ = (s) => document.querySelector(s);
 
@@ -99,3 +100,7 @@ function frame(now) {
 ui.update();
 requestAnimationFrame(frame);
 window.__dbg = { get sim() { return sim; }, get spec() { return spec; }, get series() { return series; }, nav, plan, stage };
+// the front door: the title screen and the tour on the first visit (or ?intro); the intro button replays it
+if (shouldShowIntro()) runIntro({ stage, plan, nav });
+$("#btn-intro").onclick = () => runIntro({ stage, plan, nav });
+$("#btn-tour").onclick = () => { $("#help").classList.add("hidden"); runTour({}); };

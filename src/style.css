@@ -320,3 +320,25 @@ body.pixel .brand .sub { color: #854f0b; }
 body.pixel .win-head { background: #e9dcbd; color: #2b2016; }
 body.pixel .win-head .muted { color: #854f0b; }
 body.pixel .win-arrow { color: #2b2016; font-weight: 700; }
+
+/* ---------- the front door: title screen and tour */
+#intro { position: fixed; inset: 0; z-index: 50; background: #12181e; overflow: hidden; font-family: "Nunito", system-ui, sans-serif; color: #fff8e8; }
+#intro-canvas { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+#intro .intro-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(18,24,30,.92) 0%, rgba(18,24,30,.78) 42%, rgba(18,24,30,.25) 70%, rgba(18,24,30,.55) 100%); cursor: pointer; }
+#intro .intro-title { position: absolute; left: 0; right: 0; top: 10vh; text-align: center; cursor: pointer; }
+#intro .intro-npc { font-family: "Silkscreen", monospace; font-weight: 700; font-size: clamp(72px, 14vw, 160px); line-height: 1; color: #f3c66b; text-shadow: 6px 6px 0 #c9553f, 12px 12px 0 #2b2016; letter-spacing: .04em; }
+#intro .intro-sub { margin-top: 18px; font-family: "Silkscreen", monospace; font-size: clamp(13px, 1.6vw, 20px); color: #fff8e8; letter-spacing: .06em; }
+#intro .intro-sub2 { margin-top: 8px; font-size: clamp(13px, 1.4vw, 17px); color: #cdbf9f; }
+#intro .intro-start { margin-top: 42px; font-family: "Silkscreen", monospace; font-size: clamp(15px, 1.9vw, 22px); color: #fff8e8; background: none; border: 0; box-shadow: none; letter-spacing: .1em; animation: blink 1.1s steps(2, start) infinite; cursor: pointer; }
+#intro .intro-start:active { transform: none; }
+@keyframes blink { to { visibility: hidden; } }
+#intro .intro-hint { margin-top: 14px; font-size: 12px; color: #cdbf9f; } #intro .intro-hint a { color: #f3c66b; text-decoration: underline; cursor: pointer; }
+#intro .intro-foot { position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font-size: 12px; color: #cdbf9f; }
+#tour-guide { position: fixed; z-index: 60; pointer-events: none; border: 3px solid #c9553f; box-shadow: 0 0 0 3px #fff8e8, 0 0 0 6px #c9553f, 4px 4px 0 6px rgba(43,32,22,.35); transition: left .45s ease, top .45s ease, width .45s ease, height .45s ease, opacity .3s; opacity: 0; }
+#tour-guide b { position: absolute; left: -3px; top: -34px; background: #c9553f; color: #fff8e8; font: 12px "Silkscreen", monospace; padding: 5px 9px; border: 3px solid #fff8e8; white-space: nowrap; }
+#tour-guide.low b { top: auto; bottom: -34px; }
+#tour-cap, body.pixel #tour-cap { position: fixed; z-index: 61; left: 50%; bottom: 72px; transform: translateX(-50%); width: min(560px, calc(100% - 40px)); padding: 10px 14px 12px; color: var(--ink); font-family: "Nunito", system-ui, sans-serif; font-size: 14px; background: #fff8e8; border: 3px solid #2b2016; border-image: none; box-shadow: 4px 4px 0 #2b2016, 0 0 0 3px #fff8e8; }
+#tour-cap.top, body.pixel #tour-cap.top { bottom: auto; top: 70px; }
+#tour-cap .tour-n { font-family: "Silkscreen", monospace; font-size: 10px; color: #854f0b; margin-bottom: 4px; } #tour-cap .tour-n b { color: var(--ink); }
+#tour-cap .tour-text { line-height: 1.4; }
+#tour-cap .tour-btns { display: flex; gap: 8px; margin-top: 10px; align-items: center; } #tour-cap .tour-skip { margin-left: auto; font-size: 11px; opacity: .8; }

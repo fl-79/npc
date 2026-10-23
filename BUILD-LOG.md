@@ -818,3 +818,30 @@ strips, or reloading) brings the marks back.
 
 **Built.** The recording starts before the page has loaded; the first second is now cut in the
 conversion (the command is at the top of `demo-video.mjs`). The mp4 opens on the finished interface.
+
+## 2026-10-23: the front door, a title screen and a tour
+
+**Asked (Felicia).** A landing page like the start of a game: NPC as the name, a subtitle along the
+lines of "design simulation test", a blinking start, a pixel person walking or tracing a path, then
+how-to instructions that can be skipped or go through everything, as the demo video did.
+
+**Built (`src/intro.js`, styles in `style.css`).**
+- Title screen over the app on the first visit (or with `?intro` in the address, or the intro
+  button in the top bar): "NPC" in the pixel face with a stacked shadow, "a design simulation
+  test", "Studio Day at SALA · Lasserre Level 3", a blinking PRESS START, and a footer line. Behind
+  it the floor itself at close range, with one person walking real routes between the stairs, the
+  kitchen, a plotter, the bar and a few desks, found with the tool's own path-finder, leaving a
+  red trail; the camera follows. Enter, space or a click starts; "skip the intro" and Escape go
+  straight to the tool.
+- The tour: nine steps on the real interface, each a red guide box with a label on the element
+  (what is tested, the goals, the conditions note, the group, People, Run, the summary, the feed,
+  the day's controls) and a speech-box caption with Back, Next and Skip; arrow keys work; the
+  last step's button reads Start. "Take the tour" in the help panel replays the tour alone.
+- Seen once, the intro stays out of the way (localStorage).
+
+## 2026-10-23: title screen wording
+
+**Asked (Felicia).** The subtitle is "An Occupant Simulation Tool", the prompt is "Click anywhere to
+start", and the tour's captions should read as prose rather than clipped notes.
+
+**Built.** Both lines changed; the nine captions rewritten as full sentences in one voice.
