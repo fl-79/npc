@@ -182,6 +182,15 @@ export class PixelRenderer {
       for (let s0 = 0; s0 < N; s0++) { if (seenC[s0] || kind[s0] !== 1 || room[s0] !== big) continue; const comp = [s0]; seenC[s0] = 1; for (let q = 0; q < comp.length; q++) { const idx = comp[q]; const i = idx % cols, j = (idx - i) / cols; for (const [di, dj] of NB) { const ii = i + di, jj = j + dj; if (ii < 0 || jj < 0 || ii >= cols || jj >= rows) continue; const n2 = jj * cols + ii; if (!seenC[n2] && kind[n2] === 1 && room[n2] === big) { seenC[n2] = 1; comp.push(n2); } } } comps.push(comp); }
       comps.sort((a, b) => b.length - a.length); for (const comp of comps.slice(1)) for (const idx of comp) room[idx] = -1;
       for (let pass = 0; pass < 4; pass++) for (let idx = 0; idx < N; idx++) { if (kind[idx] !== 1 || room[idx] >= 0) continue; const i = idx % cols, j = (idx - i) / cols; for (const [di, dj] of NB) { const r = Rm(i + di, j + dj); if (r >= 0 && r !== big && Kd(i + di, j + dj) === 1) { room[idx] = r; break; } } } } }
+    // north-south wall tiles are drawn at their real line: a cap 10 px wide centred on the centreline's x in the tile,
+    // not the whole half-metre tile; corners, junctions, columns and east-west walls keep the full tile
+    this.nsCap = new Int8Array(N).fill(-1);
+    { const W2 = (i, j) => i >= 0 && j >= 0 && i < cols && j < rows && kind[j * cols + i] === 2;
+      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) { const idx = j * cols + i; if (kind[idx] !== 2 || isCol[idx]) continue; if (W2(i - 1, j) || W2(i + 1, j)) continue; if (!(W2(i, j - 1) || W2(i, j + 1))) continue;
+        let sum = 0, n = 0; for (let py = j * S; py < (j + 1) * S; py++) for (let qx = i * S; qx < (i + 1) * S; qx++) if (K[py * gw + qx]) { sum += qx - i * S; n++; }
+        if (n) this.nsCap[idx] = Math.max(0, Math.min(TILE - 10, Math.round((sum / n + 0.5) * (TILE / S)) - 5)); }
+      // one line per run: a contiguous run of such tiles takes one offset, its mean, so the cap never jogs
+      for (let i = 0; i < cols; i++) { let j = 0; while (j < rows) { if (this.nsCap[j * cols + i] < 0) { j++; continue; } let k = j, sum = 0, n = 0; while (k < rows && this.nsCap[k * cols + i] >= 0) { sum += this.nsCap[k * cols + i]; n++; k++; } const v = Math.round(sum / n); for (let q = j; q < k; q++) this.nsCap[q * cols + i] = v; j = k; } } }
     this.kind = kind; this.room = room;
     this.doorAxis = new Int8Array(N).fill(-1);
     for (let idx = 0; idx < N; idx++) { const n = this.doorTile[idx]; if (n >= 0) this.doorAxis[idx] = this.doors[n].axis === "x" ? 0 : 1; }
@@ -234,7 +243,18 @@ export class PixelRenderer {
       // furniture first; a wall or column standing inside a piece's footprint is cut out of it, so the wall wins there,
       // while a piece south of a wall is drawn later and stands in front of it, as it should
       for (const f of furnByRow.get(j) || []) {
-        any = true; const spr = this.furnitureSprite(f); const x = this.nx(f.bbox[0]); const yWorld = this.ny(f.bbox[1]) - spr.height;
+        any = true; const spr = this.furnitureSprite(f);
+        // a piece whose edge reaches into a wall's tile (the tile is half a metre, the wall thinner) is drawn nudged out of
+        // that tile, up to 0.3 m, so nothing stands in a wall; the plan's own positions are untouched
+        let shift = 0; { const ci0 = this.col(f.bbox[0]), ci1 = this.col(f.bbox[2]); const rj0 = this.row(f.bbox[3] - 0.05), rj1 = this.row(f.bbox[1] + 0.05);
+          const colSolid = (ii) => { for (let jj = rj0; jj <= rj1; jj++) if (solid(ii, jj)) return true; return false; };
+          // the cap's nearest edge over the piece's rows: a junction row keeps the full tile, so it counts as the tile's edge
+          const runRows = (ii) => { let a = rj0, b = rj1; while (a > 0 && solid(ii, a - 1) && rj0 - a < 40) a--; while (b < rows - 1 && solid(ii, b + 1) && b - rj1 < 40) b++; return [a, b]; }; // the whole wall run beside the piece
+          const capL = (ii) => { let best = TILE; const [a, b] = runRows(ii); for (let jj = a; jj <= b; jj++) { if (!solid(ii, jj)) continue; const ns = this.nsCap[jj * cols + ii]; best = Math.min(best, ns >= 0 ? ns : 0); } return this.x0 + ii * TILE_M + best / PPM; };
+          const capR = (ii) => { let best = 0; const [a, b] = runRows(ii); for (let jj = a; jj <= b; jj++) { if (!solid(ii, jj)) continue; const ns = this.nsCap[jj * cols + ii]; best = Math.max(best, ns >= 0 ? ns + 10 : TILE); } return this.x0 + ii * TILE_M + best / PPM; };
+          const inE = f.bbox[2] - capL(ci1), inW = capR(ci0) - f.bbox[0];
+          if (ci1 > ci0 && colSolid(ci1) && inE > 0 && inE <= 0.45) shift = -inE; else if (ci1 > ci0 && colSolid(ci0) && inW > 0 && inW <= 0.45) shift = inW; }
+        const x = this.nx(f.bbox[0] + shift); const yWorld = this.ny(f.bbox[1]) - spr.height;
         tmp.width = spr.width; tmp.height = spr.height; tg.globalCompositeOperation = "source-over"; tg.clearRect(0, 0, tmp.width, tmp.height); tg.drawImage(spr, 0, 0);
         tg.globalCompositeOperation = "destination-out";
         // only a wall or column whose tile centre lies well inside the piece's footprint is cut out of it; a desk pushed
@@ -249,7 +269,9 @@ export class PixelRenderer {
       for (let i = 0; i < cols; i++) {
         const idx = j * cols + i; const k = kind[idx]; const hdoor = k === 4 && this.doorAxis[idx] === 0; if (k !== 2 && k !== 3 && !hdoor) continue;
         const x = i * TILE; const yS = (j + 1) * TILE - top; const cy = yS - TILE - WALL_H;
-        const south = K(i, j + 1); const faceVisible = !solid(i, j + 1) && south !== 3;
+        // a face shows where the south side is open, and also where the tile south is a narrow north-south wall, whose
+        // cap covers only the middle of its tile: the face shows on either side of that cap
+        const south = K(i, j + 1); const southNarrow = j + 1 < rows && this.nsCap[(j + 1) * cols + i] >= 0; const faceVisible = (!solid(i, j + 1) && south !== 3) || southNarrow;
         if (k === 3) {
           if (this.glassAxis[idx] === 0) {
             // an east-west run of glass shows its face; with the outside behind it the face reaches the top of the caps beside it
@@ -265,9 +287,11 @@ export class PixelRenderer {
           continue;
         }
         any = true;
+        const ns = this.nsCap[idx]; const cx0 = ns >= 0 ? x + ns : x, cw = ns >= 0 ? 10 : TILE;
         // the cap, outlined on its outer edges only, so a wall and the headers over its doors read as one piece
-        g.fillStyle = PAL.wallCap; g.fillRect(x, cy, TILE, TILE); g.fillStyle = PAL.wallEdge;
-        if (!capLike(i, j - 1)) g.fillRect(x, cy, TILE, 1); if (!capLike(i, j + 1)) g.fillRect(x, cy + TILE - 1, TILE, 1); if (!capLike(i - 1, j)) g.fillRect(x, cy, 1, TILE); if (!capLike(i + 1, j)) g.fillRect(x + TILE - 1, cy, 1, TILE);
+        g.fillStyle = PAL.wallCap; g.fillRect(cx0, cy, cw, TILE); g.fillStyle = PAL.wallEdge;
+        if (!capLike(i, j - 1)) g.fillRect(cx0, cy, cw, 1); if (!capLike(i, j + 1)) g.fillRect(cx0, cy + TILE - 1, cw, 1); if (!capLike(i - 1, j) || ns >= 0) g.fillRect(cx0, cy, 1, TILE); if (!capLike(i + 1, j) || ns >= 0) g.fillRect(cx0 + cw - 1, cy, 1, TILE);
+        if (ns >= 0 && faceVisible) { g.fillStyle = PAL.wallFace; g.fillRect(cx0, yS - WALL_H, cw, WALL_H); g.fillStyle = PAL.wallFaceDark; g.fillRect(cx0, yS - WALL_H, cw, 2); g.fillStyle = PAL.base; g.fillRect(cx0, yS - 3, cw, 3); continue; }
         if (hdoor) {
           // a door in an east-west wall: the wall continues above it as a header; the leaf is drawn each frame below
           g.fillStyle = PAL.wallFace; g.fillRect(x, yS - WALL_H, TILE, WALL_H - DOOR_H); g.fillStyle = PAL.wallFaceDark; g.fillRect(x, yS - WALL_H, TILE, 2); g.fillStyle = PAL.base; g.fillRect(x, yS - DOOR_H - 2, TILE, 2);

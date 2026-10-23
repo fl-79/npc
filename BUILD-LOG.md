@@ -845,3 +845,53 @@ how-to instructions that can be skipped or go through everything, as the demo vi
 start", and the tour's captions should read as prose rather than clipped notes.
 
 **Built.** Both lines changed; the nine captions rewritten as full sentences in one voice.
+
+## 2026-10-23: published
+
+**Pushed** to github.com/fl-79/npc (commit 95c1df5); the Pages site at fl-79.github.io/npc rebuilds on
+push. **The claude.ai artifact** ("Studio day") is a separate copy of the built `dist/` folder and does
+not follow the push; it was republished by hand as version 3 (`npm run build`, then the page and
+its changed assets published to the same artifact URL). Any later change needs both: a push, and a
+rebuild and republish of the artifact. The rebuild must use the relative base, `npx vite build
+--base=./`, as the Pages workflow does; a plain `npm run build` writes absolute asset paths that the
+artifact's page cannot reach, which is what broke version 3 (fixed in version 4).
+
+## 2026-10-23: desks out of the wall
+
+**Asked (Felicia).** The desks along the wall west of the south office were drawn in the wall.
+
+**Found.** A wall tile is half a metre wide, the wall itself a fifth; those desks reach into the
+tile by up to 0.3 m, so the wall's cap was painted over their edge.
+
+**Built.** A piece whose edge reaches into a wall's tile by 0.3 m or less is drawn nudged out of
+the tile; the plan's positions and seats are untouched. A wall standing well inside a footprint is
+still cut out of the piece, as before. That nudge alone
+was not enough: those desks reach 0.4 m into the tile because the wall's real line sits at the tile's
+far edge. So north-south walls are now drawn at their real line, a cap 10 px wide centred on the
+centreline's position inside the tile (corners, junctions, columns and east-west walls keep the full
+tile), and furniture is nudged against that line, up to 0.45 m. Checked on the wall by the south
+office, the north core and the full map.
+
+## 2026-10-23: the plotters and tables by the north office
+
+**Asked (Felicia).** The same collision on the wall west of the north office: plotters and tables
+drawn into the wall.
+
+**Found.** The nudge measured only the narrow caps; rows where that wall meets another keep a full
+tile, and the pieces still ran into those.
+
+**Built.** The nudge clears the widest cap over the piece's rows. Checked at both walls. Each piece clears the widest cap along the whole wall run beside it, so a column of desks along one wall stays aligned.
+
+## 2026-10-23: narrow walls, joined and without holes
+
+**Asked (Felicia).** A north-south wall disconnected at its end by the north office, and holes in
+the wall at the office window's corners.
+
+**Found.** Two effects of the narrow north-south caps: where a run's centreline shifted by a few
+pixels between tiles the cap jogged, and where a narrow cap sat below an east-west wall, that
+wall's face was not drawn (a wall tile stood south of it) and the uncovered part of the tile
+showed the floor.
+
+**Built.** A contiguous north-south run takes one cap offset, its mean. A wall draws its face when
+the tile south of it is a narrow north-south wall; the narrow cap then sits over the middle of that
+face. Checked at the office wall's end, the window corners, the north core and the full map.
