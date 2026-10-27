@@ -10,6 +10,14 @@ The current mockup uses the third-floor studios of the Lasserre Building at UBC.
 
 ![The tool mid-afternoon: the plan with numbered next steps, the summary, and the feed](screenshots/2-afternoon.png)
 
+## Demo video
+
+[![NPC demo walkthrough: click to play](public/demo/studio-day-voiceover-thumbnail.png)](https://fl-79.github.io/npc/demo/studio-day-voiceover.mp4)
+
+**Watch:** https://fl-79.github.io/npc/demo/studio-day-voiceover.mp4
+
+This 2:14 walkthrough shows NPC running one Friday afternoon in the Lasserre Level 3 studios at UBC. It opens on the inputs: the plan, a description of the use, the design goals and special cases of the day, here a deadline-pressure slider that raises traffic through the studios. From these the tool generates occupant archetypes, each with accessibility needs, familiarity with the building and preferences. It then plays back the whole afternoon, 13:30 to 19:30, following agents close up as they crowd the kitchen, wait for desk crits and line up for Good Times, while their comments on the space appear live. Those comments are summarized into numbered design suggestions on the plan, covering the location of the kitchen, the aisle widths and glare from the windows at the desks. The video closes on open questions: longer simulations, agents that alter the space, and how many parameters make unique experiences.
+
 ## Studio day
 
 One Friday afternoon on Lasserre Level 3, the SALA studio floor, simulated in the browser.
