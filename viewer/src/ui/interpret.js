@@ -22,7 +22,7 @@ const SCHEMA = {
   properties: {
     title: { type: 'string', description: 'three to six words naming the situation' },
     summary: { type: 'string', description: 'one or two sentences on what the engine will change, in plain words' },
-    read: { type: ['string', 'null'], enum: [...KNOWN, null], description: 'the listed situation this amounts to, or null' },
+    read: { anyOf: [{ type: 'string', enum: KNOWN }, { type: 'null' }], description: 'the listed situation this amounts to, or null' },
     untested: { type: 'boolean', description: 'true when the description goes beyond anything the engine models; the changes are then a best approximation' },
     changes: {
       type: 'object', additionalProperties: false,
@@ -33,7 +33,7 @@ const SCHEMA = {
         arrive_shift_h: { type: 'number', minimum: -6, maximum: 6 },
         leave_shift_h: { type: 'number', minimum: -8, maximum: 8 },
         lift_out: { type: 'boolean' },
-        paper_out_at: { type: ['string', 'null'], description: 'HH:MM when the plotter paper runs out, or null' },
+        paper_out_at: { anyOf: [{ type: 'string' }, { type: 'null' }], description: 'HH:MM when the plotter paper runs out, or null' },
         shop_closed: { type: 'boolean' },
         add_items: {
           type: 'array', maxItems: 6,
@@ -47,20 +47,67 @@ const SCHEMA = {
 
 const SYSTEM = `You read a one-paragraph description of a situation in an architecture school's studio building and turn it into the changes an occupant simulation should make to one day. The building: a studio floor (Level 3) with 172 desks for 165 M.Arch students in three years, two plotters, a kitchen and a lounge; crit rooms and classrooms on other floors; a lift and stairs. The simulation already models studio sessions (Tue/Fri 13:30-18:00 for years 2-3, Tue/Thu/Fri for year 1), desk crits, pin-ups and reviews, lectures and seminars, lunch, printing, the shop, Good Times on Fridays 18:00-21:00, Waffle Wednesday, deadlines, plotter paper running out, the lift out of service, fifteen extra students, and weekend days. If the description amounts to one of those listed situations, set "read" to it and keep the changes small. Otherwise set "read" to null and express the situation through the changes: extra people, the share present, arrival and leaving shifts, extra activities for a share of the students, a resource out. Set "untested" to true when the description involves things the simulation cannot represent (new rooms, weather, policies it has no switch for) and approximate anyway. Be literal and modest: do not add drama the description does not contain.`;
 
+/** The schema as structured outputs take it (2026-11-13): enums kept, which the API enforces; number, string and array
+ *  limits (minimum, maximum, maxItems...) removed, which it refuses, and written into the description for the model.
+ *  sanitize() enforces them on the reply. (The SDK's own helper also drops enums, so it is not used.) */
+const LIMITS = ['minimum', 'maximum', 'exclusiveMinimum', 'exclusiveMaximum', 'multipleOf', 'minLength', 'maxLength', 'maxItems'];
+function apiSchema(node) {
+  if (Array.isArray(node)) return node.map(apiSchema);
+  if (!node || typeof node !== 'object') return node;
+  const out = {}, notes = [];
+  for (const [k, v] of Object.entries(node)) { if (LIMITS.includes(k)) notes.push(`${k} ${v}`); else out[k] = k === 'properties' ? Object.fromEntries(Object.entries(v).map(([pk, pv]) => [pk, apiSchema(pv)])) : apiSchema(v); }
+  if (node.minItems > 1) { delete out.minItems; notes.push(`minItems ${node.minItems}`); }
+  if (notes.length) out.description = `${out.description ? out.description + ' ' : ''}(${notes.join(', ')})`;
+  return out;
+}
+const API_SCHEMA = apiSchema(SCHEMA);
+
+/** The reply held to the schema's limits, which the API cannot enforce: numbers clamped, lists cut, unknown kinds dropped. */
+export function sanitize(raw) {
+  const num = (v, lo, hi, d) => { const n = Number(v); return Number.isFinite(n) ? Math.max(lo, Math.min(hi, n)) : d; };
+  const hhmm = (v) => (typeof v === 'string' && /^([01]?\d|2[0-3]):[0-5]\d$/.test(v.trim()) ? v.trim().padStart(5, '0') : null);
+  const c = (raw && raw.changes) || {};
+  const items = (Array.isArray(c.add_items) ? c.add_items : []).map((it) => ({
+    kind: it && it.kind, at: hhmm(it && it.at), minutes: Math.round(num(it && it.minutes, 5, 600, 60)), share: num(it && it.share, 0, 1, 1),
+    years: (Array.isArray(it && it.years) ? it.years : []).map(Number).filter((y) => y === 1 || y === 2 || y === 3),
+  })).filter((it) => ITEM_KINDS.includes(it.kind) && it.at).map((it) => ({ ...it, years: it.years.length ? [...new Set(it.years)] : [1, 2, 3] })).slice(0, 6);
+  return {
+    title: String((raw && raw.title) || 'A situation').slice(0, 80), summary: String((raw && raw.summary) || ''),
+    read: KNOWN.includes(raw && raw.read) ? raw.read : null, untested: !!(raw && raw.untested),
+    changes: {
+      extra_students: Math.round(num(c.extra_students, 0, 200, 0)), present_share: num(c.present_share, 0, 1.5, 1),
+      arrive_shift_h: num(c.arrive_shift_h, -6, 6, 0), leave_shift_h: num(c.leave_shift_h, -8, 8, 0),
+      lift_out: !!c.lift_out, paper_out_at: hhmm(c.paper_out_at), shop_closed: !!c.shop_closed, add_items: items,
+    },
+  };
+}
+
 /** The reading: a situation spec, or throws with a readable message. */
 export async function interpretSituation(text, context = {}) {
   const apiKey = getKey(); if (!apiKey) throw new Error('No key saved. Save your Claude API key first, or pick a listed situation.');
   const client = new Anthropic({ apiKey, dangerouslyAllowBrowser: true });
   const user = `Day: ${context.date || 'a studio day'}${context.info ? ` (${context.info})` : ''}.\nDescription: ${text}`;
-  const msg = await client.messages.create({
-    model: 'claude-opus-5-5', max_tokens: 1500,
-    output_config: { effort: 'low', format: { type: 'json_schema', schema: SCHEMA } },
-    system: SYSTEM,
-    messages: [{ role: 'user', content: user }],
-  });
+  let msg;
+  try {
+    msg = await client.messages.create({
+      model: 'claude-opus-5-5', max_tokens: 1500,
+      output_config: { effort: 'low', format: { type: 'json_schema', schema: API_SCHEMA } },
+      system: SYSTEM,
+      messages: [{ role: 'user', content: user }],
+    });
+  } catch (e) {
+    if (e instanceof Anthropic.AuthenticationError) throw new Error('the key was not accepted. Check it, or clear it and save it again.');
+    if (e instanceof Anthropic.PermissionDeniedError) throw new Error('this key may not use the model. Check the key\'s workspace.');
+    if (e instanceof Anthropic.RateLimitError) throw new Error('too many requests on this key just now. Try again in a minute.');
+    if (e instanceof Anthropic.APIConnectionError) throw new Error('no connection to the Claude API. Check the network.');
+    if (e instanceof Anthropic.APIError) throw new Error(`the Claude API answered ${e.status}: ${e.message}`);
+    throw e;
+  }
   if (msg.stop_reason === 'refusal') throw new Error('The reading was declined. Pick a listed situation instead.');
+  if (msg.stop_reason === 'max_tokens') throw new Error('The reading ran too long. Shorten the description and try again.');
   const block = msg.content.find((b) => b.type === 'text'); if (!block) throw new Error('No reading came back.');
-  const spec = JSON.parse(block.text);
+  const raw = JSON.parse(block.text);
+  const spec = sanitize(raw);
   spec.source = { model: msg.model, usage: msg.usage ? { input: msg.usage.input_tokens, output: msg.usage.output_tokens } : null };
   return spec;
 }

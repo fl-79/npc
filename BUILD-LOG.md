@@ -2171,3 +2171,20 @@ Checked locally at 1440 px and 375 px: step 1 and the pointer on load, two steps
 row at the end, no sideways scroll on the phone.
 - Reverted the same afternoon (owner: a still, no animation or steps, the whole thing at once): `methodology-web.html` is
   back to the five cards shown together, as uploaded at fb0d1bf. The click-through stays in the presentation version.
+
+### 2026-11-13, afternoon: the OTHER reading fixed for a real key
+
+The owner asked whether A SITUATION's OTHER works with a Claude API key. It had never been tried with one, and reading the
+request against the current API documentation it would have failed: its structured-output schema carried number and array
+limits (minimum, maximum, maxItems) that structured outputs refuse, and `messages.create` sends a schema as written. Fixed
+in `src/ui/interpret.js`:
+- `apiSchema()` removes number, string and array limits and writes them into each description for the model; enums stay,
+  which the API enforces (the SDK 1.6.0 helper `jsonSchemaOutputFormat` was tried and not used: it also moves enums into
+  descriptions). The two fields that may be null are written as `anyOf` so their value lists hold.
+- `sanitize()` enforces the limits on the reply: numbers clamped, times checked, at most six added items, unknown kinds and
+  years dropped, an unknown listed situation read as none.
+- The SDK's typed errors become readable notes (a key not accepted, no permission, rate limit, no connection, any other
+  API status); a reply cut off at the token limit says so.
+`test/_interpret.mjs` checks it with the network replaced by a fake (no key, nothing sent): 14 checks pass, among them
+no limits in the schema sent, the enums kept, every out-of-range value clamped, a refused key and a refusal. Not checked:
+a live request with a real key; the first one will be the owner's.
