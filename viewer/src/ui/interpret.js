@@ -10,7 +10,7 @@ import Anthropic from '@anthropic-ai/sdk';
 export const KEY_NAME = 'npc.claudeKey';
 export function getKey() { try { return localStorage.getItem(KEY_NAME) || ''; } catch { return ''; } }
 /** The one saved example (program/other-example.json): the OTHER flow without a key, for a GitHub test run (owner 2026-11-12). */
-export async function loadExample() { const r = await fetch('/program/other-example.json', { cache: 'no-store' }); if (!r.ok) throw new Error('no example'); return r.json(); }
+export async function loadExample() { const r = await fetch('program/other-example.json', { cache: 'no-store' }); if (!r.ok) throw new Error('no example'); return r.json(); }
 export function setKey(v) { try { if (v) localStorage.setItem(KEY_NAME, v); else localStorage.removeItem(KEY_NAME); } catch { /* storage blocked: the key lives for this page only */ } }
 
 const KNOWN = ['review', 'pinup', 'lastcrit', 'good_times', 'waffle', 'deadline', 'clash', 'paper', 'lift', 'cohort', 'weekend'];

@@ -174,7 +174,7 @@ export class RunController {
     this.ready = (async () => {
       this.say('Loading the floors and the people…');
       const levels = await this.pixel.loadAllTiles();
-      const [rooms, objects, building, cohort, calendar, affordances, P, simParams] = await Promise.all(['rooms', 'objects', 'building', 'cohort', 'calendar', 'affordances', 'parameters', 'simulation'].map((n) => fetchJSON(`/program/${n}.json`)));
+      const [rooms, objects, building, cohort, calendar, affordances, P, simParams] = await Promise.all(['rooms', 'objects', 'building', 'cohort', 'calendar', 'affordances', 'parameters', 'simulation'].map((n) => fetchJSON(`program/${n}.json`)));
       this.P = P; this.simParams = simParams; this.program = { rooms, objects, building, cohort, calendar, affordances };
       this.building = new Building(levels, simParams); this.world = new World(this.building, this.program, P); this.cal = new Calendar(calendar);
       window.npcWorld = this.world;

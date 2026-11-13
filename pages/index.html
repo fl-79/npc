@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NPC</title>
+<meta name="description" content="NPC simulates how a building is lived in, through the eyes of the many different people who use it. Two versions: V2 from the Revit model of UBC's Lasserre Building, and V1, the proof of concept." />
+<!-- The site's front page (owner 2026-11-13): the intro and both versions, newest first. The workflow in
+     .github/workflows/pages.yml puts V2 at v2/, V1 (built from the v1 branch) at v1/ and the methodology page beside this. -->
+<style>
+  @font-face { font-family: 'Silkscreen'; src: url('v2/fonts/Silkscreen-Regular-latin.woff2') format('woff2'); font-weight: 400; }
+  @font-face { font-family: 'Nunito'; src: url('v2/fonts/Nunito-latin.woff2') format('woff2'); font-weight: 400 700; }
+  :root { --ink: #1e1a16; --ink2: #5a4d44; --cream: #f3e9d2; --cream2: #e4d7b8; --bg: #e6dcc3; --shadow: #b9ad92; --accent: #c8502c;
+    --head: 'Silkscreen', 'Courier New', monospace; --body: 'Nunito', 'Segoe UI', sans-serif; color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.5 var(--body); padding: 48px max(16px, env(safe-area-inset-left, 0px)) 40px max(16px, env(safe-area-inset-right, 0px)); }
+  main { max-width: 760px; margin: 0 auto; }
+  h1 { font: 400 40px var(--head); letter-spacing: 2px; margin: 0 0 6px; }
+  .people { display: block; width: 240px; height: 72px; image-rendering: pixelated; margin: 0 0 14px; }
+  .intro { font-size: 19px; margin: 0 0 30px; max-width: 64ch; }
+  .win { background: var(--cream); border: 6px double var(--ink); box-shadow: 6px 6px 0 var(--shadow); margin-bottom: 24px; }
+  .bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--cream2); border-bottom: 2px solid var(--ink); padding: 6px 12px; font: 400 13px var(--head); }
+  .bar .tag { font-size: 10px; background: var(--accent); color: var(--cream); padding: 2px 6px; }
+  .body { padding: 14px 18px 16px; }
+  .body p { margin: 0 0 14px; }
+  .links { display: flex; flex-wrap: wrap; gap: 10px; }
+  .links a { font: 400 11px var(--head); color: var(--ink); text-decoration: none; background: var(--cream2); border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--shadow); padding: 8px 12px; }
+  .links a.go { background: var(--ink); color: var(--cream); }
+  .links a:hover, .links a:focus-visible { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--shadow); outline: none; }
+  .old { opacity: 0.92; }
+  footer { font-size: 14px; color: var(--ink2); margin-top: 8px; }
+  footer a { color: var(--ink2); }
+  @media (max-width: 480px) { h1 { font-size: 30px; } .intro { font-size: 17px; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>NPC</h1>
+  <img class="people" alt="five of the simulated people" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAYCAYAAABtGnqsAAAE+0lEQVR4AeyYbWiWZRTHj9KzMv1QwWCaoAiBCkE+ReUmYlZgLHtHWWIMwzQSMmpgZR8UilGwPqSWUDEC6eWLLyG1KLdCF/sQQsVjpNGUYdZiFmEZS+35Xd7n4rrv+9wvQ8SCjf3uc87//M993c/hGc+2iZL4mjtj2jmVyF9+uHpubqRp1L4VQw/58R8PXtD8WM+3nuliarEF8oLbW5qECOTdB06487UmOsG40Pu0b6+fJ79jUatzhj0nGBc8nEkE8rGczy2ZywNPHnmz9JKzsQVqkwcHaqJCXQYWB3iJCnUZwvM0JxbN8gLbb5kueeDJug+9SuUyyQNPOO8XSEMfck7zElHUTE2OBy95CBqLQps0+WpRqIGaiAcveQga90bjLIUaqIl48JKHoLG4ULNyPHiTPTQWh37X0ntFoQZqIh685OAWiMCDIfCgh/o/FqBWwnr+rCvdj6n2mGcx1Czqr1MnBaiVsN64+fnU/IWez2L0rKL4yOpHU+ezGOZY1Ecf7hagVsL69Og/ft4tUE3EcFFhTq8M4aLCvMwsnvDMMKeXx42rNoiS5SvqMxcuKszpWaQWuObJp70vK/cGI5n8S82rWbk3GMm6F17xalbuDUby1dudhnpeyuudd4z9mlogt2BxYOVoRbA4wEcEzYlFsDjARwTNiReTFdUmySN5trnA6+9/KukTS0uZIsHyWlpkj4XZt7dJHjFzRrFl/2CqY2kpUyRYXkvD7hfIOw4Q88DT1bkpZeFdBqlGQsDTOvuqhCrCuwy+++xd1yOGIFLjeW3bdsoY/HhCTDSKMh5jLFPyCwwd3+x8NSxdbmmuYVwsr6UZo05iUS4JLpYWtGPpugUzYzVFqE38ugcpk9CrJkujZy6QxjjlNuAWWDt6fML8ZR0CRWN4gBn1kqOBalkRDzCjHvKblqwUUC0r4gFm1EPePTAkoFpW7B4Ycj5m1EM+Wv/dTuuieEX9rxVm8LkFkqjAizux73UB9CPHfnL5njc7/YLVS19RjfmF/YMC9Jgnr77TW2qe5WzvHBZg/vDgkMs71n/uF6xn0VdUY4lHG5sF6A3/cdrl1PTQ1EuuoLFEPAfmPCdAj3ny3ZPucYvHg5ce+AXy18TOtbMEaABLnHJkF6mj66GpAnidEFzQKuufEFCZxa0a+ltLObtiuQOvF6MEbfWiLoFIcovb997lWsp91Q4HXi9GCdptdy8TiCTZOjAiH9T+1FLmLbjTgdeLUYJ2Xfs2gUhyS/z+5s1aytSlGx14VfQLVGE8jm0DsQU2LX5cIOsWjbe2CWT1v2ieKZDV3zHvWoGs/poNjQJZ/eWPXSOQ1b8UemyBl+IB/u9nmgtsfWtEkmzqPVP6tZ7aukOSTOjpLz2/S45Jkm+bpkjR14zhfoGenk8EKpWG+v/2GlxOPW3koEDWfVoOvSQw/fAWSXLDaJ9Uf3jDEc77BfLJwicohIYwX/lMlwDeUCdHYxaoLZgFvMk+Gp/AkOxp3bb2WQG8qmlE4xMUVEvGvbVfBfAme2jMQrKnNbOAVzW/QISwQW2R58nr6b3yPHm9/+p8bIH6kPv79oiF9otiw5nfxKJoTvvvv/iAWGi/KFpnoxXNab/3y5pYaD+M5gJDw3iev4HUAn/+/eSDi1sWigW9/NuJOM/ZusvA9eqtvG881tlo9PJm6TmPcbbUNdfDlIPz1L34k7heYvZfAAAA//+s/2otAAAABklEQVQDAAD0M8aCw7LXAAAAAElFTkSuQmCC" />
+  <p class="intro">NPC simulates how a building is lived in, through the eyes of the many different people who use it, so a design can be tested against their days before it is built. It is a studio project for ARCH 540 at UBC, set in the Frederic Lasserre Building, the home of the School of Architecture and Landscape Architecture.</p>
+
+  <section class="win">
+    <div class="bar"><span>V2 &middot; NOVEMBER 2026</span><span class="tag">LATEST</span></div>
+    <div class="body">
+      <p>The building from its Revit model. 176 students and instructors, each with their own traits, needs and schedule, live a day or a stretch of the Fall 2026 term: crits, plotter queues, the lift, lunch, conversations between years. The tool measures collaboration and focus against goals from research and suggests design changes, each traced to what caused it.</p>
+      <div class="links"><a class="go" href="v2/">OPEN V2</a><a href="methodology.html">HOW IT WAS MADE</a><a href="https://github.com/fl-79/npc">CODE</a></div>
+    </div>
+  </section>
+
+  <section class="win old">
+    <div class="bar"><span>V1 &middot; OCTOBER 2026</span><span>PROOF OF CONCEPT</span></div>
+    <div class="body">
+      <p>The first try: a studio day on a plan of the third floor, with AI giving each occupant a voice, so a design is evaluated through many different eyes. It set out the questions V2 answers from the model and from data.</p>
+      <div class="links"><a class="go" href="v1/">OPEN V1</a><a href="https://github.com/fl-79/npc/tree/v1">CODE</a></div>
+    </div>
+  </section>
+
+  <footer>Both run in the browser. V2 opens with a short guided tour. Source and notes: <a href="https://github.com/fl-79/npc">github.com/fl-79/npc</a>.</footer>
+</main>
+</body>
+</html>

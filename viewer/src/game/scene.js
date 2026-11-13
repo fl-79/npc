@@ -43,7 +43,7 @@ export class LevelScene extends Phaser.Scene {
 
   preload() {
     // one cache key per floor: the loader skips a key that is already cached, so a shared key would keep the first floor
-    this.load.json(`tiles:${this.levelFile}`, `/exports/tiles/${this.levelFile}.json`);
+    this.load.json(`tiles:${this.levelFile}`, `exports/tiles/${this.levelFile}.json`);
   }
 
   create() {

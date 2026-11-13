@@ -27,7 +27,7 @@ export class PixelFloorView {
   /** The tile files of every level, fetched once. */
   async loadAllTiles() {
     if (!this.levels) return null;
-    for (const lv of this.levels) if (!this.tiles[lv.file]) this.tiles[lv.file] = await (await fetch(`/exports/tiles/${lv.file}.json`, { cache: 'no-store' })).json();
+    for (const lv of this.levels) if (!this.tiles[lv.file]) this.tiles[lv.file] = await (await fetch(`exports/tiles/${lv.file}.json`, { cache: 'no-store' })).json();
     return this.levels.map((lv, k) => ({ ...lv, k, L: this.tiles[lv.file] }));
   }
   setProgram(program) { this.program = program; this.programVersion++; }

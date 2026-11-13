@@ -8,10 +8,12 @@ export function toWorld(p) {
 }
 
 async function fetchJSON(url, onProgress) {
-  const res = await fetch(url);
+  let res = await fetch(url);
+  // a static site has no server to unpack exports/meshes.json.gz (the repository's copy): fetch it and unpack it here (2026-11-13)
+  if (!res.ok && url.endsWith('.json')) { const gz = await fetch(url + '.gz'); if (gz.ok) res = gz; }
   if (!res.ok) throw new Error(`${url}: ${res.status}`);
   const total = Number(res.headers.get('x-unpacked-length')) || (res.headers.get('content-encoding') ? 0 : Number(res.headers.get('content-length'))) || 0;   // a gzip file's own size is not what the reader counts
-  if (!res.body || !onProgress) return res.json();
+  if (!res.body || !onProgress) { const b = await res.blob(); const h = new Uint8Array(await b.slice(0, 2).arrayBuffer()); return JSON.parse(await (h[0] === 0x1f && h[1] === 0x8b ? new Response(b.stream().pipeThrough(new DecompressionStream('gzip'))).text() : b.text())); }
   const reader = res.body.getReader();
   const chunks = [];
   let got = 0;
@@ -23,6 +25,8 @@ async function fetchJSON(url, onProgress) {
     onProgress(got, total);
   }
   const blob = new Blob(chunks);
+  const head = new Uint8Array(await blob.slice(0, 2).arrayBuffer());
+  if (head[0] === 0x1f && head[1] === 0x8b) return JSON.parse(await new Response(blob.stream().pipeThrough(new DecompressionStream('gzip'))).text());   // still gzip: unpack
   return JSON.parse(await blob.text());
 }
 
@@ -34,14 +38,14 @@ async function fetchJSON(url, onProgress) {
 const nextTick = () => new Promise((r) => setTimeout(r, 0));   // lets the loading bar paint before a long synchronous step
 export async function loadModel(status, progress = () => {}) {
   status('loading model.json'); progress(0.03, 'the model');
-  const model = await fetchJSON('/exports/model.json');
+  const model = await fetchJSON('exports/model.json');
   status('loading meshes.json'); progress(0.12, 'the building');
-  const meshes = await fetchJSON('/exports/meshes.json', (got, total) => {
+  const meshes = await fetchJSON('exports/meshes.json', (got, total) => {
     status(`loading meshes.json ${(got / 1e6).toFixed(1)} MB${total ? ' / ' + (total / 1e6).toFixed(1) : ''}`);
     progress(0.12 + 0.6 * (total ? Math.min(1, got / total) : 0), `the building, ${(got / 1e6).toFixed(1)} MB`);
   });
   let checks = { checks: [], summary: {} };
-  try { checks = await fetchJSON('/exports/checks.json'); } catch (e) { /* validator not run yet */ }
+  try { checks = await fetchJSON('exports/checks.json'); } catch (e) { /* validator not run yet */ }
 
   status('indexing elements'); progress(0.75, 'the elements'); await nextTick();
   const elements = new Map(); // id -> record from model.json (+ kind)

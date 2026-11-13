@@ -81,7 +81,7 @@ async function main() {
   // urban context (OpenStreetMap), only with the whole building
   let context = null, contextMeta = null;
   try {
-    const res = await fetch('/exports/context.json');
+    const res = await fetch('exports/context.json');
     if (res.ok) {
       const ctx = await res.json();
       contextMeta = ctx.meta;
@@ -465,7 +465,7 @@ async function main() {
   // is kept up by chat since (scripts/program_todo.py lists what is still open). Here it names
   // the rooms in the ROOMS list and the pixel views, and the status window says what is open.
   let program = { meta: {}, rooms: {} };
-  try { const r = await fetch('/program/rooms.json', { cache: 'no-store' }); if (r.ok) program = await r.json(); } catch (e) { /* none yet */ }
+  try { const r = await fetch('program/rooms.json', { cache: 'no-store' }); if (r.ok) program = await r.json(); } catch (e) { /* none yet */ }
   if (!program.rooms) program.rooms = {};
   pixel.setProgram(program); pixelB.setProgram(program);
   const entryOf = (id) => program.rooms[id] || null;
@@ -647,10 +647,10 @@ async function main() {
   let sim = null, building = null, simParams = null, simTimer = null, simLast = 0;
   const simEls = { start: $('#sim-start'), pause: $('#sim-pause'), reset: $('#sim-reset'), speed: $('#sim-speed'), agents: $('#sim-agents'), agentsV: $('#sim-agents-v'), mode: $('#sim-mode'), stat: $('#sim-stat'), log: $('#sim-log') };
   async function buildSim() {
-    if (!simParams) simParams = await (await fetch('/program/simulation.json', { cache: 'no-store' })).json();
+    if (!simParams) simParams = await (await fetch('program/simulation.json', { cache: 'no-store' })).json();
     if (!building) {
       const levels = [];
-      for (const n of planLevels) levels.push({ name: n, file: tileFileOf(n), L: await (await fetch(`/exports/tiles/${tileFileOf(n)}.json`, { cache: 'no-store' })).json() });
+      for (const n of planLevels) levels.push({ name: n, file: tileFileOf(n), L: await (await fetch(`exports/tiles/${tileFileOf(n)}.json`, { cache: 'no-store' })).json() });
       building = new Building(levels, simParams);
     }
     sim = new Simulation(building, simParams, { seed: Date.now() % 100000, mode: simEls.mode.value });

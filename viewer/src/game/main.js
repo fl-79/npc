@@ -49,7 +49,7 @@ window.addEventListener('keydown', (e) => {
 
 // the surroundings, when scripts/fetch_context.py has run, and the owner's room labels, when any
 const get = (url) => fetch(url).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-Promise.all([get('/exports/context.json'), get('/program/rooms.json')]).then(([ctx, program]) => {
+Promise.all([get('exports/context.json'), get('program/rooms.json')]).then(([ctx, program]) => {
   if (ctx) view.setContext(ctx);
   if (program) view.setProgram(program);
   document.fonts.ready.then(() => start(current));

@@ -2123,3 +2123,19 @@ to present. Done:
 - Ten files carry the owner's local folder path (the pyRevit buttons' export destination and the export logs).
 - `research/methodology.html` gains a FULL SCREEN button (F) for presenting and a 16 px margin round the fitted page;
   the same page is published as a private artifact, "NPC V2 Methodology".
+
+### 2026-11-13, afternoon: both versions on the site, newest first
+
+The owner: a new intro, both versions as links, newest first; https://fl-79.github.io/npc/ showed only V1. Done:
+- `pages/index.html`: the site's front page in the tool's style, the intro paragraph, then V2 (latest: open, how it was made,
+  code) and V1 (proof of concept: open, code on the v1 branch).
+- `.github/workflows/pages.yml` on main builds both: V2 from `viewer/` with `--base=./` and its `exports/` and `program/`
+  copied beside it at `v2/`; V1 from the `v1` branch as it was at `v1/`; the front page at the root and
+  `research/methodology.html` as `methodology.html`.
+- V2 as a static site: every `/exports/` and `/program/` fetch is relative now (the same code runs under the dev server
+  at / and under /npc/v2/), and `fetchJSON` falls back to `meshes.json.gz` and unpacks it in the browser
+  (`DecompressionStream`) when no server does; it checks the gzip header, so a server that already unpacked it is fine.
+- The README opens with the same intro and links, V2 first.
+Checked with the site assembled and served locally: the front page; V2 loading the building from the compressed file and
+running to 12:30 with 123 people in; V1's title screen and plan files from v1/ (its `/api/status` call misses on any static
+host, as on the old site); the methodology page.

@@ -235,7 +235,7 @@ export async function initPanels() {
 
   // -------------------------------------------------------------- DAY: the term calendar and the pick
   let cal = null;
-  try { const r = await fetch('/program/calendar.json', { cache: 'no-store' }); if (r.ok) cal = await r.json(); } catch (e) { /* none */ }
+  try { const r = await fetch('program/calendar.json', { cache: 'no-store' }); if (r.ok) cal = await r.json(); } catch (e) { /* none */ }
   const calEl = $('#cal'), pickEl = $('#day-pick'), pickNote = $('#day-note'), evEl = $('#sc-events');
   const state = { date: null, menu, mode: 'day', short: '', sit: 'none' };
   window.npcUI = state;
@@ -399,7 +399,7 @@ export async function initPanels() {
   $('#sit-text').addEventListener('input', () => { $('#sit-reading').textContent = $('#sit-text').value.trim() ? 'not read yet' : '—'; });
   // -------------------------------------------------------------- the occupants: read, never typed
   try {
-    const r = await fetch('/program/cohort.json', { cache: 'no-store' });
+    const r = await fetch('program/cohort.json', { cache: 'no-store' });
     if (r.ok) {
       const co = await r.json();
       const students = co.years.reduce((a, y) => a + y.students, 0), total = students + co.instructors.count;

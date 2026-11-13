@@ -1,11 +1,18 @@
-# NPC V2
+# NPC
 
-An agent-based simulation of studio life in UBC's Frederic Lasserre Building, built from the Revit model. 176 students and
-instructors live a day, or a stretch, of the Fall 2026 term: the tool shows how the building is used, what the people say
-and why, and suggests design changes, each traced to what caused it. V1, the proof of concept, is on the `v1` branch and
-at https://fl-79.github.io/npc/.
+NPC simulates how a building is lived in, through the eyes of the many different people who use it, so a design can be
+tested against their days before it is built. It is a studio project for ARCH 540 at UBC, set in the Frederic Lasserre
+Building. Both versions run in the browser: https://fl-79.github.io/npc/
 
-## Run it
+- **V2, November 2026 (this branch):** [open V2](https://fl-79.github.io/npc/v2/) ·
+  [how it was made](https://fl-79.github.io/npc/methodology.html). The building from its Revit model: 176 students and
+  instructors, each with their own traits, needs and schedule, live a day or a stretch of the Fall 2026 term, and the
+  tool suggests design changes, each traced to what caused it.
+- **V1, October 2026, the proof of concept:** [open V1](https://fl-79.github.io/npc/v1/) ·
+  [code on the v1 branch](https://github.com/fl-79/npc/tree/v1). A studio day on a plan of the third floor, with AI
+  giving each occupant a voice.
+
+## Run V2 on your machine
 
 Needs Node 18 or later. Revit is not needed: the model's export is in `exports/` (the meshes compressed).
 
