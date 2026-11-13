@@ -13,8 +13,8 @@ Both versions run in the browser: https://fl-79.github.io/npc/
 | The building | Every floor, from the Revit model, with rooms, objects and what each allows | The third-floor studio, from a plan drawing |
 | The people | 176 students and instructors with personality, needs, stress and a schedule | Occupants of a few types, given a voice by AI |
 | The time | A full semester, day by day | One day |
-| Measures | Collaboration (shared routes, new ties, contact across years) and focus, against goals from research | Comfort, queues, crowding and wayfinding |
-| Suggests | Design changes traced to their causes; agents may rearrange furniture | Design changes drawn from the agents' day |
+| Measures | Collaboration (shared routes, new ties, contact across years) and focus, against goals from research | Nothing counted: what the occupants noticed, in their own words |
+| Suggests | Design changes traced to their causes; agents may rearrange furniture | Design changes drawn from the agents' day, the only result, and a qualitative one |
 
 ## Run V2 on your machine
 

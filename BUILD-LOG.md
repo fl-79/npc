@@ -2155,3 +2155,17 @@ creative workspaces; V1 and V2 described in parallel, V1 a one-day test of desig
 more modelled, with specific collaboration metrics, over a full semester. Done: `pages/index.html` opens with "A case study
 in creative workspaces" and a new intro; both version cards have the same five rows (the building, the people, the time,
 measures, suggests) under a one-line aim. The README intro carries the same text and a side-by-side table.
+
+### 2026-11-13, afternoon: V1 described as qualitative; the web methodology as a click-through
+
+The owner: V1 had no quantitative metrics, only qualitative results through its design suggestions; the website's "how it
+was made" should show step 1 from the start and have a graphic that prompts the user to keep clicking. Done:
+- Home page and README: V1's MEASURES row reads "Nothing counted: what the occupants noticed, in their own words", and its
+  SUGGESTS row says the design changes were its only result, and a qualitative one.
+- `research/methodology-web.html`: step 1 shows on load; the next step's place holds a dashed box with a pixel hand that
+  nudges up and left, CLICK and "for step 2 of 5" (the last says "to see them all"); a click anywhere, the box, space,
+  Enter or the right arrow shows the next card, which rises in while earlier ones fade to 45% (hover brings one back);
+  squares above jump to a step; past the last everything shows at full strength with START AGAIN; on a phone the new card
+  scrolls into view. The grid keeps its empty columns so each card appears where it stays.
+Checked locally at 1440 px and 375 px: step 1 and the pointer on load, two steps in with the first faded, all five in one
+row at the end, no sideways scroll on the phone.
