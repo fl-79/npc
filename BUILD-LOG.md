@@ -2169,3 +2169,5 @@ was made" should show step 1 from the start and have a graphic that prompts the 
   scrolls into view. The grid keeps its empty columns so each card appears where it stays.
 Checked locally at 1440 px and 375 px: step 1 and the pointer on load, two steps in with the first faded, all five in one
 row at the end, no sideways scroll on the phone.
+- Reverted the same afternoon (owner: a still, no animation or steps, the whole thing at once): `methodology-web.html` is
+  back to the five cards shown together, as uploaded at fb0d1bf. The click-through stays in the presentation version.
