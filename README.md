@@ -1,16 +1,20 @@
 # NPC
 
-NPC simulates how a building is lived in, through the eyes of the many different people who use it, so a design can be
-tested against their days before it is built. It is a studio project for ARCH 540 at UBC, set in the Frederic Lasserre
-Building. Both versions run in the browser: https://fl-79.github.io/npc/
+**A case study in creative workspaces.** A design studio is hard to judge from its plan: hundreds of people in different
+years, with different schedules, deadlines and habits, use it in patterns that shift by the hour and across a term. NPC
+takes UBC's Frederic Lasserre Building as a case study and fills it with agents, each with their own traits and routine,
+so those complex, varied patterns play out and can be measured, and design changes can be tested before they are built.
+Both versions run in the browser: https://fl-79.github.io/npc/
 
-- **V2, November 2026 (this branch):** [open V2](https://fl-79.github.io/npc/v2/) ·
-  [how it was made](https://fl-79.github.io/npc/methodology.html). The building from its Revit model: 176 students and
-  instructors, each with their own traits, needs and schedule, live a day or a stretch of the Fall 2026 term, and the
-  tool suggests design changes, each traced to what caused it.
-- **V1, October 2026, the proof of concept:** [open V1](https://fl-79.github.io/npc/v1/) ·
-  [code on the v1 branch](https://github.com/fl-79/npc/tree/v1). A studio day on a plan of the third floor, with AI
-  giving each occupant a voice.
+| | V2, November 2026 (this branch) | V1, October 2026, proof of concept |
+|---|---|---|
+| | [Open V2](https://fl-79.github.io/npc/v2/) · [how it was made](https://fl-79.github.io/npc/methodology.html) | [Open V1](https://fl-79.github.io/npc/v1/) · [code on the v1 branch](https://github.com/fl-79/npc/tree/v1) |
+| Aim | More complexity, more modelled, specific collaboration metrics | A test: can agents suggest design changes? |
+| The building | Every floor, from the Revit model, with rooms, objects and what each allows | The third-floor studio, from a plan drawing |
+| The people | 176 students and instructors with personality, needs, stress and a schedule | Occupants of a few types, given a voice by AI |
+| The time | A full semester, day by day | One day |
+| Measures | Collaboration (shared routes, new ties, contact across years) and focus, against goals from research | Comfort, queues, crowding and wayfinding |
+| Suggests | Design changes traced to their causes; agents may rearrange furniture | Design changes drawn from the agents' day |
 
 ## Run V2 on your machine
 

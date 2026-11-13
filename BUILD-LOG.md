@@ -2147,3 +2147,11 @@ The owner: the methodology graphic less detailed for the web version, proposed b
 shows) that sit in a row on a wide screen and stack on a phone, with no click-through, no export or question counts, no
 ledger, four plain agent categories and two lines of metrics. The Pages workflow now publishes it as `methodology.html`;
 the detailed click-through stays in `research/methodology.html` and as the presentation artifact.
+
+### 2026-11-13, afternoon: the home page as a case study
+
+The owner: the home page about the Lasserre as a case study, agents taking on complex and varied patterns to evaluate
+creative workspaces; V1 and V2 described in parallel, V1 a one-day test of design suggestions from agents, V2 more complex,
+more modelled, with specific collaboration metrics, over a full semester. Done: `pages/index.html` opens with "A case study
+in creative workspaces" and a new intro; both version cards have the same five rows (the building, the people, the time,
+measures, suggests) under a one-line aim. The README intro carries the same text and a side-by-side table.

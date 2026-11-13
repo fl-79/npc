@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>NPC</title>
-<meta name="description" content="NPC simulates how a building is lived in, through the eyes of the many different people who use it. Two versions: V2 from the Revit model of UBC's Lasserre Building, and V1, the proof of concept." />
+<meta name="description" content="NPC takes UBC's Lasserre Building as a case study, using agents to play out the complex, varied patterns of a design studio and evaluate creative workspaces. V2 covers a full semester; V1 tested the idea over one day." />
 <!-- The site's front page (owner 2026-11-13): the intro and both versions, newest first. The workflow in
      .github/workflows/pages.yml puts V2 at v2/, V1 (built from the v1 branch) at v1/ and the methodology page beside this. -->
 <style>
@@ -17,7 +17,12 @@
   main { max-width: 760px; margin: 0 auto; }
   h1 { font: 400 40px var(--head); letter-spacing: 2px; margin: 0 0 6px; }
   .people { display: block; width: 240px; height: 72px; image-rendering: pixelated; margin: 0 0 14px; }
+  .kicker { font: 400 12px var(--head); color: var(--accent); letter-spacing: 1px; margin: 0 0 8px; }
   .intro { font-size: 19px; margin: 0 0 30px; max-width: 64ch; }
+  dl { display: grid; grid-template-columns: 128px 1fr; gap: 6px 14px; margin: 0 0 16px; }
+  dt { font: 400 10px var(--head); color: var(--ink2); padding-top: 5px; }
+  dd { margin: 0; font-size: 16px; line-height: 1.4; }
+  @media (max-width: 480px) { dl { grid-template-columns: 1fr; gap: 2px; } dd { margin-bottom: 8px; } }
   .win { background: var(--cream); border: 6px double var(--ink); box-shadow: 6px 6px 0 var(--shadow); margin-bottom: 24px; }
   .bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--cream2); border-bottom: 2px solid var(--ink); padding: 6px 12px; font: 400 13px var(--head); }
   .bar .tag { font-size: 10px; background: var(--accent); color: var(--cream); padding: 2px 6px; }
@@ -37,12 +42,20 @@
 <main>
   <h1>NPC</h1>
   <img class="people" alt="five of the simulated people" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAYCAYAAABtGnqsAAAE+0lEQVR4AeyYbWiWZRTHj9KzMv1QwWCaoAiBCkE+ReUmYlZgLHtHWWIMwzQSMmpgZR8UilGwPqSWUDEC6eWLLyG1KLdCF/sQQsVjpNGUYdZiFmEZS+35Xd7n4rrv+9wvQ8SCjf3uc87//M993c/hGc+2iZL4mjtj2jmVyF9+uHpubqRp1L4VQw/58R8PXtD8WM+3nuliarEF8oLbW5qECOTdB06487UmOsG40Pu0b6+fJ79jUatzhj0nGBc8nEkE8rGczy2ZywNPHnmz9JKzsQVqkwcHaqJCXQYWB3iJCnUZwvM0JxbN8gLbb5kueeDJug+9SuUyyQNPOO8XSEMfck7zElHUTE2OBy95CBqLQps0+WpRqIGaiAcveQga90bjLIUaqIl48JKHoLG4ULNyPHiTPTQWh37X0ntFoQZqIh685OAWiMCDIfCgh/o/FqBWwnr+rCvdj6n2mGcx1Czqr1MnBaiVsN64+fnU/IWez2L0rKL4yOpHU+ezGOZY1Ecf7hagVsL69Og/ft4tUE3EcFFhTq8M4aLCvMwsnvDMMKeXx42rNoiS5SvqMxcuKszpWaQWuObJp70vK/cGI5n8S82rWbk3GMm6F17xalbuDUby1dudhnpeyuudd4z9mlogt2BxYOVoRbA4wEcEzYlFsDjARwTNiReTFdUmySN5trnA6+9/KukTS0uZIsHyWlpkj4XZt7dJHjFzRrFl/2CqY2kpUyRYXkvD7hfIOw4Q88DT1bkpZeFdBqlGQsDTOvuqhCrCuwy+++xd1yOGIFLjeW3bdsoY/HhCTDSKMh5jLFPyCwwd3+x8NSxdbmmuYVwsr6UZo05iUS4JLpYWtGPpugUzYzVFqE38ugcpk9CrJkujZy6QxjjlNuAWWDt6fML8ZR0CRWN4gBn1kqOBalkRDzCjHvKblqwUUC0r4gFm1EPePTAkoFpW7B4Ycj5m1EM+Wv/dTuuieEX9rxVm8LkFkqjAizux73UB9CPHfnL5njc7/YLVS19RjfmF/YMC9Jgnr77TW2qe5WzvHBZg/vDgkMs71n/uF6xn0VdUY4lHG5sF6A3/cdrl1PTQ1EuuoLFEPAfmPCdAj3ny3ZPucYvHg5ce+AXy18TOtbMEaABLnHJkF6mj66GpAnidEFzQKuufEFCZxa0a+ltLObtiuQOvF6MEbfWiLoFIcovb997lWsp91Q4HXi9GCdptdy8TiCTZOjAiH9T+1FLmLbjTgdeLUYJ2Xfs2gUhyS/z+5s1aytSlGx14VfQLVGE8jm0DsQU2LX5cIOsWjbe2CWT1v2ieKZDV3zHvWoGs/poNjQJZ/eWPXSOQ1b8UemyBl+IB/u9nmgtsfWtEkmzqPVP6tZ7aukOSTOjpLz2/S45Jkm+bpkjR14zhfoGenk8EKpWG+v/2GlxOPW3koEDWfVoOvSQw/fAWSXLDaJ9Uf3jDEc77BfLJwicohIYwX/lMlwDeUCdHYxaoLZgFvMk+Gp/AkOxp3bb2WQG8qmlE4xMUVEvGvbVfBfAme2jMQrKnNbOAVzW/QISwQW2R58nr6b3yPHm9/+p8bIH6kPv79oiF9otiw5nfxKJoTvvvv/iAWGi/KFpnoxXNab/3y5pYaD+M5gJDw3iev4HUAn/+/eSDi1sWigW9/NuJOM/ZusvA9eqtvG881tlo9PJm6TmPcbbUNdfDlIPz1L34k7heYvZfAAAA//+s/2otAAAABklEQVQDAAD0M8aCw7LXAAAAAElFTkSuQmCC" />
-  <p class="intro">NPC simulates how a building is lived in, through the eyes of the many different people who use it, so a design can be tested against their days before it is built. It is a studio project for ARCH 540 at UBC, set in the Frederic Lasserre Building, the home of the School of Architecture and Landscape Architecture.</p>
+  <p class="kicker">A CASE STUDY IN CREATIVE WORKSPACES</p>
+  <p class="intro">A design studio is hard to judge from its plan. Hundreds of people in different years, with different schedules, deadlines and habits, use it in patterns that shift by the hour and across a term. NPC takes UBC's Frederic Lasserre Building, home of the School of Architecture and Landscape Architecture, as a case study: it fills the building with agents, each with their own traits and routine, so those complex, varied patterns play out and can be measured, and design changes can be tested before they are built.</p>
 
   <section class="win">
     <div class="bar"><span>V2 &middot; NOVEMBER 2026</span><span class="tag">LATEST</span></div>
     <div class="body">
-      <p>The building from its Revit model. 176 students and instructors, each with their own traits, needs and schedule, live a day or a stretch of the Fall 2026 term: crits, plotter queues, the lift, lunch, conversations between years. The tool measures collaboration and focus against goals from research and suggests design changes, each traced to what caused it.</p>
+      <p>Builds on V1 with more complexity, more of the building modelled and specific collaboration metrics, over a full semester.</p>
+      <dl>
+        <dt>THE BUILDING</dt><dd>Every floor, from the Revit model, with rooms, objects and what each allows</dd>
+        <dt>THE PEOPLE</dt><dd>176 students and instructors, each with personality, needs, stress and a schedule</dd>
+        <dt>THE TIME</dt><dd>A full semester, day by day, with crits, reviews and events</dd>
+        <dt>MEASURES</dt><dd>Collaboration (shared routes, new ties, contact across years) and focus, against goals from research</dd>
+        <dt>SUGGESTS</dt><dd>Design changes, each traced to what caused it; agents may also rearrange furniture</dd>
+      </dl>
       <div class="links"><a class="go" href="v2/">OPEN V2</a><a href="methodology.html">HOW IT WAS MADE</a><a href="https://github.com/fl-79/npc">CODE</a></div>
     </div>
   </section>
@@ -50,7 +63,14 @@
   <section class="win old">
     <div class="bar"><span>V1 &middot; OCTOBER 2026</span><span>PROOF OF CONCEPT</span></div>
     <div class="body">
-      <p>The first try: a studio day on a plan of the third floor, with AI giving each occupant a voice, so a design is evaluated through many different eyes. It set out the questions V2 answers from the model and from data.</p>
+      <p>A test of the idea: can agents spending a day in a studio suggest how to design it better?</p>
+      <dl>
+        <dt>THE BUILDING</dt><dd>The third-floor studio, from a plan drawing</dd>
+        <dt>THE PEOPLE</dt><dd>Studio occupants of a few types, with traits such as patience and noise sensitivity, given a voice by AI</dd>
+        <dt>THE TIME</dt><dd>One day</dd>
+        <dt>MEASURES</dt><dd>Comfort, queues, crowding and wayfinding, as the occupants met them</dd>
+        <dt>SUGGESTS</dt><dd>Design changes drawn from the agents' day</dd>
+      </dl>
       <div class="links"><a class="go" href="v1/">OPEN V1</a><a href="https://github.com/fl-79/npc/tree/v1">CODE</a></div>
     </div>
   </section>
