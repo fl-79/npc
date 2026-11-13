@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "schema": 1,
+    "note": "Parameters of the simulation (viewer/src/sim). Every number here is an assumption until the owner or the handover confirms it: 'inferred' says so and 'source' where it came from. The owner edits this file; the viewer reads it on load.",
+    "updated": "2026-11-06"
+  },
+  "elevator": {
+    "capacity": 6,
+    "seconds_per_floor": 3.0,
+    "door_open_seconds": 5.0,
+    "door_move_seconds": 1.5,
+    "boarding_seconds_per_person": 1.2,
+    "control": "collective",
+    "control_note": "Collective control: a call is registered when an agent presses the button at a landing; the car keeps its direction while calls remain ahead, stopping for car calls and for landing calls in its direction (so it picks up people on the way who are going the same way); it reverses only when nothing is left ahead; first come first served within that. Capacity and timings are assumptions.",
+    "serves_levels": "all",
+    "inferred": true,
+    "source": "owner, chat 2026-11-06 (the behaviour); numbers assumed"
+  },
+  "walking": {
+    "speed_m_per_s": 1.3,
+    "stair_seconds_per_floor": 18.0,
+    "stair_tile_cost": 2.5,
+    "inferred": true,
+    "source": "general values; to confirm"
+  },
+  "choice": {
+    "stairs_if_floors_at_most": 1,
+    "stairs_share_short": 0.8,
+    "elevator_share_long": 0.7,
+    "note": "How an agent picks stairs or the lift for a trip: for a trip of at most stairs_if_floors_at_most floors it takes the stairs with probability stairs_share_short, otherwise the lift; for a longer trip it takes the lift with probability elevator_share_long, otherwise the stairs. Assumed; to be replaced by the handover's observations.",
+    "inferred": true,
+    "source": "assumed"
+  },
+  "agents": {
+    "count": 12,
+    "dwell_seconds": [20, 90],
+    "note": "The test agents of the first simulation piece: each picks a destination on another floor, goes there (walking, stairs or lift), stays a while, and picks the next. They are not yet the building's occupants with schedules; that comes with the activities and the handover.",
+    "inferred": true,
+    "source": "a test setup"
+  }
+}

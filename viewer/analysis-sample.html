@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NPC V2: analysis sample</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="/src/style.css" />
+  <style>
+    /* A SAMPLE of what ANALYSE will show: a vector diagram over the real Level 3 tiles with made-up
+       numbers. Drawing rules taken from the owner's reference diagrams (graphics/Plan-diagram):
+       heavy black wall poché on white, hairline grey furniture, one hue per reading, soft blobs for
+       fields (red = activity, blue = quiet), smooth coloured path lines with arrowheads and a dark
+       aggregate line where many overlap, faint hatched tints for zones, a scale bar and north.
+       Nothing here comes from a simulation run. */
+    body { overflow: auto; }
+    #wrap { display: grid; grid-template-columns: 400px 1fr 330px; gap: 12px; padding: 12px; }
+    .banner { background: var(--warn); color: var(--ink); font-family: var(--font-head); font-size: 9px; padding: 3px 8px; border: 2px solid var(--ink); margin-bottom: 10px; }
+    #plan { display: block; width: 100%; border: 2px solid var(--ink); background: #fff; }
+    .legend { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 11px; color: var(--ink-2); margin-top: 4px; }
+    .legend i { display: inline-block; width: 12px; height: 10px; vertical-align: middle; margin-right: 3px; }
+    details { margin-top: 6px; font-size: 11px; }
+    details summary { font-family: var(--font-head); font-size: 8px; cursor: pointer; color: var(--ink-2); }
+    details .d { margin: 4px 0 0; line-height: 1.4; }
+    details .d b { font-family: var(--font-head); font-size: 7px; color: var(--ink-2); display: block; margin-top: 4px; }
+    details .d ul { margin: 2px 0 0 14px; padding: 0; }
+    .mid { display: grid; gap: 10px; align-content: start; }
+    .grp { font-family: var(--font-head); font-size: 8px; color: var(--ink-2); margin: 8px 0 4px; border-bottom: 1px dotted var(--band); }
+    .card { display: grid; grid-template-columns: 150px 56px 56px 1fr; gap: 0 10px; align-items: center; padding: 4px 0; border-bottom: 1px dotted var(--band); font-size: 11px; }
+    .card .nm { line-height: 1.2; } .card .nm small { display: block; color: var(--ink-2); font-size: 10px; }
+    .card .v { font-family: var(--font-head); font-size: 12px; text-align: right; } .card .v small { display: block; font-size: 7px; color: var(--ink-2); }
+    .card .v.b { color: var(--accent); }
+    .mbar { position: relative; height: 10px; border: 1px solid var(--ink); background: #fff; }
+    .mbar i { position: absolute; top: 0; bottom: 0; } .mbar i.a { background: rgba(43,36,32,0.55); } .mbar i.b { background: rgba(200,80,44,0.55); top: 4px; }
+    .mbar em { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ok); }
+    .mbar span { position: absolute; top: 12px; font-size: 9px; color: var(--ink-2); white-space: nowrap; }
+    .card .read { grid-column: 1 / -1; color: var(--ink-2); font-size: 10px; margin-top: 10px; }
+    .sug { font-size: 12px; line-height: 1.45; }
+    .sug li { margin-bottom: 8px; } .sug li b { font-family: var(--font-head); font-size: 8px; color: var(--accent); margin-right: 4px; }
+    .sug details { display: inline-block; margin: 2px 0 0; } .sug details summary { display: inline; font-size: 7px; }
+    .trace { background: #fff; border: 1px solid var(--band); padding: 4px 6px; margin-top: 3px; font-size: 11px; }
+    .trace .step { display: grid; grid-template-columns: 70px 1fr; gap: 6px; padding: 2px 0; border-bottom: 1px dotted var(--band); }
+    .trace .step b { font-family: var(--font-head); font-size: 7px; color: var(--ink-2); padding-top: 2px; }
+    .trace .ev { cursor: pointer; text-decoration: underline dotted; } .trace .ev:hover { color: var(--accent); }
+    .trace q { color: var(--ink); font-style: italic; }
+    .tl canvas, .pa canvas { display: block; width: 100%; border: 2px solid var(--ink); background: #fff; }
+    .what { font-size: 11px; color: var(--ink-2); line-height: 1.4; margin-top: 4px; } .what b { color: var(--ink); }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    /* the feed: agents' remarks, live */
+    #feed .body { padding: 0; }
+    #feed .chips { display: flex; gap: 4px; padding: 6px 8px 2px; }
+    #feed .list { max-height: 640px; overflow-y: auto; padding: 4px 8px 8px; }
+    .rm { border: 2px solid var(--ink); background: #fff; box-shadow: 2px 2px 0 var(--ink); padding: 4px 8px; margin: 6px 0; font-size: 12px; line-height: 1.35; animation: pop 0.25s steps(3) both; }
+    .rm.hi { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .rm .who { font-family: var(--font-head); font-size: 8px; display: flex; justify-content: space-between; color: var(--ink-2); }
+    .rm .who i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+    .rm .bc { font-size: 10px; color: var(--ink-2); margin-top: 2px; } .rm .bc b { font-family: var(--font-head); font-size: 7px; }
+    .rm.ev { background: var(--cream-2); font-size: 11px; } .rm.sg { background: #fff4e8; border-color: var(--accent); }
+    @keyframes pop { from { transform: translateY(6px); opacity: 0; } }
+    .clockline { display: flex; justify-content: space-between; align-items: baseline; padding: 4px 8px 0; font-family: var(--font-head); font-size: 9px; }
+    .clockline b { font-size: 14px; } .clockline .live { color: var(--err); animation: blink 1s steps(2, start) infinite; }
+  </style>
+</head>
+<body>
+<div id="wrap">
+  <div>
+    <div class="banner">SAMPLE &middot; SYNTHETIC NUMBERS, NOT A RUN</div>
+    <div class="win">
+      <div class="bar"><span>OVERLAY &middot; LEVEL 3 &middot; TUE 13 OCT</span><span class="bar-r" id="layer-name"></span></div>
+      <div class="body">
+        <div class="row menu-rows" id="layers">
+          <button data-l="activity">ACTIVITY</button><button data-l="encounters">ENCOUNTERS</button><button data-l="paths">PATHS</button><button data-l="queues">QUEUES</button><button data-l="noise">NOISE</button><button data-l="years">BY YEAR</button><button data-l="drift">DRIFT</button>
+        </div>
+        <svg id="plan" viewBox="-1 -1 50 106" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="legend" id="legend"></div>
+        <div class="hint" id="layer-note"></div>
+        <details id="details"><summary>DETAILS &#9660;</summary><div class="d" id="details-body"></div></details>
+      </div>
+    </div>
+  </div>
+
+  <div class="mid">
+    <div class="win">
+      <div class="bar"><span>SUMMARY &middot; WEEK 6 &middot; A: CURRENT LAYOUT &middot; B: BOARDS MOVABLE</span></div>
+      <div class="body sug">
+        <ol id="summary"></ol>
+        <div class="hint">Each suggestion opens a TRACE: the situation it came from, the metric, the events on the plan, and the agents' own remarks at the time. That chain is the verification. Rule-based wording; sample.</div>
+      </div>
+    </div>
+    <div class="win">
+      <div class="bar"><span>METRICS &middot; A against B, the green mark is the benchmark</span></div>
+      <div class="body" id="metrics"></div>
+    </div>
+    <div class="two">
+      <div class="win tl">
+        <div class="bar"><span>TIMELINE &middot; THE TERM</span></div>
+        <div class="body"><canvas id="timeline" width="420" height="170"></canvas>
+          <div class="legend"><span><i style="background:#c8502c"></i>C4 face-to-face</span><span><i style="background:#4f8a4a"></i>F1 focus block</span><span><i style="background:#e4d7b8"></i>band: 20 seeds</span><span><i style="background:#d9c9a3"></i>review weeks</span></div>
+          <div class="what"><b>What this is:</b> the same metrics, one value per week across the term, so you see <i>when</i> the floor changes. The band is how far the seeds disagree.</div>
+        </div>
+      </div>
+      <div class="win pa">
+        <div class="bar"><span>PARETO &middot; CONTACT AGAINST FOCUS</span></div>
+        <div class="body"><canvas id="pareto" width="420" height="170"></canvas>
+          <div class="what"><b>What this is:</b> one point per scenario, contact across, focus up. Up and right is better on both; along the front is a trade, which is a design choice, not a score.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="win" id="feed">
+      <div class="bar"><span>FEED &middot; AGENTS LIVE</span><span class="bar-r" id="feed-count"></span></div>
+      <div class="body">
+        <div class="clockline"><span>TUE 13 OCT</span><b id="feed-clock">13:30</b><span class="live">&#9679; LIVE</span></div>
+        <div class="chips"><button class="small on" data-f="all">ALL</button><button class="small" data-f="rm">REMARKS</button><button class="small" data-f="ev">EVENTS</button><button class="small" data-f="sg">SUGGESTIONS</button></div>
+        <div class="list" id="feed-list"></div>
+      </div>
+    </div>
+    <div class="hint" style="margin-top:8px">Remarks are in the agent's voice at decision points, each with a <b>because</b> line carrying the computed fact (the V1 pattern). Events are the engine's own log. A suggestion appears in the feed when its rule fires, and its TRACE points back here.</div>
+  </div>
+</div>
+<script>
+(async () => {
+  const T = await (await fetch('/exports/tiles/level-3.json')).json();
+  const { cols, rows, floor, struct, furniture, rooms } = T;
+  const svg = document.getElementById('plan');
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v); (parent || svg).appendChild(e); return e; };
+  const walk = (r, c) => floor[r][c] >= 1 && (struct[r][c] === 0 || struct[r][c] === 4);
+  const idx = (r, c) => r * cols + c;
+  let seed = 7; const rnd = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
+  // the drawing rules from the reference diagrams
+  const INK = '#111', WALL = '#111', SLAB = '#f2f2f2', ROOM = '#fff', FURN = 'rgba(0,0,0,0.28)';
+  const RED = '#e4473c', BLUE = '#3b5bdb', YEAR = { 1: '#2a9d6b', 2: '#3b5bdb', 3: '#e4473c' };
+
+  // ---- defs: hatch patterns for the zones, arrowheads, soft blobs
+  const defs = el('defs', {});
+  for (const [y, col] of Object.entries(YEAR)) { const p = el('pattern', { id: `h${y}`, width: 1.2, height: 1.2, patternUnits: 'userSpaceOnUse', patternTransform: `rotate(${y * 45})` }, defs); el('line', { x1: 0, y1: 0, x2: 0, y2: 1.2, stroke: col, 'stroke-width': 0.12, opacity: 0.35 }, p); }
+  for (const [n, col] of [['red', RED], ['blue', BLUE]]) { const gr = el('radialGradient', { id: `blob-${n}` }, defs); el('stop', { offset: 0, 'stop-color': col, 'stop-opacity': 0.5 }, gr); el('stop', { offset: 0.6, 'stop-color': col, 'stop-opacity': 0.18 }, gr); el('stop', { offset: 1, 'stop-color': col, 'stop-opacity': 0 }, gr); }
+  for (const [y, col] of Object.entries(YEAR)) { const m = el('marker', { id: `arrow${y}`, viewBox: '0 0 6 6', refX: 5, refY: 3, markerWidth: 3, markerHeight: 3, orient: 'auto' }, defs); el('path', { d: 'M0,0 L6,3 L0,6 z', fill: col }, m); }
+
+  // ---- the plan: slab, rooms, heavy walls, hairline furniture, numbers, scale, north
+  const base = el('g', { id: 'base' });
+  const runs = (test) => { const out = []; for (let r = 0; r < rows; r++) { let c = 0; while (c < cols) { if (!test(r, c)) { c++; continue; } let c2 = c; while (c2 + 1 < cols && test(r, c2 + 1)) c2++; out.push([r, c, c2]); c = c2 + 1; } } return out; };
+  for (const [r, c, c2] of runs((r, c) => floor[r][c] >= 1 && struct[r][c] !== 1)) el('rect', { x: c, y: r, width: c2 - c + 1, height: 1, fill: floor[r][c] >= 2 ? ROOM : SLAB }, base);
+  const zones = el('g', { id: 'zones', opacity: 0 }, base);
+  const desks = furniture.filter((f) => f.kind === 'desk');
+  const yearOf = (f) => (f.x >= 18.5 || f.y <= -19) ? 3 : (f.y >= -3 ? 2 : 1);
+  for (const d of desks) el('rect', { x: d.c0 - 1, y: d.r0 - 1, width: d.c1 - d.c0 + 3, height: d.r1 - d.r0 + 3, fill: `url(#h${yearOf(d)})` }, zones);
+  for (const [r, c, c2] of runs((r, c) => struct[r][c] === 5)) el('rect', { x: c, y: r, width: c2 - c + 1, height: 1, fill: '#e6e6e6' }, base);
+  for (const [r, c, c2] of runs((r, c) => struct[r][c] === 1)) el('rect', { x: c, y: r, width: c2 - c + 1, height: 1, fill: WALL }, base);
+  for (const [r, c, c2] of runs((r, c) => struct[r][c] === 2)) el('rect', { x: c + 0.3, y: r + 0.3, width: c2 - c + 0.4, height: 0.4, fill: '#8ec1d8' }, base);
+  for (const [r, c, c2] of runs((r, c) => struct[r][c] === 3)) el('rect', { x: c, y: r, width: c2 - c + 1, height: 1, fill: WALL }, base);
+  for (const f of furniture) if (f.kind !== 'elevator') el('rect', { x: f.c0 + 0.1, y: f.r0 + 0.1, width: f.c1 - f.c0 + 0.8, height: f.r1 - f.r0 + 0.8, fill: 'none', stroke: FURN, 'stroke-width': 0.08 }, base);
+  for (const r of rooms) if (r.number) el('text', { x: r.label[0] - 0.8, y: r.label[1] + 0.5, 'font-family': 'Nunito, sans-serif', 'font-size': 1.5, fill: '#777' }, base).textContent = r.number;
+  // scale bar (10 tiles = 5 m) and north (the model is turned about 62 degrees from true north)
+  el('rect', { x: 2, y: 103.2, width: 10, height: 0.5, fill: INK }, base); el('text', { x: 2, y: 102.8, 'font-family': 'Nunito, sans-serif', 'font-size': 1.3, fill: '#444' }, base).textContent = '0        5 m';
+  const nx = 46, ny = 103.2; el('path', { d: `M${nx},${ny} l-0.9,2.2 l0.9,-0.6 l0.9,0.6 z`, fill: INK, transform: `rotate(-62 ${nx} ${ny + 1})` }, base); el('text', { x: nx - 0.5, y: ny - 0.3, 'font-family': 'Nunito, sans-serif', 'font-size': 1.3, fill: '#444' }, base).textContent = 'N';
+
+  // ---- real things, sample paths (BFS, then smoothed), encounters
+  const printers = furniture.filter((f) => f.kind === 'printer');
+  const room = (n) => rooms.find((r) => r.number === n);
+  const tileOf = (f) => [Math.round((f.r0 + f.r1) / 2), Math.round((f.c0 + f.c1) / 2)];
+  const nearestWalk = ([r0, c0]) => { let best = null, bd = 1e9; for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) if (walk(r, c)) { const d = (r - r0) ** 2 + (c - c0) ** 2; if (d < bd) { bd = d; best = [r, c]; } } return best; };
+  function bfs(from) { const prev = new Int32Array(rows * cols).fill(-1), q = [from]; prev[idx(...from)] = idx(...from); for (let h = 0; h < q.length; h++) { const [r, c] = q[h]; for (const [dr, dc] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nr = r + dr, nc = c + dc; if (nr < 0 || nc < 0 || nr >= rows || nc >= cols || !walk(nr, nc) || prev[idx(nr, nc)] >= 0) continue; prev[idx(nr, nc)] = idx(r, c); q.push([nr, nc]); } } return prev; }
+  const named = [['plotters', printers[0]], ['plotters', printers[1]], ['kitchen', null, '9'], ['lounge', null, '10'], ['3D printing', null, '6']];
+  const targets = named.map(([name, f, n]) => ({ name, t: f ? nearestWalk(tileOf(f)) : nearestWalk([room(n).label[1], room(n).label[0]]) })).filter((x) => x.t);
+  const smooth = (pts) => { let p = pts; for (let k = 0; k < 2; k++) { const q = [p[0]]; for (let i = 0; i < p.length - 1; i++) { const [ax, ay] = p[i], [bx, by] = p[i + 1]; q.push([ax * 0.75 + bx * 0.25, ay * 0.75 + by * 0.25]); q.push([ax * 0.25 + bx * 0.75, ay * 0.25 + by * 0.75]); } q.push(p[p.length - 1]); p = q; } return p; };
+  const paths = [], pathCount = new Float32Array(rows * cols);
+  const sampleDesks = desks.filter(() => rnd() < 0.22);
+  for (const { t } of targets) { const prev = bfs(t); for (const d of sampleDesks) { const s = nearestWalk(tileOf(d)); let cur = idx(...s); if (prev[cur] < 0) continue; const pts = []; let guard = 0; while (cur !== idx(...t) && guard++ < 5000) { pathCount[cur] += 1; pts.push([cur % cols + 0.5 + (rnd() - 0.5) * 0.3, Math.floor(cur / cols) + 0.5 + (rnd() - 0.5) * 0.3]); cur = prev[cur]; } pts.push([t[1] + 0.5, t[0] + 0.5]); if (pts.length > 2) paths.push({ pts: smooth(pts), year: yearOf(d) }); } }
+  const hot = []; for (let i = 0; i < pathCount.length; i++) if (pathCount[i] > 0) hot.push([pathCount[i], i]); hot.sort((a, b) => b[0] - a[0]);
+  const enc = [];
+  for (let k = 0; k < 70; k++) { const [w, i] = hot[Math.floor(rnd() * Math.min(hot.length, 200))]; const y1 = 1 + Math.floor(rnd() * 3), y2 = rnd() < 0.72 ? y1 : 1 + Math.floor(rnd() * 3); enc.push({ c: i % cols + 0.5, r: Math.floor(i / cols) + 0.5, n: 1 + Math.floor(rnd() * 3 + w / 8), y1, y2 }); }
+  for (const { t } of targets) for (let k = 0; k < 7; k++) enc.push({ c: t[1] + 0.5 + rnd() * 2 - 1, r: t[0] + 0.5 + rnd() * 2 - 1, n: 2 + Math.floor(rnd() * 4), y1: 1 + Math.floor(rnd() * 3), y2: 1 + Math.floor(rnd() * 3) });
+  const drift = furniture.filter((f) => f.kind === 'pinup' || f.kind === 'table').filter(() => rnd() < 0.18).map((f) => ({ f, dr: Math.round(rnd() * 6 - 3), dc: Math.round(rnd() * 6 - 3) }));
+  // the aggregate corridor: the tiles most paths share, as one dark line
+  const spine = hot.slice(0, 60).map(([, i]) => [i % cols + 0.5, Math.floor(i / cols) + 0.5]).sort((a, b) => a[1] - b[1]);
+
+  // ---- overlays: one hue each, soft blobs for fields, smooth lines for movement
+  const REF = {
+    bernstein: 'Bernstein & Turban (2018), The impact of the open workspace on human collaboration, Phil. Trans. R. Soc. B 373: face-to-face fell about 70% after an open-plan move; the encounter rule (within 3 m, facing, 15 s)',
+    kabo: 'Kabo, Owen-Smith et al. (2014), Proximity effects on the dynamics and outcomes of scientific collaborations, Research Policy 43(9): +100 ft (about 30 m) of shared path, about +20% collaborations',
+    hillier: 'Hillier (1996), Space is the Machine: integration and movement; amenities as magnets',
+    allen: 'Allen (1977), Managing the Flow of Technology: communication falls sharply with distance (about 30 m)',
+    mark: 'Mark, Gudith & Klocke (2008), The cost of interrupted work, CHI: interruptions and their recovery cost',
+    furnham: 'Furnham & Strbac (2002), Music is as distracting as noise, Ergonomics 45(3): noise impairs introverts more',
+    doshi: 'Doshi (1986), Queueing systems with vacations, Queueing Systems 1: the plotter queue with paper outages (D10)',
+    kw: 'Kossinets & Watts (2006), Empirical analysis of an evolving social network, Science 311: shared foci and tie formation',
+    sailer: 'Sailer & Penn (2009), Spatiality and transpatiality in workplace environments, 7th Space Syntax Symposium',
+    fsb: 'Festinger, Schachter & Back (1950), Social Pressures in Informal Groups: proximity and friendship',
+    notes: 'program/objects.json zones; research/summary-metrics.md; research/input-registry.md',
+  };
+  const blob = (g, c, r, rad, col) => el('circle', { cx: c, cy: r, r: rad, fill: `url(#blob-${col})` }, g);
+  const LAYERS = {
+    activity: { legend: [[RED, 'busy: hours at desks and in aisles'], [BLUE, 'quiet: long focus, few passers-by']], note: 'where the floor was busy and where it was quiet, 07:00 to 02:00',
+      what: 'How long each part of the floor was occupied, and where it stayed quiet.', how: 'Agent-hours per tile from the day run, smoothed; red where hours and movement are high, blue where a desk had long uninterrupted blocks and few passers-by (the Schindler-plan convention: warm for activity, cool for retreat).', refs: ['notes', 'mark'], ids: ['AC9 effort', 'ST11 presence', 'F1 focus block'],
+      draw(g) { for (const d of desks) { const [r, c] = tileOf(d); const h = rnd(); if (h > 0.45) blob(g, c + 0.5, r + 0.5, 1.6 + h * 2.4, 'red'); else if (h < 0.18) blob(g, c + 0.5, r + 0.5, 2 + (0.18 - h) * 8, 'blue'); } for (const { t } of targets) blob(g, t[1] + 0.5, t[0] + 0.5, 4.5, 'red'); } },
+    encounters: { legend: [['rgba(17,17,17,0.6)', 'same year'], [RED, 'between years']], note: 'where face-to-face contact happened; the size is the count',
+      what: 'Where agents met face to face, and whether the pair came from the same year.', how: 'Bernstein’s rule from the badge studies: within 3 m, facing, 15 s or more, outside a crit. A circle per site, its radius the count, a hairline outline so sites stay legible where they pile up. Feeds C4, C6 and C7.', refs: ['bernstein', 'fsb', 'kw'], ids: ['C4 F2F minutes', 'C6 share between groups', 'C7 where', 'BH30 approach threshold'],
+      draw(g) { for (const e of enc) el('circle', { cx: e.c, cy: e.r, r: 0.45 + e.n * 0.3, fill: e.y1 === e.y2 ? 'rgba(17,17,17,0.35)' : 'rgba(228,71,60,0.55)', stroke: e.y1 === e.y2 ? '#111' : RED, 'stroke-width': 0.08 }, g); } },
+    paths: { legend: [[YEAR[1], 'year 1'], [YEAR[2], 'year 2'], [YEAR[3], 'year 3'], ['#111', 'the shared corridor']], note: 'routes from desks to the plotters, kitchen, lounge and 3D printers; arrowheads at the destination',
+      what: 'The paths agents walked, by year, and the corridor most of them share.', how: 'Shortest routes on the walk grid, drawn as smooth thin lines in the year’s colour with an arrowhead at the destination; the dark line runs through the tiles the most paths share. The overlap length per pair is Kabo’s metric.', refs: ['kabo', 'allen', 'hillier'], ids: ['C1 path overlap', 'SP4 vertical circulation', 'RS1 facilities'],
+      draw(g) { for (const p of paths) el('polyline', { points: p.pts.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join(' '), fill: 'none', stroke: YEAR[p.year], 'stroke-opacity': 0.55, 'stroke-width': 0.22, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'marker-end': `url(#arrow${p.year})` }, g); if (spine.length > 2) el('polyline', { points: smooth(spine).map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join(' '), fill: 'none', stroke: '#111', 'stroke-width': 0.5, 'stroke-opacity': 0.8, 'stroke-linejoin': 'round' }, g); for (const { t, name } of targets) { el('circle', { cx: t[1] + 0.5, cy: t[0] + 0.5, r: 1.1, fill: '#fff', stroke: '#111', 'stroke-width': 0.15 }, g); el('text', { x: t[1] + 2, y: t[0] + 1, 'font-family': 'Nunito, sans-serif', 'font-size': 1.3, fill: '#111' }, g).textContent = name; } } },
+    queues: { legend: [[RED, 'minutes waited']], note: 'who waited where on the pre-review evening',
+      what: 'Waiting at the plotters and at the lift, in minutes.', how: 'Queue length and wait per resource from the run; the plotters are a two-server queue whose paper runs out outside staffed hours. One tick per minute waited.', refs: ['doshi'], ids: ['F8 resource queue time', 'RS4 shared equipment', 'D10'],
+      draw(g) { for (const p of printers.slice(0, 2)) { const [r, c] = tileOf(p); const n = 6 + Math.floor(rnd() * 10); for (let k = 0; k < n; k++) el('rect', { x: c + 1.4 + k * 0.6, y: r - 0.2, width: 0.3, height: 1.4, fill: RED, opacity: 0.95 - k * 0.04 }, g); el('text', { x: c + 1.4, y: r - 0.6, 'font-family': 'Nunito, sans-serif', 'font-size': 1.3, fill: RED }, g).textContent = `${n} min`; } const lift = furniture.find((f) => f.kind === 'elevator'); if (lift) { const [r, c] = tileOf(lift); for (let k = 0; k < 5; k++) el('rect', { x: c - 1.5 - k * 0.6, y: r, width: 0.3, height: 1, fill: RED }, g); } } },
+    noise: { legend: [[RED, 'loud'], [BLUE, 'quiet']], note: 'sound from talk and the printers, stopped by walls; headphones go on in the red',
+      what: 'How loud each part of the floor was.', how: 'Each conversation and each printer is a source; the level falls with distance and stops at walls. Soft red discs around the sources, blue where it stayed below the threshold. Exposure drives headphone use and the interruption rate.', refs: ['furnham', 'mark'], ids: ['F2 interruptions', 'BH16 headphones', 'PL6 noise norms', 'D16'],
+      draw(g) { for (const e of enc) blob(g, e.c, e.r, 1.6 + e.n * 0.9, 'red'); for (const p of printers) { const [r, c] = tileOf(p); blob(g, c + 0.5, r + 0.5, 6, 'red'); } for (const d of desks) if (rnd() < 0.12) blob(g, (d.c0 + d.c1) / 2, (d.r0 + d.r1) / 2, 2.5, 'blue'); } },
+    years: { legend: [[YEAR[1], 'year 1'], [YEAR[2], 'year 2'], [YEAR[3], 'year 3'], ['#fff', 'ring: a between-year encounter']], note: 'desks by cohort zone, as faint hatching; rings where years met',
+      what: 'Who sits where, by year, and where the years meet.', how: 'The cohort zones the owner gave (east and south year 3, middle year 1, north year 2) as hatched tints under the plan, and an open ring at each encounter whose pair came from different years. Feeds C6 and C14.', refs: ['sailer', 'kw', 'notes'], ids: ['C6 share between groups', 'OR1 sections', 'SO4 mixing'],
+      draw(g) { zones.setAttribute('opacity', 1); for (const d of desks) el('rect', { x: d.c0 + 0.1, y: d.r0 + 0.1, width: d.c1 - d.c0 + 0.8, height: d.r1 - d.r0 + 0.8, fill: YEAR[yearOf(d)], opacity: 0.55 }, g); for (const e of enc) if (e.y1 !== e.y2) el('circle', { cx: e.c, cy: e.r, r: 0.9, fill: 'none', stroke: '#111', 'stroke-width': 0.18 }, g); } },
+    drift: { legend: [['#fff', 'outline: where it started'], [RED, 'where it stands now']], note: 'objects that moved from where the term started, under rearrangement by groups',
+      what: 'Which objects moved and how far since the start of the horizon.', how: 'The layout manager logs every accepted move; the start as a hairline outline, the current place filled, the displacement as a line. Under "everyday use only" nothing but chairs appears here.', refs: ['notes'], ids: ['SP6 workstation layout', 'PL3 assignment policy', 'movement level'],
+      draw(g) { for (const { f, dr, dc } of drift) { const w = f.c1 - f.c0 + 1, h = f.r1 - f.r0 + 1; el('rect', { x: f.c0, y: f.r0, width: w, height: h, fill: 'none', stroke: '#111', 'stroke-width': 0.15, 'stroke-dasharray': '0.4 0.3' }, g); el('rect', { x: f.c0 + dc, y: f.r0 + dr, width: w, height: h, fill: RED, opacity: 0.75 }, g); el('line', { x1: f.c0 + w / 2, y1: f.r0 + h / 2, x2: f.c0 + dc + w / 2, y2: f.r0 + dr + h / 2, stroke: RED, 'stroke-width': 0.15 }, g); } } },
+  };
+  let overlay = null, mark = null;
+  function show(name) {
+    if (overlay) overlay.remove(); zones.setAttribute('opacity', 0);
+    overlay = el('g', { id: 'overlay' }); seed = 11; LAYERS[name].draw(overlay);
+    if (mark) svg.appendChild(mark);
+    const L = LAYERS[name];
+    document.getElementById('layer-name').textContent = name;
+    document.getElementById('layer-note').textContent = L.note;
+    document.getElementById('legend').innerHTML = L.legend.map(([c, t]) => `<span><i style="background:${c}; ${c === '#fff' ? 'border: 1px solid #111; border-radius: 50%' : ''}"></i>${t}</span>`).join('');
+    document.getElementById('details-body').innerHTML = `<b>WHAT</b>${L.what}<b>HOW IT IS COMPUTED</b>${L.how}<b>REGISTRY</b>${L.ids.join(' · ')}<b>REFERENCES</b><ul>${L.refs.map((k) => `<li>${REF[k]}</li>`).join('')}</ul>`;
+    for (const b of document.querySelectorAll('#layers button')) b.classList.toggle('on', b.dataset.l === name);
+  }
+  for (const b of document.querySelectorAll('#layers button')) b.addEventListener('click', () => show(b.dataset.l));
+  show('encounters');
+  // a pulsing mark on the plan when a trace points at a place
+  function pointAt(c, r) { if (mark) mark.remove(); mark = el('g', {}); el('circle', { cx: c, cy: r, r: 2.2, fill: 'none', stroke: RED, 'stroke-width': 0.35 }, mark); el('circle', { cx: c, cy: r, r: 0.6, fill: RED }, mark); mark.querySelector('circle').innerHTML = '<animate attributeName="r" values="1.6;3;1.6" dur="1.2s" repeatCount="indefinite"/>'; }
+
+  // ---- the events and the remarks: what the feed shows, and what a trace points back to
+  const P = { plot: targets[0].t, kitchen: targets[2].t, lounge: targets[3].t, print3d: targets[4].t, west: [40, 6], mid: [50, 12], south: [88, 30] };
+  const EV = {
+    e1: { t: '13:36', place: 'plotters', at: P.plot, text: 'plotter queue reaches 6; paper at 30%' },
+    e2: { t: '14:02', place: 'west bay 4', at: P.west, text: 'desk crit starts; 3 neighbours within earshot' },
+    e3: { t: '15:10', place: 'central aisle', at: P.mid, text: '14 passers-by past desk row 7 in 10 min' },
+    e4: { t: '16:25', place: 'plotters', at: P.plot, text: 'paper out; 4 waiting; tech off the floor' },
+    e5: { t: '17:40', place: 'kitchen', at: P.kitchen, text: 'year 1 and year 3 agents meet at the kettle (3 min)' },
+    e6: { t: '18:05', place: 'south bay', at: P.south, text: 'pin-up boards rolled to the aisle for a section review' },
+    e7: { t: '18:30', place: 'lounge', at: P.lounge, text: 'Good Times opens; 22 present by 18:50' },
+    e8: { t: '19:15', place: '3D printing', at: P.print3d, text: 'print finished, collected after 40 min' },
+  };
+  const AG = { a12: ['Mina', 1], a57: ['Teo', 2], a91: ['Priya', 3], a33: ['Jonah', 1], a74: ['Sol', 3], a08: ['Ana', 2] };
+  const RM = [
+    ['13:36', 'a91', 'plotters', 'Six of us at two plotters and the sheet is due at five. Same hour as everyone.', 'queue 6 at 13:36; last desk crit tomorrow (C11)', 'e1'],
+    ['14:02', 'a12', 'west bay 4', 'Crit at the desk. The whole row gets to listen.', 'desk crit, 3 agents within 3 m (D16)', 'e2'],
+    ['15:10', 'a33', 'central aisle', 'Headphones on. Fourteen people past my chair since three.', 'exposure 14 per 10 min; P(headphones) 0.6 (BH16)', 'e3'],
+    ['16:25', 'a57', 'plotters', 'Paper’s out and the tech left at four. Printing tomorrow, then.', 'paper stock 0 outside staffed hours (D10)', 'e4'],
+    ['17:40', 'a74', 'kitchen', 'A first year asked about the plotter settings while the kettle boiled. Told her.', 'between-year encounter, 3 min, kitchen (C6)', 'e5'],
+    ['17:41', 'a12', 'kitchen', 'Asked a third year about the plotters. Easier than finding the TA.', 'help ladder: friend unavailable, nearby senior (F2)', 'e5'],
+    ['18:05', 'a91', 'south bay', 'Boards into the aisle, chairs around, section review. The aisle is a room now.', 'pin-up arrangement; aisle width 1.1 m (F2)', 'e6'],
+    ['18:32', 'a08', 'lounge', 'Good Times. Free food, a keg, and the second years are actually talking to the first years.', 'event attendance; sociability 1.3 (F9)', 'e7'],
+    ['19:15', 'a33', '3D printing', 'Print was done at 18:35; nobody told me. Forty minutes on the shelf.', 'collect delay 40 min (RS3)', 'e8'],
+  ];
+  const SUG = [
+    ['C6 LOW', 'The years barely meet (14% of interactions). The only shared magnets are the plotter corner and the lounge. A shared pin-up wall along the central aisle, between the first-year middle and the third-year south, would put the two cohorts on the same route twice a day.', { situation: 'the day as the calendar has it, Tue 13 Oct (last desk crit before the midterm)', metric: 'C6 = 0.14 against 0.25', events: ['e5', 'e7'], remarks: [4, 5, 7] }],
+    ['C1 LOW', 'Desk-to-plotter routes overlap little because the plotters sit at the north end. Moving one plotter and the small printers to the middle of the floor would raise shared path length toward Kabo’s 30 m without adding noise to a bay.', { situation: 'everyday; every weekday, strongest before reviews', metric: 'C1 = 18 m against 30 m', events: ['e1', 'e4'], remarks: [0, 3] }],
+    ['F2 HIGH', 'The west bays along the central aisle take most interruptions and the highest desk exposure. The bay-end boards already divide; turning them to face the aisle cuts exposure. The run with boards movable (B) made it worse, not better.', { situation: 'everyday; worst 15:00 to 18:00', metric: 'F2 = 1.6 against 1.0; F4 = 22 against 15', events: ['e2', 'e3', 'e6'], remarks: [1, 2, 6] }],
+    ['F8', 'Nine minutes of plotter queue on the pre-review evening, with one paper outage. Paper at all hours (the policy switch) removes the outage; a third plotter does not pay back on a normal week.', { situation: 'last desk crit before the midterm; 16:00 to 20:00', metric: 'F8 = 9 min against 5', events: ['e1', 'e4'], remarks: [0, 3] }],
+    ['A vs B', 'Movable boards raise contact (C4 +7 min, C6 +8 points) and cost focus (F1 −4 min, F2 +0.3). On the Pareto view B moves right and down: a trade, not an improvement. Worth testing with the boards movable only on pin-up days.', { situation: 'scenario B: rearrangement by groups, the whole term', metric: 'C4, C6, F1, F2 (A against B)', events: ['e6'], remarks: [6] }],
+  ];
+  const feedList = document.getElementById('feed-list');
+  let feedItems = [], filter = 'all';
+  function render() { feedList.innerHTML = feedItems.filter((it) => filter === 'all' || it.kind === filter).map((it) => it.html).join(''); feedList.scrollTop = feedList.scrollHeight; document.getElementById('feed-count').textContent = `${feedItems.length}`; }
+  for (const b of document.querySelectorAll('#feed .chips button')) b.addEventListener('click', () => { filter = b.dataset.f; for (const x of document.querySelectorAll('#feed .chips button')) x.classList.toggle('on', x === b); render(); });
+  const rmHtml = (i) => { const [t, a, place, text, because, ev] = RM[i]; const [name, year] = AG[a]; return `<div class="rm" id="rm${i}"><div class="who"><span><i style="background:${YEAR[year]}"></i>${name} · YEAR ${year}</span><span>${t} · ${place.toUpperCase()}</span></div>${text}<div class="bc"><b>BECAUSE</b> ${because}</div></div>`; };
+  const evHtml = (k) => { const e = EV[k]; return `<div class="rm ev" id="ev${k}"><div class="who"><span>EVENT ${k.toUpperCase()}</span><span>${e.t} · ${e.place.toUpperCase()}</span></div>${e.text}</div>`; };
+  const sgHtml = (i) => `<div class="rm sg" id="sg${i}"><div class="who"><span>SUGGESTION ${i + 1} · ${SUG[i][0]}</span><span>rule fired</span></div>${SUG[i][1].split('. ')[0]}.</div>`;
+  // the feed plays itself: one line at a time, the clock advancing, as if the run were playing
+  const script = [];
+  for (let i = 0; i < RM.length; i++) { const ev = RM[i][5]; if (!script.find((s) => s.k === 'ev' && s.id === ev)) script.push({ k: 'ev', id: ev, t: EV[ev].t }); script.push({ k: 'rm', id: i, t: RM[i][0] }); }
+  script.push({ k: 'sg', id: 3, t: '16:40' }); script.push({ k: 'sg', id: 0, t: '19:00' }); script.push({ k: 'sg', id: 2, t: '19:30' });
+  script.sort((a, b) => a.t.localeCompare(b.t));
+  let si = 0;
+  const tick = () => { if (si >= script.length) { si = 0; feedItems = []; } const s = script[si++]; document.getElementById('feed-clock').textContent = s.t; feedItems.push({ kind: s.k, html: s.k === 'rm' ? rmHtml(s.id) : s.k === 'ev' ? evHtml(s.id) : sgHtml(s.id) }); render(); };
+  for (let i = 0; i < 6; i++) tick(); setInterval(tick, 2600);
+
+  // ---- the summary with its traces
+  document.getElementById('summary').innerHTML = SUG.map(([t, s, tr], i) => `<li><b>${t}</b>${s} <details><summary>TRACE &#9660;</summary><div class="trace">
+    <div class="step"><b>SITUATION</b><span>${tr.situation}</span></div>
+    <div class="step"><b>METRIC</b><span>${tr.metric}</span></div>
+    <div class="step"><b>EVENTS</b><span>${tr.events.map((k) => `<span class="ev" data-ev="${k}">${EV[k].t} ${EV[k].place}: ${EV[k].text}</span>`).join('<br>')}</span></div>
+    <div class="step"><b>REMARKS</b><span>${tr.remarks.map((r) => `<span class="ev" data-rm="${r}">${AG[RM[r][1]][0]}, ${RM[r][0]}: <q>${RM[r][3]}</q></span>`).join('<br>')}</span></div>
+  </div></details></li>`).join('');
+  document.getElementById('summary').addEventListener('click', (e) => {
+    const t = e.target.closest('.ev'); if (!t) return;
+    if (t.dataset.ev) { const ev = EV[t.dataset.ev]; pointAt(ev.at[1] + 0.5, ev.at[0] + 0.5); const node = document.getElementById('ev' + t.dataset.ev); if (node) { node.classList.add('hi'); node.scrollIntoView({ block: 'center' }); setTimeout(() => node.classList.remove('hi'), 2500); } }
+    if (t.dataset.rm) { const r = RM[t.dataset.rm]; const ev = EV[r[5]]; pointAt(ev.at[1] + 0.5, ev.at[0] + 0.5); const node = document.getElementById('rm' + t.dataset.rm); if (node) { node.classList.add('hi'); node.scrollIntoView({ block: 'center' }); setTimeout(() => node.classList.remove('hi'), 2500); } }
+  });
+
+  // ---- the metrics as cards
+  const M = [
+    ['COLLABORATION'],
+    ['C4', 'Face-to-face', 'min per person per day', 54, 61, 45, 0, 90, 'A bit above the benchmark; B adds 7 min from the movable boards at pin-ups.'],
+    ['C1', 'Path overlap', 'm shared per pair', 18, 18, 30, 0, 60, 'Below the 30 m where Kabo saw a +20% effect: desks and plotters share little route.'],
+    ['C6', 'Between years', 'share of interactions', 0.14, 0.22, 0.25, 0, 0.5, 'Low. Only the plotter corner and Good Times mix the years.'],
+    ['C3', 'New ties', 'per person per week', 0.8, 1.1, 1.0, 0, 2, 'Near the expected rate; rises with comfort over the term.'],
+    ['C13', 'Help latency', 'min to get help', 12, 11, 15, 0, 30, 'In range: a friend or TA is usually reachable.'],
+    ['FOCUS'],
+    ['F1', 'Focus block', 'min without interruption', 38, 34, 52, 0, 80, 'Short against DeskTime’s 52 min; B loses 4 more min to boards being moved.'],
+    ['F2', 'Interruptions', 'per focus hour', 1.6, 1.9, 1.0, 0, 4, 'Above the benchmark in both; the west bays near the aisle take most.'],
+    ['F4', 'Desk exposure', 'passers-by per hour', 22, 27, 15, 0, 50, 'High on the central aisle desks; headphone use follows.'],
+    ['F8', 'Wait for resources', 'min at the plotters', 9, 9, 5, 0, 30, 'The pre-review evening queue; paper ran out once.'],
+    ['LAYOUT'],
+    ['S1', 'Integration', 'space syntax, 0 to 1', 0.72, 0.74, 0.7, 0, 1, 'The central aisle is the integration core; the east bays are the least integrated.'],
+  ];
+  document.getElementById('metrics').innerHTML = M.map((m) => m.length === 1 ? `<div class="grp">${m[0]}</div>` : (([id, n, u, a, b, bm, lo, hi, read]) => { const p = (v) => `${((v - lo) / (hi - lo)) * 100}%`; return `<div class="card"><div class="nm">${n}<small>${id} &middot; ${u}</small></div><div class="v">${a}<small>A</small></div><div class="v b">${b}<small>B</small></div><div class="mbar"><i class="a" style="left:0; width:${p(a)}; height:4px"></i><i class="b" style="left:0; width:${p(b)}; height:4px"></i><em style="left:${p(bm)}"></em><span style="left:${p(bm)}">benchmark ${bm}</span></div><div class="read">${read}</div></div>`; })(m)).join('');
+
+  // ---- the timeline and the Pareto view
+  const tl = document.getElementById('timeline').getContext('2d'), W = 420, H = 170, pad = 28;
+  const weeks = 14, x = (w) => pad + (w / (weeks - 1)) * (W - pad - 8);
+  const c4 = [], f1 = []; for (let w = 0; w < weeks; w++) { const rev = (w === 5 || w === 12) ? 1 : (w === 4 || w === 11) ? 0.5 : 0; c4.push(50 + 10 * Math.sin(w / 2) + rev * 18 + (w > 8 ? 4 : 0)); f1.push(40 - rev * 12 - (w > 9 ? 3 : 0) + 3 * Math.cos(w / 1.7)); }
+  tl.fillStyle = '#fff'; tl.fillRect(0, 0, W, H);
+  for (const w of [5, 12]) { tl.fillStyle = 'rgba(217,201,163,0.6)'; tl.fillRect(x(w) - 8, 8, 16, H - 28); }
+  const line = (arr, col, band) => { const y = (v) => H - 20 - (v / 80) * (H - 36); if (band) { tl.fillStyle = band; tl.beginPath(); arr.forEach((v, w) => tl.lineTo(x(w), y(v + 6))); for (let w = weeks - 1; w >= 0; w--) tl.lineTo(x(w), y(arr[w] - 6)); tl.closePath(); tl.fill(); } tl.strokeStyle = col; tl.lineWidth = 2; tl.beginPath(); arr.forEach((v, w) => tl.lineTo(x(w), y(v))); tl.stroke(); };
+  line(c4, '#c8502c', 'rgba(228,215,184,0.9)'); line(f1, '#4f8a4a', 'rgba(228,215,184,0.9)');
+  tl.fillStyle = '#5a4d44'; tl.font = '7px Silkscreen, monospace';
+  for (let w = 0; w < weeks; w++) tl.fillText(String(w + 1), x(w) - 3, H - 6);
+  tl.fillText('WEEK', 2, H - 6); tl.fillText('MIDTERM', x(5) - 18, 7); tl.fillText('FINAL', x(12) - 12, 7);
+  const pa = document.getElementById('pareto').getContext('2d');
+  pa.fillStyle = '#fff'; pa.fillRect(0, 0, W, H);
+  const px = (v) => pad + (v / 80) * (W - pad - 8), py = (v) => H - 20 - (v / 60) * (H - 36);
+  const scen = [['current layout', 54, 38, [43, 36, 32]], ['boards movable', 61, 34, [200, 80, 44]], ['bay opened', 66, 29, [47, 111, 178]]];
+  pa.strokeStyle = '#d9c9a3'; pa.setLineDash([3, 3]); pa.beginPath(); scen.forEach(([, cx, fy], i) => i ? pa.lineTo(px(cx), py(fy)) : pa.moveTo(px(cx), py(fy))); pa.stroke(); pa.setLineDash([]);
+  for (const [n, cx, fy, [r, g, b]] of scen) { pa.fillStyle = `rgba(${r},${g},${b},0.18)`; pa.beginPath(); pa.ellipse(px(cx), py(fy), 22, 12, 0, 0, Math.PI * 2); pa.fill(); pa.fillStyle = `rgb(${r},${g},${b})`; pa.beginPath(); pa.arc(px(cx), py(fy), 4, 0, Math.PI * 2); pa.fill(); pa.font = '7px Silkscreen, monospace'; pa.fillText(n.toUpperCase(), px(cx) + 8, py(fy) - 6); }
+  pa.fillStyle = '#5a4d44'; pa.font = '7px Silkscreen, monospace'; pa.fillText('MORE CONTACT →', W - 90, H - 6); pa.save(); pa.translate(10, 90); pa.rotate(-Math.PI / 2); pa.fillText('MORE FOCUS →', 0, 0); pa.restore(); pa.fillText('THE FRONT: NO POINT BEATS ANOTHER ON BOTH', pad, 14);
+})();
+</script>
+</body>
+</html>

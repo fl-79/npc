@@ -1,0 +1,904 @@
+{
+  "meta": {
+    "schema": 1,
+    "note": "Every number the engine reads, keyed by the research registry ID (research/input-registry.md) or the checklist item, with its status code (C confirmed by the owner, D data, D* adjusted data, M model, A assumed) and source. The engine (viewer/src/sim) reads this file; program/simulation.json holds the stairs-and-lift piece and stays. Nothing here is typed in the interface; the owner edits this file. Values come from research/studio-culture-school-checklist.md, assumption-data-sources.md, agent-variables.md and personality-model.md as of 2026-11-07. 2026-11-08: the owner's answers to QUESTIONS.md 1-21 applied (see BUILD-LOG.md).",
+    "updated": "2026-11-11"
+  },
+  "time": {
+    "tick_s": 1,
+    "run_from": "07:00",
+    "run_to": "02:00",
+    "encounter_check_s": 15,
+    "note": "the day run steps one second at a time; encounters are checked every 15 s (Bernstein's rule needs 15 s)"
+  },
+  "population": {
+    "mobility_need_share": 0.03,
+    "mobility_need_note": "PLACEHOLDER [A], no data: the share of agents with a mobility need, who take the lift for every floor change (owner 2026-11-12, stop 8). Drawn on its own random stream so the rest of the population is unchanged. The owner may set it from what they know of the cohort.",
+    "traits": {
+      "status": "D*",
+      "distribution": "MVN in general-population SD units",
+      "corr": {
+        "N_C": -0.25,
+        "N_E": -0.25,
+        "N_A": -0.2,
+        "E_O": 0.25,
+        "C_A": 0.2
+      },
+      "field_shift": {
+        "O": 0.5,
+        "C": -0.25
+      },
+      "sex_shift_women": {
+        "N": 0.4,
+        "A": 0.35,
+        "E": 0.1
+      },
+      "source": "personality-model.md §2: IPIP-NEO (correlations placeholder [A]), Feist 1998 and Vedel 2016 (field), Schmitt 2008 and Weisberg 2011 (sex)"
+    },
+    "sex": {
+      "status": "D",
+      "women": 0.58,
+      "men": 0.41,
+      "nonbinary": 0.01,
+      "source": "A9"
+    },
+    "international": {
+      "status": "D",
+      "share": 0.15,
+      "source": "A10"
+    },
+    "job_hours": {
+      "status": "D*",
+      "shares": {
+        "none": 0.35,
+        "1-9": 0.2,
+        "10-20": 0.35,
+        "20+": 0.1
+      },
+      "source": "A11"
+    },
+    "commute": {
+      "status": "D*",
+      "off_campus": 0.9,
+      "minutes": [
+        30,
+        60
+      ],
+      "modes": {
+        "transit": 0.6,
+        "car": 0.25,
+        "walk_bike": 0.15
+      },
+      "source": "A12"
+    },
+    "caregiving": {
+      "status": "D*",
+      "share": 0.05,
+      "source": "A13"
+    },
+    "background": {
+      "status": "D",
+      "little": 0.29,
+      "design": 0.46,
+      "advanced": 0.26,
+      "source": "A14 (APR24)"
+    },
+    "chronotype": {
+      "status": "D*",
+      "evening": 0.25,
+      "morning": 0.2,
+      "shift_E": 0.2,
+      "shift_C": -0.3,
+      "source": "E3; Tsaousis 2010"
+    },
+    "keenness_corr_O": {
+      "status": "A",
+      "value": 0.3
+    },
+    "mentor_share_y1": {
+      "status": "A",
+      "value": 0.5,
+      "source": "F5 (APR24 mentorship program)"
+    },
+    "advanced_standing_y2": {
+      "status": "D",
+      "count": 15,
+      "source": "A3"
+    },
+    "instructors": {
+      "status": "D*",
+      "sessional_share": 0.6,
+      "office_in_building_share": 0.75,
+      "office_level_order": [
+        "Level 2",
+        "Level 4",
+        "Level 3"
+      ],
+      "office_days": [
+        "Mon",
+        "Wed"
+      ],
+      "crit_mode": {
+        "desk": 0.5,
+        "spot": 0.5
+      },
+      "note": "A8: a mix of permanent and sessional faculty. Owner 2026-11-08 (Q2): adjuncts have no office; a permanent instructor's office may be in another building. Sessional instructors come for the session only. Q6: crit mode by teaching style: desk-by-desk within the section, or a spot where students come; a desk-mode instructor moves to a spot when the bay is crowded or loud. 2026-11-11 (Q22, APR24 p. 73): 17 full-time architecture faculty (16.8 FTE, 6.22 teaching FTE) and 15 adjuncts in 2024/25; 7 adjunct names on the three fall studios (ARCH 500 one, 520 four, 540 two) against 11 sections gives sessional_share 0.6 [D*: one adjunct per section assumed; co-taught sections would lower it]. Office share [D]: of 12 architecture faculty whose sala.ubc.ca profile gives an office, 9 are in Lasserre (201C, 201D, 202A x2, 205A, 205B, 309B, 414, 420) and 3 in CIRS; so 0.75, and offices go to Level 2 first, then 4, then 3 (6 / 2 / 1 of the 9). The owner (2026-11-11): about 20 permanent faculty, not all teaching studio or with an office in the building.",
+      "source": "A8, C5, C12; owner 2026-11-08 and 2026-11-11; APR24 p. 73; sala.ubc.ca/people/faculty profiles (read 2026-11-11)"
+    }
+  },
+  "walking": {
+    "status": "A",
+    "lift_one_floor": {
+      "p_base": 0.05,
+      "p_carrying": 0.7,
+      "p_tired": 0.5,
+      "tired_after_h": 22,
+      "tired_sleep_debt_h": 9
+    },
+    "lift_two_floors_p": 0.7,
+    "note": "Owner 2026-11-12 (walkthrough stop 8): unless tired or with a mobility need, nobody takes the lift for one floor to the washroom; carrying a model is different. One floor: the stairs, except with p_carrying when the trip is to or from the plotters, the printers, the 3D printer, the shop, a review or a pin-up, p_tired after tired_after_h or with a sleep debt of tired_sleep_debt_h hours or more, and always with a mobility need; otherwise p_base. Two floors or more: lift_two_floors_p. It used to be 20% lift for one floor and 70% for more. Numbers [A]."
+  },
+  "effort": {
+    "H_base": {
+      "status": "A",
+      "base_h": 48,
+      "w_C": 0.25,
+      "w_keen": 0.15,
+      "job_factor": {
+        "none": 1.0,
+        "1-9": 0.9,
+        "10-20": 0.8,
+        "20+": 0.6
+      },
+      "caregiving_factor": 0.8,
+      "long_commute_factor": 0.9,
+      "clip": [
+        15,
+        70
+      ],
+      "source": "agent-variables.md traits-only mappings; E1 median about 40 h; 200k-draw check 25/39/60"
+    },
+    "impulsiveness": {
+      "status": "A",
+      "base": 0.3,
+      "w_C": -0.6,
+      "w_N": 0.1,
+      "source": "AT11, Steel 2007"
+    },
+    "value_studio_vs_other": {
+      "status": "A",
+      "base": 2.0,
+      "w_keen": 0.2,
+      "source": "AT12, E8"
+    },
+    "tmt": {
+      "status": "M",
+      "note": "urgency = expectancy × value / (1 + Γ × days_to_deadline); daily hours scale with the sum over concurrent deadlines",
+      "expectancy": 0.8,
+      "ramp_cap": 2.0,
+      "source": "E12, Steel 2007"
+    },
+    "late_worker_share": {
+      "status": "D*",
+      "value": 0.25,
+      "source": "E3"
+    },
+    "friday": {
+      "status": "A",
+      "plans_p": 0.4,
+      "leave_after_crit_min": [20, 60],
+      "note": "Owner 2026-11-12 (walkthrough stop 5): on Fridays people are less likely to stay to the end of studio once their desk crit is done; with other plans they leave earlier. plans_p of students leave leave_after_crit_min minutes after their crit ends and skip the evening event. Numbers [A]."
+    },
+    "late_nights": {
+      "status": "A",
+      "near_days": 7,
+      "p_normal": 0.25,
+      "cap_h": 19,
+      "cap_spread_h": 1.5,
+      "note": "Owner 2026-11-12 (item 28): on an ordinary weekday with no review coming up there are few night owls in studio; people prefer to work from home. Within near_days of a review a late worker stays to 22:30-01:00 every night; otherwise only with p_normal, and everyone else leaves by cap_h plus up to cap_spread_h (the rest of the planned hours at home, E9). Numbers [A]; the old rule keyed on urgency > 1.3, which every student exceeds all term.",
+      "source": "E3; owner 2026-11-12"
+    },
+    "weekend": {
+      "status": "A",
+      "p_base": 0.15,
+      "p_near_review": 0.7,
+      "near_days": 7,
+      "note": "Owner 2026-11-11 (item 32): before a final the weekend is a working weekend: more come in (p_near_review, within near_days of the review), for a full day rather than 0.8 of one, late workers stay late, the all-nighter hurdle applies on the eve, and the organised print early (resources.plotters.print_early_days_per_C). Numbers [A].",
+      "source": "E6; owner 2026-11-11"
+    },
+    "off_site_share": {
+      "status": "A",
+      "value": 0.25,
+      "home": 0.7,
+      "library": 0.25,
+      "cafe": 0.05,
+      "library_close": "22:00",
+      "source": "E9"
+    },
+    "medium_split": {
+      "status": "A",
+      "digital": 0.55,
+      "physical": 0.3,
+      "print_pin": 0.15,
+      "w_making": 0.3,
+      "source": "E7"
+    },
+    "recovery": {
+      "status": "A",
+      "day1": 0.5,
+      "day2": 0.8,
+      "source": "E13"
+    },
+    "breaks": {
+      "status": "M",
+      "work_mean_min": 52,
+      "break_mean_min": 17,
+      "gamma_shape": 2,
+      "source": "E11, DeskTime"
+    }
+  },
+  "sleep": {
+    "need_h": {
+      "status": "A",
+      "mean": 7.2,
+      "sd": 0.6
+    },
+    "floor_h": {
+      "status": "A",
+      "range": [
+        4.0,
+        5.5
+      ]
+    },
+    "hurdle": {
+      "status": "M",
+      "p_event": {
+        "final": 0.32,
+        "midterm": 0.13,
+        "pinup": 0.02,
+        "other_deadline": 0.04
+      },
+      "or": {
+        "w_C": -0.4,
+        "w_N": 0.3,
+        "w_keen": 0.2
+      },
+      "beta_gap": 1.0,
+      "source": "E4; re-calibrated 2026-11-07 (33% / 14% / 2%)"
+    },
+    "delta_urgency_h": {
+      "status": "A",
+      "value": 2.5,
+      "note": "sleep = max(floor, need − δ × urgency) + noise"
+    }
+  },
+  "studio": {
+    "sessions": {
+      "status": "C",
+      "y23": {
+        "days": [
+          "Tue",
+          "Fri"
+        ],
+        "start": "13:30",
+        "end": "18:00"
+      },
+      "y1": {
+        "days": [
+          "Tue",
+          "Thu",
+          "Fri"
+        ],
+        "start": "13:30",
+        "end": "18:00"
+      },
+      "source": "B1, B2",
+      "intro_min": 15,
+      "intro_note": "[D*] each session opens with the section gathered at the instructor's spot for intro_min: the briefing, announcements, the day's plan (APR24: 'desk crits, small group meetings, studio pinups'; owner 2026-11-11, Q23: the section's own briefing counts as an intro). On the week's first session the year's lecture follows it."
+    },
+    "lecture": {
+      "status": "A",
+      "minutes": 45,
+      "per_week": 1,
+      "off_floor": true,
+      "source": "B4; owner 2026-11-08",
+      "booking": "first come: the smallest classroom that seats the year group; off site when none fits",
+      "per_year_group": true,
+      "note": "B4: one 45 min lecture a week in another classroom, the section relocates. Owner 2026-11-08 (Q8, Q19): make a projection; rooms are bookable first come. Projection [A]: the lecture is held per year group in the first session of the week, in the smallest Level 1 or 2 classroom whose chairs seat the year; a second year group at the same hour takes the next room; none fitting means another building."
+    },
+    "crit": {
+      "status": "C/M",
+      "per_group_per_session": 1,
+      "length_min": {
+        "shift": 12,
+        "median": 8,
+        "sigma": 0.72
+      },
+      "sign_up": "first come first served",
+      "at_desk_share": 0.5,
+      "source": "C1, C2, C3, C5",
+      "note": "at_desk_share superseded 2026-11-08: the place of a crit follows the instructor's crit mode (population.instructors.crit_mode) and the crowding of the bay (Q6)"
+    },
+    "groups": {
+      "status": "A",
+      "phase1_team": [
+        3,
+        4
+      ],
+      "pairs_share_sections": 0.3,
+      "source": "B13"
+    },
+    "departure": {
+      "status": "M",
+      "p_imm_base": 0.15,
+      "w_C": 0.3,
+      "hazard_strict": 0.5,
+      "hazard_lax": 1.5,
+      "hazard_deadline_72h": 0.4,
+      "hazard_constraint": 2.0,
+      "source": "B3 (Cox 1972; Page 2008)"
+    },
+    "instructor_style": {
+      "status": "A",
+      "mix": {
+        "critic": 0.25,
+        "mixed": 0.5,
+        "facilitator": 0.25
+      },
+      "push": {
+        "critic": 1.3,
+        "mixed": 1.15,
+        "facilitator": 1.0
+      },
+      "source": "C12, H3"
+    },
+    "pin_ups_per_review": {
+      "status": "C",
+      "value": 2,
+      "minutes_per_group": 10,
+      "source": "C6"
+    },
+    "seminar": {
+      "status": "A",
+      "courses_on_floor": 1,
+      "courses_off_site": 2,
+      "seminar_min": 90,
+      "lecture_min": 90,
+      "walk_min": [
+        10,
+        20
+      ],
+      "source": "B5, D14 (2026-11-06 ratio [A])",
+      "scheduling": {
+        "days": "weekdays that are not the year's studio days",
+        "slots": [
+          "09:00",
+          "10:30",
+          "13:00",
+          "14:30",
+          "15:30"
+        ],
+        "lunch_kept_free": [
+          "12:00",
+          "13:00"
+        ],
+        "rooms": "any crit room, first come, Level 3 rooms first; room 30 included (owner 2026-11-08, Q16)",
+        "group": "one studio section (about 15)"
+      },
+      "note": "Owner 2026-11-08 (Q9): seminars can be any day but must not clash with lunch or studio time; (Q19) rooms are booked first come. The timetable is built once per seed."
+    },
+    "office_hours": {
+      "status": "A",
+      "p_visit_per_week": 0.15,
+      "w_keen": 0.4,
+      "w_N": -0.3,
+      "w_C": 0.2,
+      "minutes": 15,
+      "hours": [
+        "10:00",
+        "16:00"
+      ],
+      "note": "Owner 2026-11-08 (Q10): who uses office hours depends on the student. P(visit per week) = p x exp(w_keen keen + w_N N + w_C C), only when the section's instructor has an office in the building and is in that day.",
+      "source": "F2 (help-seeking), Karabenick 2003; owner 2026-11-08"
+    }
+  },
+  "resources": {
+    "plotters": {
+      "status": "C/M",
+      "servers": 2,
+      "service_min": {
+        "mean": 6,
+        "sd": 2
+      },
+      "paper_stock_sheets": 150,
+      "restock_hours": {
+        "days": [
+          "Mon",
+          "Tue",
+          "Wed",
+          "Thu",
+          "Fri"
+        ],
+        "start": "08:30",
+        "end": "17:00"
+      },
+      "sheets_per_job": [
+        1,
+        4
+      ],
+      "print_early_days_per_C": 2,
+      "reprint_eve_p": 0.3,
+      "print_early_note": "[A] owner 2026-11-11 (item 32): the organised student prints earlier than the day before, with the plotter failing in mind. Print day = 1 + 2 x C days before the review (C = +1 three days before, at most six); a missed day is caught up on the next day in; 30% reprint on the eve.",
+      "source": "D10, D11, Doshi 1986",
+      "note": "150 sheets loaded at each restock during staffed hours [A]; outside those hours an empty roll stays empty (D10)"
+    },
+    "printers_small": {
+      "status": "C",
+      "count": 3,
+      "service_min": 2
+    },
+    "printer3d": {
+      "status": "C",
+      "count": 6,
+      "slot_min": 30,
+      "collect_delay_min": [
+        10,
+        60
+      ],
+      "fee": 15,
+      "source": "D9 (moved to Level 3, 2026-11-06)"
+    },
+    "kitchen": {
+      "status": "C",
+      "always_open": true,
+      "counters": 2,
+      "microwaves": 2,
+      "kettle": 1,
+      "coffee": 1,
+      "source": "D12, Level 3 room 9"
+    },
+    "shops": {
+      "status": "D*",
+      "basement": {
+        "days": {
+          "Mon-Thu": [
+            [
+              "09:00",
+              "12:00"
+            ],
+            [
+              "13:00",
+              "20:30"
+            ]
+          ],
+          "Fri": [
+            [
+              "08:30",
+              "12:00"
+            ],
+            [
+              "13:00",
+              "16:30"
+            ]
+          ],
+          "Sat-Sun": [
+            [
+              "10:00",
+              "14:00"
+            ]
+          ]
+        }
+      },
+      "main_off_site": {
+        "walk_min": [
+          15,
+          20
+        ],
+        "hours": [
+          [
+            "09:00",
+            "21:00"
+          ]
+        ]
+      },
+      "source": "D8"
+    },
+    "food_run_min": {
+      "status": "C",
+      "value": 15,
+      "source": "D13"
+    },
+    "library_walk_min": {
+      "status": "C",
+      "value": 5,
+      "source": "D15"
+    }
+  },
+  "needs": {
+    "status": "A",
+    "hunger_h": [
+      4,
+      6
+    ],
+    "thirst_h": [
+      1.5,
+      2
+    ],
+    "washroom_h": [
+      2.5,
+      4
+    ],
+    "coffee_factor": 0.8,
+    "critical_fraction": 0.6,
+    "source": "AT19; EFSA 2010; Haylen 2010",
+    "durations_min": {
+      "washroom": [
+        3,
+        6
+      ],
+      "kitchen": [
+        5,
+        12
+      ],
+      "lunch": [
+        25,
+        45
+      ],
+      "water": [
+        2,
+        4
+      ]
+    },
+    "washroom_rule": {
+      "status": "C",
+      "students": "the nearest of Level 1 and Level 2 by current floor: Level 2 from the studio, Level 1 from a lecture; the Level 4 rooms are the professors'",
+      "instructors": "Level 4",
+      "source": "owner 2026-11-08 (Q1)"
+    }
+  },
+  "social": {
+    "encounter": {
+      "status": "D",
+      "radius_m": 3,
+      "min_s": 15,
+      "facing_deg": 120,
+      "source": "J10, Bernstein & Turban 2018; 3 m in a dense studio (J10 sensitivity candidate)"
+    },
+    "comfort": {
+      "status": "M",
+      "tau_h": 60,
+      "c0": {
+        "returning": 0.6,
+        "y1": 0.3,
+        "newcomer": 0.3
+      },
+      "w_E": 0.3,
+      "w_N": -0.3,
+      "ties_bonus": 0.05,
+      "source": "F1, Reis 2011, Asendorpf & Wilpers 1998"
+    },
+    "exchange_rate_per_day": {
+      "status": "A",
+      "r0": 4,
+      "w_E": 0.5,
+      "w_A": 0.2,
+      "source": "F3"
+    },
+    "tie": {
+      "status": "A",
+      "increment": 0.05,
+      "w_E": 0.3,
+      "w_A": 0.3,
+      "decay_per_day": 0.005,
+      "strong": 0.5,
+      "online_factor": 0.5,
+      "source": "ST8, F4"
+    },
+    "help": {
+      "status": "M",
+      "threshold": 0.5,
+      "w_N": 0.4,
+      "w_E": -0.3,
+      "source": "F2, Karabenick 2003, Edmondson 1999"
+    },
+    "availability": {
+      "status": "A",
+      "headphones_p": 0.6,
+      "headphones_w_E": -0.4,
+      "headphones_w_N": 0.2,
+      "headphones_factor": 0.4,
+      "crit_block": true,
+      "groupmate_weight": 2,
+      "approach_w_A": 0.2,
+      "approach_w_N": 0.2,
+      "approach_w_E": -0.3,
+      "source": "D16, BH16, BH30; Furnham & Strbac 2002"
+    },
+    "curiosity": {
+      "status": "A",
+      "p_detour": 0.08,
+      "w_O": 0.5,
+      "within_m": 3,
+      "minutes": [
+        1,
+        3
+      ],
+      "source": "F6"
+    },
+    "events": {
+      "status": "C/A",
+      "good_times": {
+        "p": 0.35,
+        "w_urgency": -1,
+        "grab_share": 0.4,
+        "grab_min": [10, 20],
+        "arrive_within_min": 25
+      },
+      "waffle": {
+        "p": 0.4,
+        "grab_share": 0.6,
+        "grab_min": [8, 15]
+      },
+      "note": "Owner 2026-11-12 (walkthrough stop 5): Good Times was far too full (95 at the event) because the situation added half of everyone for 150 minutes on top of the calendar's own Friday rule; the situation now adds nothing on a day that has the event. Many grab something and leave quickly: grab_share of the attenders stay grab_min minutes, the rest 40 to 100% of the event. Numbers [A]; Q11 (2026-11-08) accepted about 50-60 at Good Times; owner 2026-11-12: that is the number who come through, at the start of Good Times, so everyone arrives within arrive_within_min of the start.",
+      "halloween": {
+        "p": 0.5
+      },
+      "stress_relief": 0.1,
+      "source": "F9"
+    },
+    "between_year_channels": {
+      "status": "C",
+      "mentor": true,
+      "ta": true,
+      "events": true,
+      "source": "F5"
+    },
+    "sleep_disclosure_p": {
+      "status": "A",
+      "value": 0.5,
+      "source": "F7"
+    }
+  },
+  "wellbeing": {
+    "stress": {
+      "status": "D*",
+      "high": 0.7,
+      "target_normal_share": 0.2,
+      "target_review_share": 0.4,
+      "base": 0.40,
+      "base_w_N": 0.15,
+      "drift_per_day": 0,
+      "urgency_w": 0.002,
+      "review_w": 0.03,
+      "review_window_days": 14,
+      "sleep_w": 0.001,
+      "gain_w_N": 0.5,
+      "decay_per_day": 0.15,
+      "crit_bad_p": 0.2,
+      "crit_bad_loss": 0.15,
+      "note": "Daily: stress relaxes 15% toward a personal baseline (base + base_w_N x N), plus exp(gain_w_N x N) x (urgency_w x log(urgency) + review_w x nearness), plus sleep_w x sleep debt, plus crit_bad_loss with crit_bad_p on a crit day. Nearness = 1 - days to the year's next review / review_window_days, zero beyond the window. 2026-11-11 (item 33): the constant daily push (0.015) and the review rise through the capped urgency sum put half the cohort over the line all term; the owner: a normal week depends on personality, 55% before reviews is near the target, bring it down. Rebuilt so the review rise comes from the days to the review; base and review_w set by the term probe (test/_stress.mjs) to about 20% high in a normal week and about 40% the week before a review (H1: CGPSS 21%, BATT24 33-46%).",
+      "source": "H1, BATT24, CGPSS22; owner 2026-11-11 (item 33)"
+    },
+    "support_seek_p_per_week": {
+      "status": "A",
+      "value": 0.1,
+      "hours_off_floor": 1,
+      "source": "H2"
+    },
+    "push": {
+      "status": "A",
+      "weeks_before_review": 2,
+      "source": "H3"
+    }
+  },
+  "costs": {
+    "term_spend": {
+      "status": "D*",
+      "median": 700,
+      "p10": 450,
+      "p90": 1200,
+      "w_making": 0.3,
+      "source": "G1, G2"
+    },
+    "sheet_cost": {
+      "status": "A",
+      "value": 12
+    },
+    "reprint_share": {
+      "status": "A",
+      "value": 0.25
+    }
+  },
+  "layout": {
+    "movement": {
+      "status": "C",
+      "default": "everyday",
+      "levels": [
+        "everyday",
+        "agents",
+        "free"
+      ],
+      "note": "Owner 2026-11-08 (Q12): the rearrangement feature is the design suggestions happening in real time, by the agents. EVERYDAY: chairs and boards move for crits and pin-ups and return. AGENTS REARRANGE: when a live trigger trips (a plotter queue, an exposed desk, a crowded kitchen, the years not meeting), the agents concerned move the nearest movable piece themselves, within the constraints below; the moves are logged, traced to the suggestion they anticipate, and their effect measured. FREE: the same triggers without veto, budget or aisle limit (a stress test).",
+      "source": "owner 2026-11-07 and 2026-11-08"
+    },
+    "mobility": {
+      "status": "A",
+      "classes": {
+        "chair": "in_use",
+        "table": "in_use_casters",
+        "pinup": "in_use_casters",
+        "desk": "by_plan",
+        "counter": "fixed",
+        "sink": "fixed",
+        "fridge": "fixed",
+        "printer": "fixed",
+        "printer3d": "fixed",
+        "computers": "fixed",
+        "bar": "fixed",
+        "pew_bench": "fixed",
+        "seating": "in_use",
+        "shelf": "fixed"
+      },
+      "effort_min": {
+        "chair": 0.2,
+        "table": 2,
+        "pinup": 1.5,
+        "desk": 5
+      },
+      "return_hysteresis": 0.3
+    },
+    "manager": {
+      "status": "A",
+      "check_every_min": 30,
+      "budget_per_day": {
+        "agents": 4,
+        "free": 12
+      },
+      "cooldown_h": 3,
+      "per_trigger_cap": {
+        "exposure": 2,
+        "note": "Owner 2026-11-12 (item 27, walkthrough stop 3): screens (a board rolled to the aisle side of an exposed desk) are capped at two a day so the other moves (the plotter table, the kitchen table, the shared board) get their chance; the owner wants to see what else the agents do to the space, since that could have long-term implications. Number [A]."
+      },
+      "veto": {
+        "base": 0.35,
+        "w_A": -0.15,
+        "free": 0.0,
+        "note": "P(an affected desk owner vetoes) = base + w_A x mean A of the affected owners [A]"
+      },
+      "triggers": {
+        "queue_len": 3,
+        "exposure_passers_per_h": 20,
+        "kitchen_n": 6,
+        "between_share": 0.15,
+        "between_check": "14:00",
+        "noise_at_desk": 2.0
+      },
+      "movable_kinds": [
+        "table",
+        "pinup",
+        "seating"
+      ],
+      "max_move_tiles": 10,
+      "kitchen_reach_tiles": 30,
+      "min_main_component_keep": 0.98,
+      "note": "the floor must stay connected (the main walkable component keeps at least 98% of its tiles) and no desk may lose its standing tile. Owner 2026-11-12 (item 27): to see the other moves, queue_len 4 -> 3 (the eve-of-midterm queue peaks at 3 in seed 2026, so 4 never fired), kitchen_reach_tiles 30 (the nearest side table is 21 tiles from the kitchen, over the old reach of 20), and a spot is now tried for connectivity before it is chosen (the first spot used to be the only one tried). All [A]."
+    },
+    "gaps": {
+      "status": "A",
+      "note": "Owner 2026-11-08 (Q18): four desks were boxed in. A pocket of floor that holds desks and is cut off from the floor proper is connected by rolling aside the thinnest movable piece between them (a board or table), at most 6 tiles; the gap is logged in world.gaps and drawn in the drift overlay. The model should be checked at those boards.",
+      "max_tiles": 6
+    }
+  },
+  "metrics": {
+    "benchmarks": {
+      "C1": {
+        "value": 30,
+        "unit": "m shared per pair",
+        "note": "+30 m ≈ +20% collaborations (Kabo 2014)"
+      },
+      "C3": {
+        "value": 1.0,
+        "unit": "per person-week"
+      },
+      "C4": {
+        "value": 45,
+        "unit": "min per person-day",
+        "note": "open plan −70% after a move (Bernstein 2018)"
+      },
+      "C6": {
+        "value": 0.25,
+        "unit": "share between years"
+      },
+      "C7": {
+        "value": null,
+        "unit": "route / desk / room shares"
+      },
+      "C13": {
+        "value": 15,
+        "unit": "min"
+      },
+      "F1": {
+        "value": 11,
+        "upper": 52,
+        "deep_min": 25,
+        "unit": "min focus block (median)",
+        "note": "Mark, Gonzalez & Harris 2005 (CHI): information workers spent 11 min 04 s on a working sphere before switching, 57% of spheres interrupted; Gonzalez & Mark 2004: about 3 min per task event. Heerwagen 2004 cites offices at under 10 to under 30 min uninterrupted. DeskTime's 52 min is the undisturbed work bout, kept as the upper reference and as the bout draw (E11). The share of blocks of 25 min or more is reported too (J6 threshold [A]). Owner 2026-11-08 (Q20): base the focus benchmark on data."
+      },
+      "F2": {
+        "value": 1.0,
+        "unit": "per focus-hour",
+        "note": "Mark 2008"
+      },
+      "F4": {
+        "value": 6,
+        "unit": "passes per hour within 1 m of the desk",
+        "note": "[A] no measured benchmark; before 2026-11-08 the count was 15 tile-steps an hour within one tile. Rescaled on 2026-11-08 to passes (one per walker per pass) so the ratio to the engine's normal Tuesday is unchanged (was 21.9 against 15)."
+      },
+      "F8": {
+        "value": 5,
+        "unit": "min wait at resources"
+      },
+      "F11": {
+        "value": 0.6,
+        "unit": "index"
+      },
+      "S1": {
+        "value": 0.7,
+        "unit": "integration"
+      }
+    },
+    "exposure_count": {
+      "radius": 2,
+      "far": 0.5,
+      "screened": 0.5,
+      "once_s": 60,
+      "note": "[A] one count per walker per pass (not per tile stepped): within one tile of the desk's standing tile 1.0, the next ring out 0.5, and x0.5 when a board, table or wall sits between the desk and the walker. Added 2026-11-08 for open item 25: a board rolled to the aisle side used to take the passers to zero because it took the counted tile; now it reduces them."
+    },
+    "scale": {
+      "C1": [
+        0,
+        60
+      ],
+      "C3": [
+        0,
+        2
+      ],
+      "C4": [
+        0,
+        90
+      ],
+      "C6": [
+        0,
+        0.5
+      ],
+      "C13": [
+        0,
+        30
+      ],
+      "F1": [
+        0,
+        60
+      ],
+      "F2": [
+        0,
+        4
+      ],
+      "F4": [
+        0,
+        50
+      ],
+      "F8": [
+        0,
+        30
+      ],
+      "F11": [
+        0,
+        1
+      ],
+      "S1": [
+        0,
+        1
+      ]
+    }
+  }
+}

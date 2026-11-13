@@ -1,0 +1,770 @@
+{
+  "meta": {
+    "schema": 1,
+    "note": "The catalogue of object kinds and what an agent can do with each: one entry per kind, whether the Revit model has a family for it (modelled) or the owner adds it per room in program/objects.json (not modelled). Kinds are the ones scripts/rasterise.py gives the furniture from its family name, plus the unmodelled ones. An entry filled from general use rather than the owner's words says inferred: true and is to be confirmed. Started 2026-11-06 with the Level 3 crit rooms.",
+    "fields": {
+      "actions": "what an agent does there: verb, posture (standing, seated), people at once, typical minutes as [low, high]",
+      "movable": "whether people move it in use (owner's rules per room in objects.json override this)",
+      "needs": "what the action depends on: another object kind, a wall, a chair"
+    },
+    "updated": "2026-11-06"
+  },
+  "kinds": {
+    "pinup_wall": {
+      "label": "Pin-up wall",
+      "modelled": false,
+      "description": "A felt or fabric pin-up surface fixed directly to the wall, on every opaque wall of a crit room. Not in the Revit model; added per room.",
+      "actions": [
+        {
+          "verb": "pin_up",
+          "posture": "standing",
+          "people": "1 to 3 per group",
+          "minutes": [
+            5,
+            15
+          ],
+          "note": "one group pins down as the next pins up"
+        },
+        {
+          "verb": "present",
+          "posture": "standing at the wall",
+          "people": "1 presenter, the group beside",
+          "minutes": null,
+          "note": "duration comes with the crit activity (handover notes, to import)"
+        },
+        {
+          "verb": "view",
+          "posture": "seated or standing, facing the wall",
+          "people": "the room",
+          "minutes": null
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "opaque wall"
+      ],
+      "source": "owner, chat 2026-11-06",
+      "inferred": false
+    },
+    "screen": {
+      "label": "Projection screen",
+      "modelled": false,
+      "description": "A screen that descends from a housing mounted high on the wall. In both Level 3 crit rooms it is on the short wall on the door's side (the west wall). Not in the Revit model; added per room.",
+      "states": [
+        "up",
+        "down"
+      ],
+      "actions": [
+        {
+          "verb": "view",
+          "posture": "seated, facing the screen",
+          "people": "the room",
+          "minutes": null
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "projector"
+      ],
+      "source": "owner, chat 2026-11-06",
+      "inferred": false
+    },
+    "projector": {
+      "label": "Projector",
+      "modelled": false,
+      "description": "Projects onto the screen. The owner confirms one in each Level 3 crit room; its mounting and position are not given and are placed as ceiling-mounted, facing the screen.",
+      "actions": [
+        {
+          "verb": "present",
+          "posture": "standing by the screen or seated",
+          "people": "1 presenter",
+          "minutes": null,
+          "note": "studio lectures and internal slide presentations"
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "screen"
+      ],
+      "source": "owner, chat 2026-11-06 (its presence); mounting inferred",
+      "inferred": true
+    },
+    "pinup": {
+      "label": "Pin-up board (freestanding)",
+      "modelled": true,
+      "description": "SALA_Pinup_Board, the freestanding boards in the studio and the corridor. On casters; the board at the end of each desk bay is more a divider than a pin-up. Not typically moved during the semester; movable when the movable_furniture toggle is on.",
+      "actions": [
+        {
+          "verb": "pin_up",
+          "posture": "standing",
+          "people": "1 to 2",
+          "minutes": [
+            5,
+            15
+          ]
+        },
+        {
+          "verb": "view",
+          "posture": "standing",
+          "people": "1 to 4",
+          "minutes": [
+            2,
+            20
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [],
+      "source": "general use, to confirm",
+      "inferred": true
+    },
+    "desk": {
+      "label": "Desk",
+      "modelled": true,
+      "description": "SALA_Desk, one student's desk in the studio (on casters, not typically moved during the semester, movable with the movable_furniture toggle; assigned by cohort zone, see objects.json zones); and, added by rule (objects.json by_use), the occupant's desk in every individual office, sized by the room.",
+      "actions": [
+        {
+          "verb": "work",
+          "posture": "seated",
+          "people": "1",
+          "minutes": [
+            30,
+            240
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "chair"
+      ],
+      "source": "general use, to confirm",
+      "inferred": true
+    },
+    "chair": {
+      "label": "Chair",
+      "modelled": true,
+      "description": "Zeph multipurpose chairs and other seating; the seat an agent takes at a desk or table, or turns to face a pin-up wall.",
+      "actions": [
+        {
+          "verb": "sit",
+          "posture": "seated",
+          "people": "1",
+          "minutes": null
+        }
+      ],
+      "movable": true,
+      "needs": [],
+      "source": "owner, chat 2026-11-06 (crit rooms: chairs are turned and shifted as presentations move wall to wall)",
+      "inferred": false
+    },
+    "table": {
+      "label": "Table",
+      "modelled": true,
+      "description": "Classroom and SALA tables. Seats a group around it for seminars and classes; in the crit rooms on casters, moved to the side or stacked top to top for presentations. In the photography room the table holds the model being photographed (added there).",
+      "actions": [
+        {
+          "verb": "work",
+          "posture": "seated around",
+          "people": "4 to 10",
+          "minutes": [
+            30,
+            180
+          ]
+        },
+        {
+          "verb": "seminar",
+          "posture": "seated around",
+          "people": "the class",
+          "minutes": [
+            50,
+            180
+          ],
+          "note": "history seminars and other classes"
+        },
+        {
+          "verb": "photograph",
+          "posture": "standing at",
+          "people": "1 to 3",
+          "minutes": [
+            20,
+            60
+          ],
+          "note": "the photography room: a model on the table, the backdrop down, the lights on; session length assumed"
+        }
+      ],
+      "movable": true,
+      "needs": [
+        "chair"
+      ],
+      "source": "owner, chat 2026-11-06 (crit rooms); seminar seating from the owner, capacities general",
+      "inferred": true
+    },
+    "computers": {
+      "label": "Computer station",
+      "modelled": true,
+      "description": "SALA computer stations and monitors. In the studio the desktop computers in the middle of the floor are primarily used for sending prints to the big plotters, by all students.",
+      "actions": [
+        {
+          "verb": "send_print",
+          "posture": "seated or standing",
+          "people": "1 per station",
+          "minutes": [
+            3,
+            15
+          ],
+          "note": "the studio's computers: a print job to the plotters"
+        },
+        {
+          "verb": "work",
+          "posture": "seated",
+          "people": "1 per station",
+          "minutes": [
+            20,
+            180
+          ],
+          "note": "the crit room's station"
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "chair"
+      ],
+      "source": "general use, to confirm",
+      "inferred": true
+    },
+    "seating": {
+      "label": "Sofa or bench",
+      "modelled": true,
+      "description": "Sofas and benches, mostly in the lounge.",
+      "actions": [
+        {
+          "verb": "sit",
+          "posture": "seated",
+          "people": "2 to 3 per piece",
+          "minutes": [
+            10,
+            90
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [],
+      "source": "general use, to confirm",
+      "inferred": true
+    },
+    "counter": {
+      "label": "Counter",
+      "modelled": true,
+      "description": "Kitchen counters, casework, sinks, the keg fridge and the bar edge.",
+      "actions": [
+        {
+          "verb": "prepare",
+          "posture": "standing",
+          "people": "1 to 3",
+          "minutes": [
+            2,
+            20
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [],
+      "source": "general use, to confirm",
+      "inferred": true
+    },
+    "printer": {
+      "label": "Printer or plotter",
+      "modelled": "partly",
+      "description": "The two Designjet plotters at the north end of the studio (modelled) and three large printers for 8.5 by 11 and 11 by 17 beside them (added, O24 to O26). Used by all students; printing is concentrated in this one area for the whole floor. Jobs go to the plotters from the desktop computers in the middle of the floor.",
+      "actions": [
+        {
+          "verb": "print",
+          "posture": "standing",
+          "people": "1, others queue",
+          "minutes": [
+            2,
+            15
+          ]
+        },
+        {
+          "verb": "collect",
+          "posture": "standing",
+          "people": "1",
+          "minutes": [
+            1,
+            3
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [],
+      "source": "owner, chat 2026-11-06 (what and who); durations general",
+      "inferred": true
+    },
+    "bin": {
+      "label": "Bin",
+      "modelled": true,
+      "description": "Waste and recycling bins.",
+      "actions": [
+        {
+          "verb": "dispose",
+          "posture": "standing",
+          "people": "1",
+          "minutes": [
+            0,
+            1
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [],
+      "source": "general use, to confirm",
+      "inferred": true
+    },
+    "cutting": {
+      "label": "Cutting table",
+      "modelled": true,
+      "description": "Cutting tables for model making: the studio's and the assembly room's (75, added).",
+      "actions": [
+        {
+          "verb": "make",
+          "posture": "standing",
+          "people": "1 to 2",
+          "minutes": [
+            15,
+            120
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [],
+      "source": "general use, to confirm",
+      "inferred": true
+    },
+    "elevator": {
+      "label": "Elevator",
+      "modelled": true,
+      "description": "The southern elevator: the car in the south stair core, on every level. People may use it to move between floors (owner, 2026-11-06).",
+      "actions": [
+        {
+          "verb": "ride",
+          "posture": "standing",
+          "people": "up to 6",
+          "minutes": [
+            0,
+            2
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [],
+      "source": "owner, chat 2026-11-06 (its presence and that people use it); capacity general",
+      "inferred": true,
+      "transit": true
+    },
+    "sink": {
+      "label": "Sink",
+      "modelled": true,
+      "description": "The double-bowl sink in the middle of the kitchen's west counter (modelled); and the washroom sinks, approximately three per washroom on a counter (added by rule).",
+      "actions": [
+        {
+          "verb": "wash",
+          "posture": "standing",
+          "people": "1",
+          "minutes": [
+            1,
+            3
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [],
+      "source": "owner, chat 2026-11-06 (its place); use general",
+      "inferred": true
+    },
+    "fridge": {
+      "label": "Fridge",
+      "modelled": false,
+      "description": "A fridge in the north-east corner of the kitchen and another in the north-east corner of the lounge. Not in the Revit model; added per room.",
+      "actions": [
+        {
+          "verb": "fetch",
+          "posture": "standing",
+          "people": "1",
+          "minutes": [
+            0,
+            1
+          ],
+          "note": "put food in, take it out"
+        }
+      ],
+      "movable": false,
+      "needs": [],
+      "source": "owner, chat 2026-11-06 (both fridges); use general",
+      "inferred": false
+    },
+    "microwave": {
+      "label": "Microwave",
+      "modelled": false,
+      "description": "One on each kitchen counter. Communal: not everyone uses them, many prefer a personal appliance.",
+      "actions": [
+        {
+          "verb": "heat",
+          "posture": "standing, then waiting beside",
+          "people": "1, others queue",
+          "minutes": [
+            2,
+            5
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "counter"
+      ],
+      "use_share": null,
+      "source": "owner, chat 2026-11-06; the share of users is pending",
+      "inferred": false
+    },
+    "kettle": {
+      "label": "Kettle",
+      "modelled": false,
+      "description": "Kettles on the kitchen counters, communal.",
+      "actions": [
+        {
+          "verb": "make_drink",
+          "posture": "standing",
+          "people": "1",
+          "minutes": [
+            3,
+            5
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "counter"
+      ],
+      "use_share": null,
+      "source": "owner, chat 2026-11-06; count and place on the counter assumed",
+      "inferred": true
+    },
+    "coffee_machine": {
+      "label": "Coffee machine",
+      "modelled": false,
+      "description": "A coffee machine and other tabletop appliances on the kitchen counters, communal.",
+      "actions": [
+        {
+          "verb": "make_drink",
+          "posture": "standing",
+          "people": "1, others queue",
+          "minutes": [
+            2,
+            5
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "counter"
+      ],
+      "use_share": null,
+      "source": "owner, chat 2026-11-06; place on the counter assumed",
+      "inferred": true
+    },
+    "bar": {
+      "label": "Bar counter",
+      "modelled": true,
+      "description": "The lounge bar against the service shaft (the model's 'Ray's Bar' piece; the owner says the real counter is longer). Two beers on tap.",
+      "actions": [
+        {
+          "verb": "serve",
+          "posture": "standing behind",
+          "people": "1 to 2 serving",
+          "minutes": null,
+          "note": "who serves and when is pending"
+        },
+        {
+          "verb": "drink",
+          "posture": "standing at, or on a stool",
+          "people": "3 to 6 along it",
+          "minutes": [
+            10,
+            60
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "beer_tap"
+      ],
+      "source": "owner, chat 2026-11-06; capacities general",
+      "inferred": true
+    },
+    "beer_tap": {
+      "label": "Beer tap",
+      "modelled": true,
+      "description": "Two beers on tap at the bar: the two squares with a small faucet behind the bar, beside the keg fridge.",
+      "actions": [
+        {
+          "verb": "pour",
+          "posture": "standing behind the bar",
+          "people": "1",
+          "minutes": [
+            0,
+            1
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "bar"
+      ],
+      "source": "owner, chat 2026-11-06",
+      "inferred": false
+    },
+    "serving_table": {
+      "label": "Serving table",
+      "modelled": true,
+      "description": "A kitchen- or bar-height serving table, 4.9 m long, along the kitchen wall of the lounge (the model's 'Family5').",
+      "actions": [
+        {
+          "verb": "serve",
+          "posture": "standing behind",
+          "people": "1 to 3 serving",
+          "minutes": null,
+          "note": "likely where Waffle Times food is set out; to confirm with the handover schedule"
+        },
+        {
+          "verb": "take",
+          "posture": "standing, queueing along it",
+          "people": "4 to 8 along it",
+          "minutes": [
+            1,
+            3
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [],
+      "source": "owner, chat 2026-11-06 (what it is); its use at events inferred",
+      "inferred": true
+    },
+    "pew_bench": {
+      "label": "Pew bench",
+      "modelled": true,
+      "description": "Church-pew-like benches with a high back, standing along the studio desks on the lounge's south edge with the back against the desks, facing into the lounge: the model's four 'Family7' pieces, confirmed by the owner.",
+      "actions": [
+        {
+          "verb": "sit",
+          "posture": "seated, facing the lounge",
+          "people": "about 2 per metre",
+          "minutes": [
+            10,
+            90
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [],
+      "source": "owner, chat 2026-11-06 (plan screenshot); extent inferred from the desk row",
+      "inferred": false
+    },
+    "coffee_table": {
+      "label": "Coffee table",
+      "modelled": true,
+      "description": "The low table in front of the couch (the model's 'Bench2').",
+      "actions": [
+        {
+          "verb": "set_down",
+          "posture": "seated on the couch",
+          "people": "the couch",
+          "minutes": null
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "seating"
+      ],
+      "source": "owner, chat 2026-11-06",
+      "inferred": false
+    },
+    "shelf": {
+      "label": "Shelf",
+      "modelled": false,
+      "description": "The shelf in the 3D-printing room on the wall opposite the window, carrying the printers. Not in the Revit model; added.",
+      "actions": [],
+      "movable": false,
+      "needs": [
+        "wall"
+      ],
+      "source": "owner, chat 2026-11-06 (the shelf and its wall); its size assumed",
+      "inferred": false
+    },
+    "printer3d": {
+      "label": "3D printer",
+      "modelled": false,
+      "description": "Small 3D printers on the shelf in room 6, at least six. Any architecture student may use them and brings their own filament. A print runs for hours unattended; prints fail for unforeseen reasons, and when the printers are busy a student moves another's finished or failed work aside.",
+      "actions": [
+        {
+          "verb": "start_print",
+          "posture": "standing at the shelf",
+          "people": "1 per printer",
+          "minutes": [
+            5,
+            15
+          ],
+          "note": "then the student leaves; the printer is busy for hours"
+        },
+        {
+          "verb": "collect",
+          "posture": "standing",
+          "people": "1",
+          "minutes": [
+            1,
+            5
+          ],
+          "note": "when the print ends; may find it failed"
+        },
+        {
+          "verb": "move_aside",
+          "posture": "standing",
+          "people": "1",
+          "minutes": [
+            1,
+            2
+          ],
+          "note": "another student's work, when the printers are very busy"
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "shelf",
+        "own filament"
+      ],
+      "print_hours": null,
+      "failure_share": null,
+      "source": "owner, chat 2026-11-06; print durations, the failure share and how busy they are are pending",
+      "inferred": false
+    },
+    "backdrop": {
+      "label": "Photo backdrop",
+      "modelled": false,
+      "description": "A backdrop that drops down from the wall in the photography room, behind the table. Not in the Revit model; added.",
+      "states": [
+        "up",
+        "down"
+      ],
+      "actions": [
+        {
+          "verb": "drop",
+          "posture": "standing",
+          "people": "1",
+          "minutes": [
+            0,
+            1
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "wall"
+      ],
+      "source": "owner, chat 2026-11-06 (the backdrop); its wall assumed",
+      "inferred": false
+    },
+    "light_stand": {
+      "label": "Photo light",
+      "modelled": false,
+      "description": "Some lights in the photography room, taken as two on stands either side of the table.",
+      "actions": [
+        {
+          "verb": "switch_on",
+          "posture": "standing",
+          "people": "1",
+          "minutes": [
+            0,
+            1
+          ]
+        }
+      ],
+      "movable": true,
+      "needs": [],
+      "source": "owner, chat 2026-11-06 (some lights); count and places assumed",
+      "inferred": true
+    },
+    "lamp": {
+      "label": "Pendant lamp",
+      "modelled": true,
+      "description": "Pendant lamps; not interactive and not drawn.",
+      "actions": [],
+      "movable": false,
+      "needs": [],
+      "source": "model",
+      "inferred": false
+    },
+    "stall": {
+      "label": "Washroom stall",
+      "modelled": false,
+      "description": "A toilet stall in a washroom, placed by rule: approximately four per washroom (owner, 2026-11-06).",
+      "actions": [
+        {
+          "verb": "use",
+          "posture": "private, one at a time",
+          "people": "1, others wait",
+          "minutes": [
+            2,
+            6
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [],
+      "source": "owner, chat 2026-11-06 (the count); use general",
+      "inferred": true
+    },
+    "urinal": {
+      "label": "Urinal",
+      "modelled": false,
+      "description": "A urinal in a men's washroom, in place of a stall where the owner says so (room 38).",
+      "actions": [
+        {
+          "verb": "use",
+          "posture": "standing",
+          "people": "1",
+          "minutes": [
+            1,
+            2
+          ]
+        }
+      ],
+      "movable": false,
+      "needs": [],
+      "source": "owner, chat 2026-11-06",
+      "inferred": true
+    },
+    "machine": {
+      "label": "Workshop machine",
+      "modelled": false,
+      "description": "A machine in the workshop (room 74): wood tools and one metal bending tool, the owner says; each piece names its tool. Used under supervision in business hours.",
+      "actions": [
+        {
+          "verb": "use",
+          "posture": "standing",
+          "people": "1, others wait",
+          "minutes": [
+            5,
+            30
+          ],
+          "note": "trained use, a technician present"
+        }
+      ],
+      "movable": false,
+      "needs": [
+        "supervision"
+      ],
+      "source": "owner, chat 2026-11-06 (the kinds); durations general",
+      "inferred": true
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "schema": 1,
+    "note": "Who is on the floor: the cohort the simulation populates. The number of agents is this count plus whatever a situation adds (program/calendar.json events, the SITUATION step); it is never typed into the interface. Values from the owner's confirmed checklist (research/studio-culture-school-checklist.md A3, A4, A8) and the 2024 accreditation report.",
+    "updated": "2026-11-07",
+    "source": "research notes A3, A4, A8 (confirmed + APR24)"
+  },
+  "years": [
+    { "year": 1, "students": 45, "sections": 3, "note": "about 45 enter year 1" },
+    { "year": 2, "students": 60, "sections": 4, "note": "about 15 join with advanced standing as newcomers" },
+    { "year": 3, "students": 60, "sections": 4 }
+  ],
+  "instructors": { "count": 11, "note": "about 4 per year level, 3 in year 1; a mix of permanent and sessional faculty" },
+  "staff_optional": { "shop_technician": 1, "plotter_technicians_students": 2, "custodial_security": "not modelled yet (research open item)" },
+  "desks": { "studio_desks_in_model": 172, "hot_desks_unclaimed": 7, "note": "the 7 spare desks toward the middle of the floor are unclaimed hot desks (owner, 2026-11-06)" }
+}

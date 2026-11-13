@@ -1,0 +1,492 @@
+{
+  "1": {
+    "title": "A normal Tuesday (the baseline)",
+    "expected": "176 expected; floor about 44 at 09:00, 120 at 12:00, 166 at 15:00, about 70 during the 13:45 lecture (building count stays), about 30 at midnight; crits from 13:40; instructors set up at side tables; voices differ; C1 LOW, F2 HIGH, WC TRIPS fire; F1 about 16 min against 11; eleven section intros at 13:30",
+    "observed": {
+      "expected": 176,
+      "present": 176,
+      "headcount": {
+        "09:00": {
+          "floor": 44,
+          "building": 45
+        },
+        "12:00": {
+          "floor": 120,
+          "building": 124
+        },
+        "14:00 lecture": {
+          "floor": 65,
+          "building": 176
+        },
+        "15:00": {
+          "floor": 165,
+          "building": 174
+        },
+        "20:00": {
+          "floor": 101,
+          "building": 104
+        },
+        "23:00": {
+          "floor": 55,
+          "building": 58
+        },
+        "midnight": {
+          "floor": 30,
+          "building": 32
+        }
+      },
+      "firstCrit": "13:38",
+      "critSpots": 2,
+      "intros": 11,
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "metrics": {
+        "C1": 22.48,
+        "C3": 2.21,
+        "C4": 56.69,
+        "C6": 0.28,
+        "F1": 16.3,
+        "F2": 1.44,
+        "F4": 8.72,
+        "F8": 0.2
+      },
+      "F1deepShare": 0.26,
+      "voiceLabels": 118,
+      "voiceTop": [
+        [
+          "even",
+          120
+        ],
+        [
+          "warm",
+          95
+        ],
+        [
+          "chatty",
+          50
+        ],
+        [
+          "chatty · calm",
+          45
+        ],
+        [
+          "vivid · warm · precise",
+          40
+        ],
+        [
+          "chatty · loose",
+          33
+        ]
+      ],
+      "voiceSamples": {
+        "terse": "In.",
+        "chatty": "Okay so. In. The floor is 6 people deep already.",
+        "anxious": "Same floor, same light, same walk to the kitchen. Behind already.",
+        "loose": "here. kind of. coffee first"
+      },
+      "remarks": 1893,
+      "events": 3852
+    },
+    "command": "node test/run-day.mjs 2026-10-13 none everyday 2026",
+    "seconds": 11,
+    "ranAt": "2026-11-12T04:44:07.177Z"
+  },
+  "2": {
+    "title": "The afternoon before the midterm, the agents rearranging",
+    "expected": "plot jobs from late morning; the queue reaches 4 or more; paper runs out after 17:00 with people giving up; boards rolled to exposed desks from noon, a side table to the plotter corner around 17:00; four moves is the budget; possibly a veto; F8 QUEUE and F2 HIGH end with \"The agents tried this live\"",
+    "observed": {
+      "present": 145,
+      "plotJobs": 104,
+      "paperOut": 42,
+      "firstPaperOut": "17:25",
+      "plotQueueEvents": 104,
+      "queueAt17": 3,
+      "moves": [
+        {
+          "t": "12:00",
+          "trigger": "exposure",
+          "what": "the board rolled to the aisle side of Arjun Shah's desk as a screen",
+          "effect": "passers at that desk 33 → 2 an hour"
+        },
+        {
+          "t": "13:00",
+          "trigger": "exposure",
+          "what": "the board rolled to the aisle side of Hugo Lee's desk as a screen",
+          "effect": "passers at that desk 29 → 0 an hour"
+        },
+        {
+          "t": "14:00",
+          "trigger": "exposure",
+          "what": "the board rolled to the aisle side of Maya Baker's desk as a screen",
+          "effect": "passers at that desk 84 → 4 an hour"
+        },
+        {
+          "t": "18:00",
+          "trigger": "exposure",
+          "what": "the board rolled to the aisle side of Vera Kim's desk as a screen",
+          "effect": "passers at that desk 40 → 7 an hour"
+        }
+      ],
+      "vetoes": 1,
+      "gaps": [
+        "table@L3:4",
+        "aisle@L1:7",
+        "aisle@L1:1",
+        "aisle@L1:1",
+        "aisle@L1:1",
+        "aisle@L1:1",
+        "aisle@L1:1",
+        "aisle@L1:1",
+        "aisle@L1:1",
+        "aisle@L1:1",
+        "aisle@L1:1",
+        "aisle@L2:6"
+      ],
+      "suggestions": [
+        "F2 HIGH",
+        "F8 QUEUE",
+        "WC TRIPS"
+      ],
+      "live": {
+        "F8 QUEUE": [],
+        "F2 HIGH": [
+          "The agents tried this live at 12:00: the board rolled to the aisle side of Arjun Shah's desk as a screen; passers at that desk 33 → 2 an hour. The agents tried this live at 13:00: the board rolled to the aisle side of Hugo Lee's desk as a screen; passers at that desk 29 → 0 an hour.",
+          "The agents tried this live at 14:00: the board rolled to the aisle side of Maya Baker's desk as a screen; passers at that desk 84 → 4 an hour. The agents tried this live at 18:00: the board rolled to the aisle side of Vera Kim's desk as a screen; passers at that desk 40 → 7 an hour."
+        ]
+      },
+      "metrics": {
+        "C1": 25.77,
+        "C3": 2.22,
+        "C4": 53.63,
+        "C6": 0.26,
+        "F1": 16.75,
+        "F2": 1.37,
+        "F4": 6.53,
+        "F8": 7.49
+      }
+    },
+    "command": "node test/run-day.mjs 2026-10-15 none agents 2026",
+    "seconds": 10,
+    "ranAt": "2026-11-12T05:25:26.814Z"
+  },
+  "3": {
+    "title": "The same day with paper at all hours (A against B)",
+    "expected": "no paper_out events; F8 falls (the wait stays, the giving-up goes); in ANALYSE the cards show A and B",
+    "observed": {
+      "A_paperOut": 42,
+      "B_paperOut": 0,
+      "A_F8": 6.96,
+      "B_F8": 3.28,
+      "A_outages": 42,
+      "B_outages": 0,
+      "A_jobs": 104,
+      "B_jobs": 104,
+      "B_suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS",
+        "LAYOUT"
+      ]
+    },
+    "command": "node test/run-cases.mjs 3   (the headless day runner has no policy flag; this script passes policy.paperAllHours = true)",
+    "seconds": 20,
+    "ranAt": "2026-11-12T04:44:36.055Z"
+  },
+  "4": {
+    "title": "FREE rearrangement (the stress test)",
+    "expected": "more moves than case 2 (up to twelve), no vetoes; the floor stays walkable: nobody stuck, the lift count does not climb",
+    "observed": {
+      "moves": 4,
+      "movesList": [
+        {
+          "t": "12:00",
+          "trigger": "exposure",
+          "what": "the board rolled to the aisle side of Arjun Shah's desk as a screen",
+          "effect": "passers at that desk 33 → 5 an hour"
+        },
+        {
+          "t": "13:00",
+          "trigger": "exposure",
+          "what": "the board rolled to the aisle side of Maya Baker's desk as a screen",
+          "effect": "passers at that desk 54 → 4 an hour"
+        },
+        {
+          "t": "13:30",
+          "trigger": "exposure",
+          "what": "the board rolled to the aisle side of Hugo Lee's desk as a screen",
+          "effect": "passers at that desk 99 → 0 an hour"
+        },
+        {
+          "t": "14:00",
+          "trigger": "exposure",
+          "what": "the board rolled to the aisle side of Vera Kim's desk as a screen",
+          "effect": "passers at that desk 38 → 6 an hour"
+        }
+      ],
+      "vetoes": 0,
+      "mainComponentShare": 1.08,
+      "stillWalkingAtEnd": 10,
+      "insideAtEnd": 10,
+      "lift": {
+        "boarded": 485,
+        "waits": 505,
+        "meanWait": 18
+      },
+      "present": 145,
+      "metrics": {
+        "C1": 25.77,
+        "C3": 2.15,
+        "C4": 53.4,
+        "C6": 0.28,
+        "F1": 16.88,
+        "F2": 1.38,
+        "F4": 6.66,
+        "F8": 7.04
+      }
+    },
+    "command": "node test/run-day.mjs 2026-10-15 none free 2026",
+    "seconds": 9,
+    "ranAt": "2026-11-12T05:25:36.051Z"
+  },
+  "5": {
+    "title": "Lift out of service",
+    "expected": "the LIFT count stays 0; washroom and lecture trips take the stairs; the lift wait remarks disappear; WC TRIPS still fires",
+    "observed": {
+      "liftBoarded": 0,
+      "liftWaits": 0,
+      "liftWaitRemarks": 0,
+      "washroomTrips": 335,
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "headcount14": {
+        "floor": 32,
+        "building": 176
+      },
+      "present": 176
+    },
+    "command": "node test/run-day.mjs 2026-10-13 lift everyday 2026",
+    "seconds": 11,
+    "ranAt": "2026-11-12T04:44:56.673Z"
+  },
+  "6": {
+    "title": "Fifteen more students",
+    "expected": "Visitor 1 to 15 on hot desks; the kitchen crowds; encounters up, focus down a little",
+    "observed": {
+      "visitors": 15,
+      "agentsBaseline": 176,
+      "agentsNow": 191,
+      "presentBaseline": 176,
+      "presentNow": 191,
+      "kitchenCrowdedRemarks": 455,
+      "encounters": {
+        "baseline": 12567,
+        "now": 16805
+      },
+      "C4": {
+        "baseline": 56.69,
+        "now": 56.91
+      },
+      "F1": {
+        "baseline": 16.3,
+        "now": 16.73
+      },
+      "F2": {
+        "baseline": 1.44,
+        "now": 1.38
+      }
+    },
+    "command": "node test/run-day.mjs 2026-10-13 cohort everyday 2026",
+    "seconds": 22,
+    "ranAt": "2026-11-12T04:45:18.933Z"
+  },
+  "7": {
+    "title": "Good Times (a Friday)",
+    "expected": "the lounge fills from 18:00; about 50 to 60 attend by 19:00; between-year conversations rise (C6 above 0.25); the event remarks",
+    "observed": {
+      "atEvent": {
+        "18:00": 59,
+        "19:00": 60,
+        "20:00": 19
+      },
+      "inLounge19": 57,
+      "eventRemarks": 81,
+      "sampleRemark": "Good Times. The lounge is the one room on this floor that works at seven. That’s 10 minutes gone.",
+      "C6": 0.28,
+      "between": 359,
+      "interactions": 1284,
+      "present": 176
+    },
+    "command": "node test/run-day.mjs 2026-10-23 good_times everyday 2026",
+    "seconds": 13,
+    "ranAt": "2026-11-12T04:45:31.809Z"
+  },
+  "8": {
+    "title": "A weekend day before the final",
+    "expected": "about 60% present, arrivals from 11:00, no sessions, printing, long evenings, few events",
+    "observed": {
+      "present": 133,
+      "students": 165,
+      "presentShare": 0.81,
+      "earliestArrival": "10:15",
+      "critStarts": 0,
+      "intros": 0,
+      "plotJobs": 8,
+      "headcount": {
+        "12:00": {
+          "floor": 54,
+          "building": 56
+        },
+        "16:00": {
+          "floor": 82,
+          "building": 85
+        },
+        "20:00": {
+          "floor": 63,
+          "building": 65
+        },
+        "23:00": {
+          "floor": 40,
+          "building": 41
+        }
+      },
+      "events": 1488
+    },
+    "command": "node test/run-day.mjs 2026-12-05 weekend everyday 2026",
+    "seconds": 13,
+    "ranAt": "2026-11-12T04:45:44.883Z"
+  },
+  "9": {
+    "title": "The term horizon with five seeds",
+    "expected": "the timeline shows hours per week, high-stress share, comfort and between-year ties with a band; stress peaks in the review weeks (6 and 14); a normal week about 42 to 50 hours and 20% high stress (E1, H1)",
+    "observed": {
+      "seeds": 5,
+      "weeks": 14,
+      "reviewWeeks": [
+        {
+          "name": "Midterm review",
+          "date": "2026-10-16",
+          "week": 6
+        },
+        {
+          "name": "Final review, years 2 and 3",
+          "date": "2026-12-08",
+          "week": 14
+        },
+        {
+          "name": "Final review, year 1",
+          "date": "2026-12-10",
+          "week": 14
+        }
+      ],
+      "stressPeakWeeks": [
+        5,
+        13,
+        13
+      ],
+      "normalWeek": {
+        "week": 3,
+        "date": "2026-09-29",
+        "hoursPerPerson": {
+          "median": 45.29,
+          "lo": 44.88,
+          "hi": 46.28
+        },
+        "highStressShare": {
+          "median": 0.18,
+          "lo": 0.15,
+          "hi": 0.24
+        },
+        "meanComfort": {
+          "median": 0.89,
+          "lo": 0.88,
+          "hi": 0.89
+        },
+        "betweenYearTies": {
+          "median": 176,
+          "lo": 169,
+          "hi": 178
+        }
+      },
+      "byWeek": [
+        "1: hours 41.72 (41.15–42.7), stress 0.07, comfort 0.72, between ties 176",
+        "2: hours 40.92 (39.67–41.87), stress 0.13, comfort 0.82, between ties 176",
+        "3: hours 45.29 (44.88–46.28), stress 0.18, comfort 0.89, between ties 176",
+        "4: hours 50.73 (49.62–51.52), stress 0.25, comfort 0.93, between ties 176",
+        "5: hours 61.47 (60.22–62.34), stress 0.42, comfort 0.96, between ties 176",
+        "6: hours 42.71 (42.62–44.04), stress 0.36, comfort 0.97, between ties 176",
+        "7: hours 37.85 (36.51–38.66), stress 0.21, comfort 0.98, between ties 176",
+        "8: hours 38.83 (38.45–40.68), stress 0.19, comfort 0.98, between ties 176",
+        "9: hours 35.04 (33.77–36.01), stress 0.12, comfort 0.98, between ties 26",
+        "10: hours 41.16 (40.76–42.8), stress 0.13, comfort 0.99, between ties 176",
+        "11: hours 47.65 (47.45–48.82), stress 0.21, comfort 0.99, between ties 176",
+        "12: hours 50.86 (49.85–51.57), stress 0.32, comfort 0.99, between ties 176",
+        "13: hours 41.41 (40.78–41.91), stress 0.41, comfort 0.99, between ties 26",
+        "13: hours 0 (0–0), stress 0.41, comfort 0.99, between ties 26"
+      ]
+    },
+    "command": "node test/run-cases.mjs 9   (five term layers, seeds 2026 to 2030, as RUN with horizon TERM and seeds 5 does)",
+    "seconds": 53,
+    "ranAt": "2026-11-12T04:46:38.345Z"
+  },
+  "10": {
+    "title": "One agent, two voices",
+    "expected": "the AGENT window shows the traits bars and the Voice line; two agents of opposite register read differently over the same hour; the label after the name is stable per agent",
+    "observed": {
+      "terse": {
+        "name": "Kira Ahmed",
+        "voice": "terse",
+        "traits": {
+          "O": 0.07,
+          "C": 0.21,
+          "E": -0.74,
+          "A": -0.58,
+          "N": -0.25
+        },
+        "remarks": [
+          "14:41 Window.",
+          "15:29 Washroom means another floor.",
+          "16:17 Headphones.",
+          "16:44 Headphones.",
+          "17:52 A good chat is one aisle away.",
+          "19:56 23 in the kitchen."
+        ],
+        "labelsSeen": [
+          "terse"
+        ]
+      },
+      "chatty": {
+        "name": "Ravi Moreau",
+        "voice": "chatty",
+        "traits": {
+          "O": 0.66,
+          "C": -0.69,
+          "E": 0.94,
+          "A": 0.48,
+          "N": -0.4
+        },
+        "remarks": [
+          "12:15 The kitchen is a corridor with a fridge, and 20 of us are in it.",
+          "13:49 Lecture in room 12. Forty-five minutes, then back up.",
+          "14:39 23 people, two counters. Nobody drew lunch on this plan.",
+          "14:50 Okay so. Washroom means another floor. 25 metres and a flight of stairs.",
+          "15:33 The aisle is loud. Headphones.",
+          "16:11 Okay so. 7 people, two counters. Nobody drew lunch on this plan."
+        ],
+        "labelsSeen": [
+          "chatty"
+        ]
+      },
+      "agentsWithRemarks": 176,
+      "distinctLabels": 118
+    },
+    "command": "node test/run-cases.mjs 10   (the same day as case 1; in the browser pick the two names in AGENT)",
+    "seconds": 11,
+    "ranAt": "2026-11-12T04:46:48.980Z"
+  }
+}

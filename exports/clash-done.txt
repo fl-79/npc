@@ -1,0 +1,13 @@
+{
+ "pairs": 832, 
+ "overlaps": 302, 
+ "model": "260630 - Lasserre", 
+ "touches": 530, 
+ "seconds": 164.0, 
+ "with_solids": 3089, 
+ "elements": 3157, 
+ "touch_threshold_m3": 0.00050000000000000001, 
+ "checked": "2026-11-02 21:46:19", 
+ "unknown": 0, 
+ "without_solids": 0
+}

@@ -1,0 +1,2957 @@
+{
+ "model": "260630 - Lasserre",
+ "exported": "2026-11-02 21:42:38",
+ "summary": {
+  "info": 7,
+  "warn": 171
+ },
+ "kinds": {
+  "phases": 1,
+  "no_geometry": 1,
+  "level_from_bbox": 2,
+  "room_area_basis": 1,
+  "room_area_mismatch": 5,
+  "room_no_slab": 7,
+  "column_no_slab": 2,
+  "in_place_family": 1,
+  "mesh_missing": 2,
+  "curtain_member_no_geometry": 1,
+  "collision": 150,
+  "collision_through_slab": 4,
+  "collision_louvers": 1
+ },
+ "checks": [
+  {
+   "kind": "phases",
+   "severity": "info",
+   "message": "Model has phases ['Existing', 'New Construction']; demolished elements are marked phase_demolished",
+   "ids": [],
+   "level": null,
+   "point": null
+  },
+  {
+   "kind": "no_geometry",
+   "severity": "warn",
+   "message": "17 exported elements have no solid geometry at Medium or Fine detail (not drawn): 16 Railings, 1 Roofs",
+   "ids": [
+    1268284,
+    1268288,
+    1269542,
+    1269546,
+    1269762,
+    1269766,
+    1271695,
+    1271699,
+    1272198,
+    1272202,
+    1273925,
+    1273929,
+    1274047,
+    1274051,
+    1274080,
+    1274084,
+    1264039
+   ],
+   "level": null,
+   "point": null
+  },
+  {
+   "kind": "level_from_bbox",
+   "severity": "info",
+   "message": "17 furniture got their level from their bounding box, not a parameter",
+   "ids": [
+    1360330,
+    1360372,
+    1360412,
+    1360509,
+    1359169,
+    1359181,
+    1360052,
+    1360064,
+    1360537,
+    1360549,
+    1360561,
+    1360563,
+    1359031,
+    1359232,
+    1359244,
+    1359284,
+    1359324
+   ],
+   "level": null,
+   "point": null
+  },
+  {
+   "kind": "level_from_bbox",
+   "severity": "info",
+   "message": "2 other got their level from their bounding box, not a parameter",
+   "ids": [
+    1264039,
+    1263552
+   ],
+   "level": null,
+   "point": null
+  },
+  {
+   "kind": "room_area_basis",
+   "severity": "info",
+   "message": "Room boundary loops (finish faces) cover a median 95.0% of Revit's room areas (area computed at Center)",
+   "ids": [],
+   "level": null,
+   "point": null
+  },
+  {
+   "kind": "room_area_mismatch",
+   "severity": "warn",
+   "message": "Room 31 Room: loop area 17.94 m2 is 89% of Revit's 20.07 m2 (others are about 95%): loops may be nested or not holes",
+   "ids": [
+    1365032
+   ],
+   "level": "Level 2",
+   "point": [
+    20.929,
+    -20.468,
+    4.01
+   ]
+  },
+  {
+   "kind": "room_area_mismatch",
+   "severity": "warn",
+   "message": "Room 5 Room: loop area 8.40 m2 is 87% of Revit's 9.66 m2 (others are about 95%): loops may be nested or not holes",
+   "ids": [
+    1364445
+   ],
+   "level": "Level 3",
+   "point": [
+    26.452,
+    -27.753,
+    7.554
+   ]
+  },
+  {
+   "kind": "room_area_mismatch",
+   "severity": "warn",
+   "message": "Room 6 Room: loop area 8.40 m2 is 87% of Revit's 9.66 m2 (others are about 95%): loops may be nested or not holes",
+   "ids": [
+    1364448
+   ],
+   "level": "Level 3",
+   "point": [
+    26.452,
+    -24.474,
+    7.554
+   ]
+  },
+  {
+   "kind": "room_area_mismatch",
+   "severity": "warn",
+   "message": "Room 66 Room: loop area 7.52 m2 is 90% of Revit's 8.37 m2 (others are about 95%): loops may be nested or not holes",
+   "ids": [
+    1365236
+   ],
+   "level": "Level 4",
+   "point": [
+    17.735,
+    -6.056,
+    11.658
+   ]
+  },
+  {
+   "kind": "room_area_mismatch",
+   "severity": "warn",
+   "message": "Room 67 Room: loop area 6.85 m2 is 88% of Revit's 7.74 m2 (others are about 95%): loops may be nested or not holes",
+   "ids": [
+    1365239
+   ],
+   "level": "Level 4",
+   "point": [
+    17.333,
+    -9.669,
+    11.658
+   ]
+  },
+  {
+   "kind": "room_no_slab",
+   "severity": "warn",
+   "message": "Room 70 Room on Basement: the Basement floor slab covers only 6% of it",
+   "ids": [
+    1365251
+   ],
+   "level": "Basement",
+   "point": [
+    13.64,
+    10.687,
+    -3.695
+   ]
+  },
+  {
+   "kind": "room_no_slab",
+   "severity": "warn",
+   "message": "Room 17 Room on Level 1: the Level 1 floor slab covers only 63% of it (an opening in the slab: a stair or shaft room)",
+   "ids": [
+    1364853
+   ],
+   "level": "Level 1",
+   "point": [
+    20.018,
+    4.268,
+    0.0
+   ]
+  },
+  {
+   "kind": "room_no_slab",
+   "severity": "warn",
+   "message": "Room 18 Room on Level 1: the Level 1 floor slab covers only 63% of it (an opening in the slab: a stair or shaft room)",
+   "ids": [
+    1364856
+   ],
+   "level": "Level 1",
+   "point": [
+    18.704,
+    -26.753,
+    0.0
+   ]
+  },
+  {
+   "kind": "room_no_slab",
+   "severity": "warn",
+   "message": "Room 39 Room on Level 2: the Level 2 floor slab covers only 43% of it (an opening in the slab: a stair or shaft room)",
+   "ids": [
+    1365056
+   ],
+   "level": "Level 2",
+   "point": [
+    19.58,
+    4.043,
+    4.01
+   ]
+  },
+  {
+   "kind": "room_no_slab",
+   "severity": "warn",
+   "message": "Room 40 Room on Level 2: the Level 2 floor slab covers only 43% of it (an opening in the slab: a stair or shaft room)",
+   "ids": [
+    1365059
+   ],
+   "level": "Level 2",
+   "point": [
+    19.58,
+    -26.557,
+    4.01
+   ]
+  },
+  {
+   "kind": "room_no_slab",
+   "severity": "warn",
+   "message": "Room 7 Room on Level 3: the Level 3 floor slab covers only 44% of it (an opening in the slab: a stair or shaft room)",
+   "ids": [
+    1364451
+   ],
+   "level": "Level 3",
+   "point": [
+    20.441,
+    -27.18,
+    7.554
+   ]
+  },
+  {
+   "kind": "room_no_slab",
+   "severity": "warn",
+   "message": "Room 8 Room on Level 3: the Level 3 floor slab covers only 44% of it (an opening in the slab: a stair or shaft room)",
+   "ids": [
+    1364454
+   ],
+   "level": "Level 3",
+   "point": [
+    19.744,
+    3.547,
+    7.554
+   ]
+  },
+  {
+   "kind": "column_no_slab",
+   "severity": "warn",
+   "message": "Column 1209642 is based on Basement at (16.0, 13.5) where that level has no floor slab",
+   "ids": [
+    1209642
+   ],
+   "level": "Basement",
+   "point": [
+    16.032,
+    13.539,
+    614.0
+   ]
+  },
+  {
+   "kind": "column_no_slab",
+   "severity": "warn",
+   "message": "Column 1211417 is based on Basement at (18.8, 13.5) where that level has no floor slab",
+   "ids": [
+    1211417
+   ],
+   "level": "Basement",
+   "point": [
+    18.775,
+    13.539,
+    614.0
+   ]
+  },
+  {
+   "kind": "in_place_family",
+   "severity": "info",
+   "message": "16 furniture-like elements are in-place families (no location point)",
+   "ids": [
+    1360330,
+    1360372,
+    1360412,
+    1360509,
+    1359169,
+    1359181,
+    1360052,
+    1360064,
+    1360537,
+    1360549,
+    1360561,
+    1359031,
+    1359232,
+    1359244,
+    1359284,
+    1359324
+   ],
+   "level": null,
+   "point": null
+  },
+  {
+   "kind": "mesh_missing",
+   "severity": "warn",
+   "message": "16 railings have no mesh: 1268284 Railing, 1268288 Railing, 1269542 Railing, 1269546 Railing, 1269762 Railing, 1269766 Railing, 1271695 Railing, 1271699 Railing, 1272198 Railing, 1272202 Railing, 1273925 Railing, 1273929 Railing, 1274047 Railing, 1274051 Railing, 1274080 Railing, 1274084 Railing",
+   "ids": [
+    1268284,
+    1268288,
+    1269542,
+    1269546,
+    1269762,
+    1269766,
+    1271695,
+    1271699,
+    1272198,
+    1272202,
+    1273925,
+    1273929,
+    1274047,
+    1274051,
+    1274080,
+    1274084
+   ],
+   "level": null,
+   "point": null
+  },
+  {
+   "kind": "mesh_missing",
+   "severity": "warn",
+   "message": "1 other have no mesh: 1264039 Roofs 1",
+   "ids": [
+    1264039
+   ],
+   "level": null,
+   "point": null
+  },
+  {
+   "kind": "curtain_member_no_geometry",
+   "severity": "info",
+   "message": "136 of 1829 curtain panels and mullions have no geometry (empty system panels, or panels replaced by doors)",
+   "ids": [
+    1233376,
+    1238886,
+    1238887,
+    1238875,
+    1236267,
+    1237926,
+    1237927,
+    1237828,
+    1236329,
+    1238948,
+    1238949,
+    1238937,
+    1236362,
+    1238979,
+    1238980,
+    1238968,
+    1236395,
+    1239010,
+    1239011,
+    1238999,
+    1236428,
+    1239041,
+    1239042,
+    1239030,
+    1236461,
+    1239072,
+    1239073,
+    1239061,
+    1236494,
+    1239103,
+    1239104,
+    1239092,
+    1236527,
+    1239134,
+    1239135,
+    1239123,
+    1236560,
+    1239165,
+    1239166,
+    1239154,
+    1236593,
+    1239196,
+    1239197,
+    1239185,
+    1236628,
+    1239227,
+    1239228,
+    1239216,
+    1236661,
+    1239258,
+    1239259,
+    1239247,
+    1236696,
+    1239289,
+    1239290,
+    1239278,
+    1236729,
+    1239320,
+    1239321,
+    1239309,
+    1236762,
+    1239351,
+    1239352,
+    1239340,
+    1240511,
+    1240535,
+    1240536,
+    1240524,
+    1240823,
+    1240847,
+    1240848,
+    1240836,
+    1240989,
+    1241305,
+    1241306,
+    1241294,
+    1241007,
+    1241284,
+    1241285,
+    1241273,
+    1241025,
+    1241326,
+    1241327,
+    1241315,
+    1241043,
+    1241347,
+    1241348,
+    1241336,
+    1241061,
+    1241368,
+    1241369,
+    1241357,
+    1241079,
+    1241389,
+    1241390,
+    1241378,
+    1241097,
+    1241410,
+    1241411,
+    1241399,
+    1241115,
+    1241431,
+    1241432,
+    1241420,
+    1241133,
+    1241452,
+    1241453,
+    1241441,
+    1241151,
+    1241473,
+    1241474,
+    1241462,
+    1241169,
+    1241494,
+    1241495,
+    1241483,
+    1241187,
+    1241515,
+    1241516,
+    1241504,
+    1241205,
+    1241536,
+    1241537,
+    1241525,
+    1241223,
+    1241557,
+    1241558,
+    1241546,
+    1241241,
+    1241578,
+    1241579,
+    1241567,
+    1241259,
+    1241599,
+    1241600,
+    1241588
+   ],
+   "level": null,
+   "point": null
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Floors 1216109 Floor (Level 4) overlaps Ceilings 1359198 Compound Ceiling (Level 3) by 0.786 m3",
+   "ids": [
+    1216109,
+    1359198
+   ],
+   "level": "Level 4",
+   "point": [
+    23.9315,
+    -2.3005,
+    10.838999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217455 M_Rectangular Column (Level 2) overlaps Columns 1286998 M_Rectangular Column (Level 1) by 0.597 m3",
+   "ids": [
+    1217455,
+    1286998
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    -10.9465,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217474 M_Rectangular Column (Level 2) overlaps Columns 1287001 M_Rectangular Column (Level 1) by 0.597 m3",
+   "ids": [
+    1217474,
+    1287001
+   ],
+   "level": "Level 2",
+   "point": [
+    16.0325,
+    -23.1385,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217487 M_Rectangular Column (Level 2) overlaps Columns 1287004 M_Rectangular Column (Level 1) by 0.597 m3",
+   "ids": [
+    1217487,
+    1287004
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    -29.2345,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217407 M_Rectangular Column (Level 2) overlaps Columns 1286992 M_Rectangular Column (Level 1) by 0.597 m3",
+   "ids": [
+    1217407,
+    1286992
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    7.3415,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1286992 M_Rectangular Column (Level 1) overlaps Columns 1287010 M_Rectangular Column (Basement) by 0.575 m3",
+   "ids": [
+    1286992,
+    1287010
+   ],
+   "level": "Level 1",
+   "point": [
+    18.7755,
+    7.3415,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1286991 M_Rectangular Column (Level 1) overlaps Columns 1287009 M_Rectangular Column (Basement) by 0.575 m3",
+   "ids": [
+    1286991,
+    1287009
+   ],
+   "level": "Level 1",
+   "point": [
+    16.0325,
+    7.3415,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287004 M_Rectangular Column (Level 1) overlaps Columns 1287022 M_Rectangular Column (Basement) by 0.575 m3",
+   "ids": [
+    1287004,
+    1287022
+   ],
+   "level": "Level 1",
+   "point": [
+    18.7755,
+    -29.2345,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287001 M_Rectangular Column (Level 1) overlaps Columns 1287019 M_Rectangular Column (Basement) by 0.575 m3",
+   "ids": [
+    1287001,
+    1287019
+   ],
+   "level": "Level 1",
+   "point": [
+    16.0325,
+    -23.1385,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217445 M_Rectangular Column (Level 2) overlaps Columns 1286996 M_Rectangular Column (Level 1) by 0.474 m3",
+   "ids": [
+    1217445,
+    1286996
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    -4.8505,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217444 M_Rectangular Column (Level 2) overlaps Columns 1286995 M_Rectangular Column (Level 1) by 0.472 m3",
+   "ids": [
+    1217444,
+    1286995
+   ],
+   "level": "Level 2",
+   "point": [
+    16.0325,
+    -4.8505,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217465 M_Rectangular Column (Level 2) overlaps Columns 1287000 M_Rectangular Column (Level 1) by 0.472 m3",
+   "ids": [
+    1217465,
+    1287000
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    -17.0425,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1286995 M_Rectangular Column (Level 1) overlaps Columns 1287013 M_Rectangular Column (Basement) by 0.457 m3",
+   "ids": [
+    1286995,
+    1287013
+   ],
+   "level": "Level 1",
+   "point": [
+    16.0325,
+    -4.8505,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217372 M_Rectangular Column (Level 2) overlaps Columns 1286991 M_Rectangular Column (Level 1) by 0.437 m3",
+   "ids": [
+    1217372,
+    1286991
+   ],
+   "level": "Level 2",
+   "point": [
+    16.0325,
+    7.3415,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217464 M_Rectangular Column (Level 2) overlaps Columns 1286999 M_Rectangular Column (Level 1) by 0.434 m3",
+   "ids": [
+    1217464,
+    1286999
+   ],
+   "level": "Level 2",
+   "point": [
+    16.0325,
+    -17.0425,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217454 M_Rectangular Column (Level 2) overlaps Columns 1286997 M_Rectangular Column (Level 1) by 0.434 m3",
+   "ids": [
+    1217454,
+    1286997
+   ],
+   "level": "Level 2",
+   "point": [
+    16.0325,
+    -10.9465,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217434 M_Rectangular Column (Level 2) overlaps Columns 1286993 M_Rectangular Column (Level 1) by 0.434 m3",
+   "ids": [
+    1217434,
+    1286993
+   ],
+   "level": "Level 2",
+   "point": [
+    16.0325,
+    1.2454999999999998,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1286999 M_Rectangular Column (Level 1) overlaps Columns 1287017 M_Rectangular Column (Basement) by 0.422 m3",
+   "ids": [
+    1286999,
+    1287017
+   ],
+   "level": "Level 1",
+   "point": [
+    16.0325,
+    -17.0425,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1286997 M_Rectangular Column (Level 1) overlaps Columns 1287015 M_Rectangular Column (Basement) by 0.422 m3",
+   "ids": [
+    1286997,
+    1287015
+   ],
+   "level": "Level 1",
+   "point": [
+    16.0325,
+    -10.9465,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287003 M_Rectangular Column (Level 1) overlaps Columns 1287021 M_Rectangular Column (Basement) by 0.422 m3",
+   "ids": [
+    1287003,
+    1287021
+   ],
+   "level": "Level 1",
+   "point": [
+    16.0325,
+    -29.2345,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1286993 M_Rectangular Column (Level 1) overlaps Columns 1287011 M_Rectangular Column (Basement) by 0.422 m3",
+   "ids": [
+    1286993,
+    1287011
+   ],
+   "level": "Level 1",
+   "point": [
+    16.0325,
+    1.2454999999999998,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1286998 M_Rectangular Column (Level 1) overlaps Columns 1287016 M_Rectangular Column (Basement) by 0.416 m3",
+   "ids": [
+    1286998,
+    1287016
+   ],
+   "level": "Level 1",
+   "point": [
+    18.7755,
+    -10.9465,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1286996 M_Rectangular Column (Level 1) overlaps Columns 1287014 M_Rectangular Column (Basement) by 0.416 m3",
+   "ids": [
+    1286996,
+    1287014
+   ],
+   "level": "Level 1",
+   "point": [
+    18.7755,
+    -4.8505,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217435 M_Rectangular Column (Level 2) overlaps Columns 1286994 M_Rectangular Column (Level 1) by 0.328 m3",
+   "ids": [
+    1217435,
+    1286994
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    1.2454999999999998,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217475 M_Rectangular Column (Level 2) overlaps Columns 1287002 M_Rectangular Column (Level 1) by 0.328 m3",
+   "ids": [
+    1217475,
+    1287002
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    -23.1385,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1286994 M_Rectangular Column (Level 1) overlaps Columns 1287012 M_Rectangular Column (Basement) by 0.315 m3",
+   "ids": [
+    1286994,
+    1287012
+   ],
+   "level": "Level 1",
+   "point": [
+    18.7755,
+    1.2454999999999998,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287002 M_Rectangular Column (Level 1) overlaps Columns 1287020 M_Rectangular Column (Basement) by 0.315 m3",
+   "ids": [
+    1287002,
+    1287020
+   ],
+   "level": "Level 1",
+   "point": [
+    18.7755,
+    -23.1385,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287000 M_Rectangular Column (Level 1) overlaps Columns 1287018 M_Rectangular Column (Basement) by 0.298 m3",
+   "ids": [
+    1287000,
+    1287018
+   ],
+   "level": "Level 1",
+   "point": [
+    18.7755,
+    -17.0425,
+    3.525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217474 M_Rectangular Column (Level 2) overlaps Columns 1287019 M_Rectangular Column (Basement) by 0.282 m3",
+   "ids": [
+    1217474,
+    1287019
+   ],
+   "level": "Level 2",
+   "point": [
+    16.0325,
+    -23.1385,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217372 M_Rectangular Column (Level 2) overlaps Columns 1287009 M_Rectangular Column (Basement) by 0.282 m3",
+   "ids": [
+    1217372,
+    1287009
+   ],
+   "level": "Level 2",
+   "point": [
+    16.0325,
+    7.3415,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217455 M_Rectangular Column (Level 2) overlaps Columns 1287016 M_Rectangular Column (Basement) by 0.282 m3",
+   "ids": [
+    1217455,
+    1287016
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    -10.9465,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217445 M_Rectangular Column (Level 2) overlaps Columns 1287014 M_Rectangular Column (Basement) by 0.282 m3",
+   "ids": [
+    1217445,
+    1287014
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    -4.8505,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217487 M_Rectangular Column (Level 2) overlaps Columns 1287022 M_Rectangular Column (Basement) by 0.282 m3",
+   "ids": [
+    1217487,
+    1287022
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    -29.2345,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217407 M_Rectangular Column (Level 2) overlaps Columns 1287010 M_Rectangular Column (Basement) by 0.282 m3",
+   "ids": [
+    1217407,
+    1287010
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    7.3415,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217486 M_Rectangular Column (Level 2) overlaps Columns 1287003 M_Rectangular Column (Level 1) by 0.274 m3",
+   "ids": [
+    1217486,
+    1287003
+   ],
+   "level": "Level 2",
+   "point": [
+    16.115000000000002,
+    -29.2345,
+    7.3774999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1229095 Basic Wall (Level 3) overlaps Casework 1359169 Kitchen Counter 1 (None) by 0.273 m3",
+   "ids": [
+    1229095,
+    1359169
+   ],
+   "level": "Level 3",
+   "point": [
+    27.764000000000003,
+    2.908,
+    7.9985
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217444 M_Rectangular Column (Level 2) overlaps Columns 1287013 M_Rectangular Column (Basement) by 0.164 m3",
+   "ids": [
+    1217444,
+    1287013
+   ],
+   "level": "Level 2",
+   "point": [
+    16.0325,
+    -4.8505,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217465 M_Rectangular Column (Level 2) overlaps Columns 1287018 M_Rectangular Column (Basement) by 0.164 m3",
+   "ids": [
+    1217465,
+    1287018
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    -17.0425,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1255730 Basic Wall (Level 4) overlaps Columns 1217455 M_Rectangular Column (Level 2) by 0.156 m3",
+   "ids": [
+    1255730,
+    1217455
+   ],
+   "level": "Level 4",
+   "point": [
+    18.8455,
+    -10.9465,
+    13.2065
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1255730 Basic Wall (Level 4) overlaps Columns 1217445 M_Rectangular Column (Level 2) by 0.156 m3",
+   "ids": [
+    1255730,
+    1217445
+   ],
+   "level": "Level 4",
+   "point": [
+    18.8455,
+    -4.8505,
+    13.2065
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1255730 Basic Wall (Level 4) overlaps Columns 1217465 M_Rectangular Column (Level 2) by 0.156 m3",
+   "ids": [
+    1255730,
+    1217465
+   ],
+   "level": "Level 4",
+   "point": [
+    18.8455,
+    -17.0425,
+    13.2065
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217435 M_Rectangular Column (Level 2) overlaps Columns 1287012 M_Rectangular Column (Basement) by 0.155 m3",
+   "ids": [
+    1217435,
+    1287012
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    1.2454999999999998,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217475 M_Rectangular Column (Level 2) overlaps Columns 1287020 M_Rectangular Column (Basement) by 0.155 m3",
+   "ids": [
+    1217475,
+    1287020
+   ],
+   "level": "Level 2",
+   "point": [
+    18.7755,
+    -23.1385,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217486 M_Rectangular Column (Level 2) overlaps Columns 1287021 M_Rectangular Column (Basement) by 0.129 m3",
+   "ids": [
+    1217486,
+    1287021
+   ],
+   "level": "Level 2",
+   "point": [
+    16.115000000000002,
+    -29.2345,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217454 M_Rectangular Column (Level 2) overlaps Columns 1287015 M_Rectangular Column (Basement) by 0.129 m3",
+   "ids": [
+    1217454,
+    1287015
+   ],
+   "level": "Level 2",
+   "point": [
+    16.115000000000002,
+    -10.9465,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217464 M_Rectangular Column (Level 2) overlaps Columns 1287017 M_Rectangular Column (Basement) by 0.129 m3",
+   "ids": [
+    1217464,
+    1287017
+   ],
+   "level": "Level 2",
+   "point": [
+    16.115000000000002,
+    -17.0425,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217434 M_Rectangular Column (Level 2) overlaps Columns 1287011 M_Rectangular Column (Basement) by 0.129 m3",
+   "ids": [
+    1217434,
+    1287011
+   ],
+   "level": "Level 2",
+   "point": [
+    16.115000000000002,
+    1.2454999999999998,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1302161 Basic Wall (Basement) overlaps Stairs 1269751 Cast-In-Place Stair (Basement) by 0.076 m3",
+   "ids": [
+    1302161,
+    1269751
+   ],
+   "level": "Basement",
+   "point": [
+    23.0345,
+    -24.09,
+    -1.482
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1302077 Basic Wall (Basement) overlaps Stairs 1269751 Cast-In-Place Stair (Basement) by 0.075 m3",
+   "ids": [
+    1302077,
+    1269751
+   ],
+   "level": "Basement",
+   "point": [
+    23.867,
+    -25.0225,
+    -1.491
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1303859 Basic Wall (Basement) overlaps Stairs 1274036 Cast-In-Place Stair (Basement) by 0.074 m3",
+   "ids": [
+    1303859,
+    1274036
+   ],
+   "level": "Basement",
+   "point": [
+    23.867,
+    3.0405,
+    -1.482
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1255730 Basic Wall (Level 4) overlaps Columns 1217475 M_Rectangular Column (Level 2) by 0.071 m3",
+   "ids": [
+    1255730,
+    1217475
+   ],
+   "level": "Level 4",
+   "point": [
+    18.8455,
+    -23.056,
+    13.2065
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1304187 Basic Wall (Basement) overlaps Stairs 1274036 Cast-In-Place Stair (Basement) by 0.047 m3",
+   "ids": [
+    1304187,
+    1274036
+   ],
+   "level": "Basement",
+   "point": [
+    22.037,
+    3.0025000000000004,
+    -0.965
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287019 M_Rectangular Column (Basement) overlaps Curtain Wall Mullions 1290801  (Level 1) by 0.014 m3",
+   "ids": [
+    1287019,
+    1290801
+   ],
+   "level": "Basement",
+   "point": [
+    16.2075,
+    -23.137999999999998,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287021 M_Rectangular Column (Basement) overlaps Curtain Wall Mullions 1290441  (Level 1) by 0.014 m3",
+   "ids": [
+    1287021,
+    1290441
+   ],
+   "level": "Basement",
+   "point": [
+    16.2075,
+    -29.234,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287011 M_Rectangular Column (Basement) overlaps Curtain Wall Mullions 1290600  (Level 1) by 0.014 m3",
+   "ids": [
+    1287011,
+    1290600
+   ],
+   "level": "Basement",
+   "point": [
+    16.2075,
+    1.246,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287020 M_Rectangular Column (Basement) overlaps Curtain Wall Mullions 1290800  (Level 1) by 0.014 m3",
+   "ids": [
+    1287020,
+    1290800
+   ],
+   "level": "Basement",
+   "point": [
+    18.6005,
+    -23.137999999999998,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287012 M_Rectangular Column (Basement) overlaps Curtain Wall Mullions 1290599  (Level 1) by 0.014 m3",
+   "ids": [
+    1287012,
+    1290599
+   ],
+   "level": "Basement",
+   "point": [
+    18.6005,
+    1.246,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287022 M_Rectangular Column (Basement) overlaps Curtain Wall Mullions 1290440  (Level 1) by 0.014 m3",
+   "ids": [
+    1287022,
+    1290440
+   ],
+   "level": "Basement",
+   "point": [
+    18.6005,
+    -29.234,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287020 M_Rectangular Column (Basement) overlaps Curtain Wall Mullions 1266840  (Level 2) by 0.014 m3",
+   "ids": [
+    1287020,
+    1266840
+   ],
+   "level": "Basement",
+   "point": [
+    18.75,
+    -23.313499999999998,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287010 M_Rectangular Column (Basement) overlaps Curtain Wall Mullions 1266870  (Level 2) by 0.014 m3",
+   "ids": [
+    1287010,
+    1266870
+   ],
+   "level": "Basement",
+   "point": [
+    18.75,
+    7.1665,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287022 M_Rectangular Column (Basement) overlaps Curtain Wall Mullions 1266839  (Level 2) by 0.014 m3",
+   "ids": [
+    1287022,
+    1266839
+   ],
+   "level": "Basement",
+   "point": [
+    18.75,
+    -29.0595,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287012 M_Rectangular Column (Basement) overlaps Curtain Wall Mullions 1266871  (Level 2) by 0.014 m3",
+   "ids": [
+    1287012,
+    1266871
+   ],
+   "level": "Basement",
+   "point": [
+    18.75,
+    1.4205,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359782 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359793 SALA_Desk_32x60in (Level 3) by 0.012 m3",
+   "ids": [
+    1359782,
+    1359793
+   ],
+   "level": "Level 3",
+   "point": [
+    25.6565,
+    -12.369499999999999,
+    8.1825
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359781 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359792 SALA_Desk_32x60in (Level 3) by 0.012 m3",
+   "ids": [
+    1359781,
+    1359792
+   ],
+   "level": "Level 3",
+   "point": [
+    24.1325,
+    -12.369499999999999,
+    8.1825
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359783 SALA_Desk_30x60in (Level 3) overlaps Furniture 1359794 SALA_Desk_32x60in (Level 3) by 0.011 m3",
+   "ids": [
+    1359783,
+    1359794
+   ],
+   "level": "Level 3",
+   "point": [
+    27.183,
+    -12.369499999999999,
+    8.1825
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1230983 Basic Wall (Level 3) overlaps Furniture 1359770 SALA_Desk_32x60in (Level 3) by 0.011 m3",
+   "ids": [
+    1230983,
+    1359770
+   ],
+   "level": "Level 3",
+   "point": [
+    20.6835,
+    -12.21,
+    8.179
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287010 M_Rectangular Column (Basement) overlaps Curtain Wall Mullions 1289435  (Level 1) by 0.011 m3",
+   "ids": [
+    1287010,
+    1289435
+   ],
+   "level": "Basement",
+   "point": [
+    18.6005,
+    7.3420000000000005,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287009 M_Rectangular Column (Basement) overlaps Curtain Wall Mullions 1289436  (Level 1) by 0.011 m3",
+   "ids": [
+    1287009,
+    1289436
+   ],
+   "level": "Basement",
+   "point": [
+    16.2075,
+    7.3420000000000005,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217434 M_Rectangular Column (Level 2) overlaps Furniture 1360009 Cutting Table (Level 3) by 0.011 m3",
+   "ids": [
+    1217434,
+    1360009
+   ],
+   "level": "Level 2",
+   "point": [
+    16.0325,
+    1.2454999999999998,
+    8.0815
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1286993 M_Rectangular Column (Level 1) overlaps Furniture 1360009 Cutting Table (Level 3) by 0.011 m3",
+   "ids": [
+    1286993,
+    1360009
+   ],
+   "level": "Level 1",
+   "point": [
+    16.0325,
+    1.2454999999999998,
+    8.0815
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1213467 M_Rectangular Column (Basement) overlaps Generic Models 1359031 Mechanical Floor Box (None) by 0.010 m3",
+   "ids": [
+    1213467,
+    1359031
+   ],
+   "level": "Basement",
+   "point": [
+    28.128999999999998,
+    -10.9465,
+    7.605
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1213466 M_Rectangular Column (Basement) overlaps Generic Models 1359031 Mechanical Floor Box (None) by 0.010 m3",
+   "ids": [
+    1213466,
+    1359031
+   ],
+   "level": "Basement",
+   "point": [
+    28.128999999999998,
+    -4.8505,
+    7.605
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1213468 M_Rectangular Column (Basement) overlaps Generic Models 1359031 Mechanical Floor Box (None) by 0.010 m3",
+   "ids": [
+    1213468,
+    1359031
+   ],
+   "level": "Basement",
+   "point": [
+    28.128999999999998,
+    -17.0425,
+    7.605
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1230983 Basic Wall (Level 3) overlaps Furniture 1359768 SALA_Desk_36x60in (Level 3) by 0.009 m3",
+   "ids": [
+    1230983,
+    1359768
+   ],
+   "level": "Level 3",
+   "point": [
+    20.712,
+    -10.676,
+    8.1795
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359860 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359959 SALA_Desk_30x60in (Level 3) by 0.009 m3",
+   "ids": [
+    1359860,
+    1359959
+   ],
+   "level": "Level 3",
+   "point": [
+    7.6095,
+    -17.2215,
+    8.182
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1230983 Basic Wall (Level 3) overlaps Furniture 1359769 SALA_Desk_36x60in (Level 3) by 0.009 m3",
+   "ids": [
+    1230983,
+    1359769
+   ],
+   "level": "Level 3",
+   "point": [
+    20.711,
+    -13.6125,
+    8.1795
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359838 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359841 SALA_Desk_32x60in (Level 3) by 0.008 m3",
+   "ids": [
+    1359838,
+    1359841
+   ],
+   "level": "Level 3",
+   "point": [
+    12.1815,
+    -29.207,
+    8.172
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359836 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359839 SALA_Desk_32x60in (Level 3) by 0.008 m3",
+   "ids": [
+    1359836,
+    1359839
+   ],
+   "level": "Level 3",
+   "point": [
+    7.6095,
+    -29.207,
+    8.172
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1213477 M_Rectangular Column (Level 2) overlaps Generic Models 1359031 Mechanical Floor Box (None) by 0.007 m3",
+   "ids": [
+    1213477,
+    1359031
+   ],
+   "level": "Level 2",
+   "point": [
+    28.128999999999998,
+    -20.0905,
+    7.605
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1213476 M_Rectangular Column (Level 2) overlaps Generic Models 1359031 Mechanical Floor Box (None) by 0.007 m3",
+   "ids": [
+    1213476,
+    1359031
+   ],
+   "level": "Level 2",
+   "point": [
+    28.128999999999998,
+    -13.9945,
+    7.605
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1213475 M_Rectangular Column (Level 2) overlaps Generic Models 1359031 Mechanical Floor Box (None) by 0.007 m3",
+   "ids": [
+    1213475,
+    1359031
+   ],
+   "level": "Level 2",
+   "point": [
+    28.128999999999998,
+    -7.8985,
+    7.605
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1213474 M_Rectangular Column (Level 2) overlaps Generic Models 1359031 Mechanical Floor Box (None) by 0.007 m3",
+   "ids": [
+    1213474,
+    1359031
+   ],
+   "level": "Level 2",
+   "point": [
+    28.128999999999998,
+    -1.8025,
+    7.605
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359796 SALA_Desk_30x60in (Level 3) overlaps Furniture 1359798 SALA_Desk_30x60in (Level 3) by 0.006 m3",
+   "ids": [
+    1359796,
+    1359798
+   ],
+   "level": "Level 3",
+   "point": [
+    25.6705,
+    -15.324,
+    8.1715
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359795 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359799 SALA_Desk_30x60in (Level 3) by 0.006 m3",
+   "ids": [
+    1359795,
+    1359799
+   ],
+   "level": "Level 3",
+   "point": [
+    24.144,
+    -15.324,
+    8.1715
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359785 SALA_Desk_36x60in (Level 3) overlaps Furniture 1359786 SALA_Desk_32x60in (Level 3) by 0.005 m3",
+   "ids": [
+    1359785,
+    1359786
+   ],
+   "level": "Level 3",
+   "point": [
+    20.889499999999998,
+    -20.458,
+    8.169
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359895 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359949 SALA_Desk_30x60in (Level 3) by 0.005 m3",
+   "ids": [
+    1359895,
+    1359949
+   ],
+   "level": "Level 3",
+   "point": [
+    9.133,
+    0.7545,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1213469 M_Rectangular Column (Basement) overlaps Generic Models 1359031 Mechanical Floor Box (None) by 0.005 m3",
+   "ids": [
+    1213469,
+    1359031
+   ],
+   "level": "Basement",
+   "point": [
+    28.128999999999998,
+    -23.057000000000002,
+    7.605
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1230292 Basic Wall (Level 3) overlaps Casework 1360064 Casework1 (None) by 0.005 m3",
+   "ids": [
+    1230292,
+    1360064
+   ],
+   "level": "Level 3",
+   "point": [
+    19.4525,
+    -20.184,
+    8.494499999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359872 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359938 SALA_Desk_30x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359872,
+    1359938
+   ],
+   "level": "Level 3",
+   "point": [
+    10.658,
+    -11.2305,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359863 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359866 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359863,
+    1359866
+   ],
+   "level": "Level 3",
+   "point": [
+    7.6095,
+    -14.227,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359859 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359862 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359859,
+    1359862
+   ],
+   "level": "Level 3",
+   "point": [
+    12.1815,
+    -17.2245,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359870 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359873 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359870,
+    1359873
+   ],
+   "level": "Level 3",
+   "point": [
+    12.1815,
+    -11.2305,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359900 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359903 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359900,
+    1359903
+   ],
+   "level": "Level 3",
+   "point": [
+    7.6095,
+    3.7515,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359875 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359878 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359875,
+    1359878
+   ],
+   "level": "Level 3",
+   "point": [
+    9.133500000000002,
+    -8.2345,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359908 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359912 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359908,
+    1359912
+   ],
+   "level": "Level 3",
+   "point": [
+    9.133500000000002,
+    6.748,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359868 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359871 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359868,
+    1359871
+   ],
+   "level": "Level 3",
+   "point": [
+    7.6095,
+    -11.2305,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359883 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359886 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359883,
+    1359886
+   ],
+   "level": "Level 3",
+   "point": [
+    10.657499999999999,
+    -5.2379999999999995,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359907 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359911 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359907,
+    1359911
+   ],
+   "level": "Level 3",
+   "point": [
+    7.6095,
+    6.748,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359858 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359861 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359858,
+    1359861
+   ],
+   "level": "Level 3",
+   "point": [
+    10.657499999999999,
+    -17.2245,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359890 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359893 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359890,
+    1359893
+   ],
+   "level": "Level 3",
+   "point": [
+    12.1815,
+    -2.2314999999999996,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359902 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359906 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359902,
+    1359906
+   ],
+   "level": "Level 3",
+   "point": [
+    12.1815,
+    3.7515,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359874 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359877 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359874,
+    1359877
+   ],
+   "level": "Level 3",
+   "point": [
+    7.6095,
+    -8.2345,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359894 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359897 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359894,
+    1359897
+   ],
+   "level": "Level 3",
+   "point": [
+    7.6095,
+    0.755,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359910 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359913 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359910,
+    1359913
+   ],
+   "level": "Level 3",
+   "point": [
+    12.1815,
+    6.748,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359882 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359885 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359882,
+    1359885
+   ],
+   "level": "Level 3",
+   "point": [
+    9.133500000000002,
+    -5.2379999999999995,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359876 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359880 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359876,
+    1359880
+   ],
+   "level": "Level 3",
+   "point": [
+    12.1815,
+    -8.2345,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359865 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359867 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359865,
+    1359867
+   ],
+   "level": "Level 3",
+   "point": [
+    12.1815,
+    -14.227,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359884 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359887 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359884,
+    1359887
+   ],
+   "level": "Level 3",
+   "point": [
+    12.1815,
+    -5.2379999999999995,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359896 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359899 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359896,
+    1359899
+   ],
+   "level": "Level 3",
+   "point": [
+    12.1815,
+    0.755,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359888 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359892 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359888,
+    1359892
+   ],
+   "level": "Level 3",
+   "point": [
+    9.133500000000002,
+    -2.2314999999999996,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359901 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359904 SALA_Desk_32x60in (Level 3) by 0.004 m3",
+   "ids": [
+    1359901,
+    1359904
+   ],
+   "level": "Level 3",
+   "point": [
+    9.133500000000002,
+    3.7515,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287019 M_Rectangular Column (Basement) overlaps Doors 1280241 M_Single-Flush (Level 2) by 0.004 m3",
+   "ids": [
+    1287019,
+    1280241
+   ],
+   "level": "Basement",
+   "point": [
+    15.9625,
+    -22.9315,
+    5.09
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287018 M_Rectangular Column (Basement) overlaps Doors 1283180 M_Single-Flush (Level 2) by 0.003 m3",
+   "ids": [
+    1287018,
+    1283180
+   ],
+   "level": "Basement",
+   "point": [
+    18.8455,
+    -17.253,
+    5.09
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359852 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359855 SALA_Desk_32x60in (Level 3) by 0.003 m3",
+   "ids": [
+    1359852,
+    1359855
+   ],
+   "level": "Level 3",
+   "point": [
+    7.6095,
+    -20.214,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359843 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359846 SALA_Desk_32x60in (Level 3) by 0.003 m3",
+   "ids": [
+    1359843,
+    1359846
+   ],
+   "level": "Level 3",
+   "point": [
+    12.1815,
+    -26.214,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359831 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359834 SALA_Desk_32x60in (Level 3) by 0.003 m3",
+   "ids": [
+    1359831,
+    1359834
+   ],
+   "level": "Level 3",
+   "point": [
+    7.6095,
+    -32.201,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359849 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359851 SALA_Desk_32x60in (Level 3) by 0.003 m3",
+   "ids": [
+    1359849,
+    1359851
+   ],
+   "level": "Level 3",
+   "point": [
+    12.1815,
+    -23.2105,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359842 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359844 SALA_Desk_32x60in (Level 3) by 0.003 m3",
+   "ids": [
+    1359842,
+    1359844
+   ],
+   "level": "Level 3",
+   "point": [
+    7.6095,
+    -26.214,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359853 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359857 SALA_Desk_32x60in (Level 3) by 0.003 m3",
+   "ids": [
+    1359853,
+    1359857
+   ],
+   "level": "Level 3",
+   "point": [
+    10.657499999999999,
+    -20.214,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359847 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359850 SALA_Desk_32x60in (Level 3) by 0.003 m3",
+   "ids": [
+    1359847,
+    1359850
+   ],
+   "level": "Level 3",
+   "point": [
+    7.6095,
+    -23.2105,
+    8.171
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359789 SALA_Desk_36x60in (Level 3) overlaps Casework 1360537 Material Recycling (None) by 0.003 m3",
+   "ids": [
+    1359789,
+    1360537
+   ],
+   "level": "Level 3",
+   "point": [
+    23.945,
+    -21.227,
+    8.5255
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359785 SALA_Desk_36x60in (Level 3) overlaps Furniture 1359811 SALA_Pinup_Board (Level 3) by 0.003 m3",
+   "ids": [
+    1359785,
+    1359811
+   ],
+   "level": "Level 3",
+   "point": [
+    21.6385,
+    -20.7605,
+    8.2375
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287011 M_Rectangular Column (Basement) overlaps Curtain Panels 1290596  (Level 1) by 0.002 m3",
+   "ids": [
+    1287011,
+    1290596
+   ],
+   "level": "Basement",
+   "point": [
+    16.2455,
+    1.2455,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287022 M_Rectangular Column (Basement) overlaps Curtain Panels 1290447  (Level 1) by 0.002 m3",
+   "ids": [
+    1287022,
+    1290447
+   ],
+   "level": "Basement",
+   "point": [
+    18.5625,
+    -29.2345,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287021 M_Rectangular Column (Basement) overlaps Curtain Panels 1290437  (Level 1) by 0.002 m3",
+   "ids": [
+    1287021,
+    1290437
+   ],
+   "level": "Basement",
+   "point": [
+    16.2455,
+    -29.2345,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287019 M_Rectangular Column (Basement) overlaps Curtain Panels 1290797  (Level 1) by 0.002 m3",
+   "ids": [
+    1287019,
+    1290797
+   ],
+   "level": "Basement",
+   "point": [
+    16.2455,
+    -23.1385,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287020 M_Rectangular Column (Basement) overlaps Curtain Panels 1290807  (Level 1) by 0.002 m3",
+   "ids": [
+    1287020,
+    1290807
+   ],
+   "level": "Basement",
+   "point": [
+    18.5625,
+    -23.1385,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287012 M_Rectangular Column (Basement) overlaps Curtain Panels 1290606  (Level 1) by 0.002 m3",
+   "ids": [
+    1287012,
+    1290606
+   ],
+   "level": "Basement",
+   "point": [
+    18.5625,
+    1.2455,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1230983 Basic Wall (Level 3) overlaps Furniture 1359767 SALA_Desk_36x60in (Level 3) by 0.002 m3",
+   "ids": [
+    1230983,
+    1359767
+   ],
+   "level": "Level 3",
+   "point": [
+    20.7145,
+    -9.4575,
+    8.1695
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287010 M_Rectangular Column (Basement) overlaps Curtain Panels 1266878  (Level 2) by 0.002 m3",
+   "ids": [
+    1287010,
+    1266878
+   ],
+   "level": "Basement",
+   "point": [
+    18.750500000000002,
+    7.128500000000001,
+    5.5525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287022 M_Rectangular Column (Basement) overlaps Curtain Panels 1266847  (Level 2) by 0.002 m3",
+   "ids": [
+    1287022,
+    1266847
+   ],
+   "level": "Basement",
+   "point": [
+    18.750500000000002,
+    -29.0215,
+    5.5525
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359758 Family7 (Level 3) overlaps Furniture 1359774 SALA_Desk_32x60in (Level 3) by 0.002 m3",
+   "ids": [
+    1359758,
+    1359774
+   ],
+   "level": "Level 3",
+   "point": [
+    26.005499999999998,
+    -6.362,
+    7.9319999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359757 Family7 (Level 3) overlaps Furniture 1359775 SALA_Desk_32x60in (Level 3) by 0.002 m3",
+   "ids": [
+    1359757,
+    1359775
+   ],
+   "level": "Level 3",
+   "point": [
+    27.3555,
+    -6.33,
+    7.8145
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359759 Family7 (Level 3) overlaps Furniture 1359773 SALA_Desk_32x60in (Level 3) by 0.002 m3",
+   "ids": [
+    1359759,
+    1359773
+   ],
+   "level": "Level 3",
+   "point": [
+    24.656,
+    -6.362,
+    7.9319999999999995
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359763 COR_Elm_Sofa (Level 3) overlaps Furniture 1359764 COR_Elm_Sofa (Level 3) by 0.002 m3",
+   "ids": [
+    1359763,
+    1359764
+   ],
+   "level": "Level 3",
+   "point": [
+    19.9105,
+    -5.768000000000001,
+    8.065000000000001
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1286995 M_Rectangular Column (Level 1) overlaps Furniture 1360040 SALA_Pinup_Board (Level 3) by 0.002 m3",
+   "ids": [
+    1286995,
+    1360040
+   ],
+   "level": "Level 1",
+   "point": [
+    16.0325,
+    -4.6995000000000005,
+    8.622499999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1217444 M_Rectangular Column (Level 2) overlaps Furniture 1360040 SALA_Pinup_Board (Level 3) by 0.002 m3",
+   "ids": [
+    1217444,
+    1360040
+   ],
+   "level": "Level 2",
+   "point": [
+    16.0325,
+    -4.6995000000000005,
+    8.622499999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359786 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359811 SALA_Pinup_Board (Level 3) by 0.001 m3",
+   "ids": [
+    1359786,
+    1359811
+   ],
+   "level": "Level 3",
+   "point": [
+    21.639499999999998,
+    -20.1485,
+    8.2375
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287020 M_Rectangular Column (Basement) overlaps Doors 1266836 M_Door-Curtain-Wall-Single-Glass (Level 2) by 0.001 m3",
+   "ids": [
+    1287020,
+    1266836
+   ],
+   "level": "Basement",
+   "point": [
+    18.7945,
+    -23.3515,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287012 M_Rectangular Column (Basement) overlaps Doors 1266867 M_Door-Curtain-Wall-Single-Glass (Level 2) by 0.001 m3",
+   "ids": [
+    1287012,
+    1266867
+   ],
+   "level": "Basement",
+   "point": [
+    18.7945,
+    1.4585,
+    5.529999999999999
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287010 M_Rectangular Column (Basement) overlaps Curtain Panels 1289583  (Level 1) by 0.001 m3",
+   "ids": [
+    1287010,
+    1289583
+   ],
+   "level": "Basement",
+   "point": [
+    18.5625,
+    7.348,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Columns 1287009 M_Rectangular Column (Basement) overlaps Curtain Panels 1289431  (Level 1) by 0.001 m3",
+   "ids": [
+    1287009,
+    1289431
+   ],
+   "level": "Basement",
+   "point": [
+    16.2455,
+    7.348,
+    1.573
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359790 SALA_Desk_32x60in (Level 3) overlaps Casework 1360549 Material Recycling1 (None) by 0.001 m3",
+   "ids": [
+    1359790,
+    1360549
+   ],
+   "level": "Level 3",
+   "point": [
+    25.47,
+    -21.2255,
+    8.5255
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359791 SALA_Desk_30x60in (Level 3) overlaps Casework 1360561 Material Recycling2 (None) by 0.001 m3",
+   "ids": [
+    1359791,
+    1360561
+   ],
+   "level": "Level 3",
+   "point": [
+    26.994999999999997,
+    -21.2255,
+    8.5255
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359789 SALA_Desk_36x60in (Level 3) overlaps Casework 1360549 Material Recycling1 (None) by 0.001 m3",
+   "ids": [
+    1359789,
+    1360549
+   ],
+   "level": "Level 3",
+   "point": [
+    24.6755,
+    -21.227,
+    8.5255
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Walls 1230918 Basic Wall (Level 3) overlaps Furniture 1359769 SALA_Desk_36x60in (Level 3) by 0.001 m3",
+   "ids": [
+    1230918,
+    1359769
+   ],
+   "level": "Level 3",
+   "point": [
+    20.712,
+    -14.3185,
+    8.2925
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359891 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359946 SALA_Desk_30x60in (Level 3) by 0.001 m3",
+   "ids": [
+    1359891,
+    1359946
+   ],
+   "level": "Level 3",
+   "point": [
+    7.6095,
+    -2.2335,
+    8.1705
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359777 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359778 SALA_Desk_32x60in (Level 3) by 0.001 m3",
+   "ids": [
+    1359777,
+    1359778
+   ],
+   "level": "Level 3",
+   "point": [
+    27.189999999999998,
+    -9.3615,
+    8.1705
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359772 SALA_Desk_30x60in (Level 3) overlaps Furniture 1359779 SALA_Desk_32x60in (Level 3) by 0.001 m3",
+   "ids": [
+    1359772,
+    1359779
+   ],
+   "level": "Level 3",
+   "point": [
+    24.142,
+    -9.3615,
+    8.1705
+   ]
+  },
+  {
+   "kind": "collision",
+   "severity": "warn",
+   "message": "Furniture 1359776 SALA_Desk_32x60in (Level 3) overlaps Furniture 1359780 SALA_Desk_30x60in (Level 3) by 0.001 m3",
+   "ids": [
+    1359776,
+    1359780
+   ],
+   "level": "Level 3",
+   "point": [
+    25.665,
+    -9.3615,
+    8.1705
+   ]
+  },
+  {
+   "kind": "collision_through_slab",
+   "severity": "warn",
+   "message": "Floors 1216109 on Level 4 (0.864 m thick) is crossed by 2 elements (1 Walls, 1 Doors), 0.13 m3 in all: walls, columns or mullions run through the slab instead of stopping at it",
+   "ids": [
+    1216109,
+    1229087,
+    1231188
+   ],
+   "level": "Level 4",
+   "point": null
+  },
+  {
+   "kind": "collision_through_slab",
+   "severity": "warn",
+   "message": "Floors 1215105 on Level 3 (0.305 m thick) is crossed by 100 elements (66 Curtain Wall Mullions, 34 Curtain Panels), 1.38 m3 in all: walls, columns or mullions run through the slab instead of stopping at it",
+   "ids": [
+    1215105,
+    1241409,
+    1241304,
+    1239102,
+    1241430,
+    1241556,
+    1239164,
+    1238978,
+    1238885,
+    1241535,
+    1241388,
+    1241514,
+    1239319,
+    1239071,
+    1241367,
+    1239226,
+    1239133,
+    1241493,
+    1241346,
+    1239288,
+    1239040,
+    1241325,
+    1241472,
+    1238947,
+    1241451,
+    1241577,
+    1241598,
+    1239009,
+    1239195,
+    1239350,
+    1239257,
+    1241283,
+    1240846,
+    1240534,
+    1237925,
+    1239260,
+    1241297,
+    1239095,
+    1239167,
+    1241423,
+    1238940,
+    1241549,
+    1241391,
+    1239250,
+    1240849,
+    1239074,
+    1239157,
+    1238981,
+    1239002,
+    1240839,
+    1239136,
+    1240537,
+    1238888,
+    1241517,
+    1239322,
+    1239229,
+    1240527,
+    1241381,
+    1241276,
+    1241507,
+    1239312,
+    1241402,
+    1241349,
+    1239219,
+    1239291,
+    1239043,
+    1241528,
+    1239064,
+    1238971,
+    1239281,
+    1239105,
+    1241328,
+    1239126,
+    1238950,
+    1239033,
+    1241454,
+    1241475,
+    1241370,
+    1241580,
+    1241601,
+    1238878,
+    1241496,
+    1239012,
+    1241360,
+    1241339,
+    1241486,
+    1239198,
+    1241465,
+    1241307,
+    1241591,
+    1241433,
+    1241318,
+    1241444,
+    1241286,
+    1239353,
+    1241570,
+    1241412,
+    1241538,
+    1239343,
+    1241559,
+    1239188
+   ],
+   "level": "Level 3",
+   "point": null
+  },
+  {
+   "kind": "collision_through_slab",
+   "severity": "warn",
+   "message": "Floors 1214740 on Level 2 (0.864 m thick) is crossed by 1 elements (1 Columns), 0.01 m3 in all: walls, columns or mullions run through the slab instead of stopping at it",
+   "ids": [
+    1214740,
+    1213475
+   ],
+   "level": "Level 2",
+   "point": null
+  },
+  {
+   "kind": "collision_through_slab",
+   "severity": "warn",
+   "message": "Floors 1274809 on Level 1 (0.305 m thick) is crossed by 9 elements (8 Doors, 1 Walls), 0.08 m3 in all: walls, columns or mullions run through the slab instead of stopping at it",
+   "ids": [
+    1274809,
+    1304187,
+    1301839,
+    1302956,
+    1303712,
+    1303660,
+    1301786,
+    1300931,
+    1301810,
+    1300804
+   ],
+   "level": "Level 1",
+   "point": null
+  },
+  {
+   "kind": "collision_louvers",
+   "severity": "info",
+   "message": "40 louver pieces (Generic Models) overlap curtain panels or mullions: expected if the louvers sit on the curtain wall",
+   "ids": [
+    1241356,
+    1241358,
+    1241361,
+    1241362,
+    1241363,
+    1241377,
+    1241379,
+    1241382,
+    1241383,
+    1241384,
+    1241398,
+    1241400,
+    1241403,
+    1241404,
+    1241405,
+    1241419,
+    1241421,
+    1241424,
+    1241425,
+    1241426,
+    1241440,
+    1241442,
+    1241445,
+    1241446,
+    1241447,
+    1241461,
+    1241463,
+    1241466,
+    1241467,
+    1241468,
+    1241482,
+    1241484,
+    1241487,
+    1241488,
+    1241489,
+    1241503,
+    1241505,
+    1241508,
+    1241509,
+    1241510,
+    1359031
+   ],
+   "level": null,
+   "point": null
+  }
+ ]
+}

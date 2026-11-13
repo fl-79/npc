@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "schema": 1,
+    "note": "The term calendar the simulation runs over: term dates, closures, studio sessions, reviews, other-course deadlines, recurring social events and project phases. Values come from the owner's confirmed checklist (research/studio-culture-school-checklist.md, categories B, C, F) and the UBC calendar; every date marked inferred is a default the notes assumed [A] and the owner has not confirmed. The SCENARIO window's day picker reads it. Dates are ISO (YYYY-MM-DD), times 24 h local.",
+    "updated": "2026-11-07",
+    "source": "research notes B1, B2, B8, B9, B10, B11, C11, F9; UBC Academic Calendar 2026W"
+  },
+  "term": {
+    "name": "Fall 2026 (Winter Session, Term 1)",
+    "classes_start": "2026-09-08",
+    "classes_end": "2026-12-07",
+    "exams_start": "2026-12-11",
+    "exams_end": "2026-12-22",
+    "closures": [
+      { "date": "2026-09-30", "name": "National Day for Truth and Reconciliation" },
+      { "date": "2026-10-12", "name": "Thanksgiving" },
+      { "from": "2026-11-09", "to": "2026-11-11", "name": "Midterm break" }
+    ],
+    "source": "B8, confirmed with the calendar"
+  },
+  "studio": {
+    "sessions": [
+      { "years": [2, 3], "days": ["Tue", "Fri"], "start": "13:30", "end": "18:00", "source": "B1, B2, confirmed" },
+      { "years": [1], "days": ["Tue", "Thu", "Fri"], "start": "13:30", "end": "18:00", "source": "B1, B2, confirmed" }
+    ],
+    "lecture": { "minutes": 45, "per_week": 1, "where": "another classroom, to be labelled", "inferred": true, "source": "B4 [A]" },
+    "desk_crits": { "per_group_per_session": 1, "sign_up": "sheet, first come first served", "source": "C1, C3, confirmed" }
+  },
+  "reviews": [
+    { "id": "midterm", "name": "Midterm review", "date": "2026-10-16", "years": [1, 2, 3], "last_desk_crit": "2026-10-13", "inferred": true, "source": "B10: after Thanksgiving, default Fri Oct 16 [A]" },
+    { "id": "final-y23", "name": "Final review, years 2 and 3", "date": "2026-12-08", "years": [2, 3], "last_desk_crit": "2026-12-04", "inferred": true, "source": "B10: first or second week of December on a studio day, default [A]" },
+    { "id": "final-y1", "name": "Final review, year 1", "date": "2026-12-10", "years": [1], "last_desk_crit": "2026-12-08", "inferred": true, "source": "B10 default [A]" }
+  ],
+  "pin_ups": { "per_review": 2, "dates": null, "note": "At least two pin-ups or internal presentations before each review (C6); their dates are not fixed and are to be placed by the simulation or the owner.", "source": "C6, confirmed" },
+  "phases": [
+    { "id": "starter", "name": "Site or starter assignment", "from": "2026-09-08", "to": "2026-09-25", "inferred": true, "source": "B9: about 2–3 weeks [A]" },
+    { "id": "midterm", "name": "Midterm project", "from": "2026-09-28", "to": "2026-10-16", "inferred": true, "source": "B9, ends at the midterm review" },
+    { "id": "final", "name": "Final project", "from": "2026-10-19", "to": "2026-12-08", "inferred": true, "source": "B9, builds on the midterm" }
+  ],
+  "other_courses": {
+    "count": 3,
+    "class_hours_per_week_each": 3,
+    "deadlines": [
+      { "date": "2026-10-02", "name": "Monthly assignment (September, moved past the Sep 30 closure)", "inferred": true },
+      { "date": "2026-10-30", "name": "Monthly assignment (October)", "inferred": true },
+      { "date": "2026-11-27", "name": "Monthly assignment (November)", "inferred": true }
+    ],
+    "weekly_readings": "before each history class",
+    "source": "B5, B11 confirmed; dates [A]"
+  },
+  "events": [
+    { "id": "good_times", "name": "Good Times", "repeat": "weekly", "day": "Fri", "start": "18:00", "end": "21:00", "room": 1364796, "note": "SALA happy hour after studio; food free, drinks paid", "source": "F9, confirmed; location: the student lounge (owner)" },
+    { "id": "waffle_wednesday", "name": "Waffle Wednesday", "repeat": "weekly", "day": "Wed", "start": "09:00", "end": "11:00", "room": 1364796, "note": "ARCHUS free breakfast", "inferred": true, "source": "F9, confirmed; hours and location [A]" },
+    { "id": "halloween", "name": "Halloween party", "date": "2026-10-30", "start": "19:00", "end": "23:00", "room": null, "note": "ticketed; clashes with the October assignment", "inferred": true, "source": "F9; date [A]" }
+  ],
+  "hours": {
+    "floor_access": "24/7 by card through the door into stair 18 (program/building.json)",
+    "business_hours": { "days": ["Mon", "Tue", "Wed", "Thu", "Fri"], "start": "08:30", "end": "17:00", "inferred": true, "source": "[A]" },
+    "basement_shop": [
+      { "days": ["Mon", "Tue", "Wed", "Thu"], "ranges": [["09:00", "12:00"], ["13:00", "20:30"]] },
+      { "days": ["Fri"], "ranges": [["08:30", "12:00"], ["13:00", "16:30"]] },
+      { "days": ["Sat", "Sun"], "ranges": [["10:00", "14:00"]] }
+    ],
+    "basement_shop_source": "D8, SALA pages (older page; weekends [D*])",
+    "library_close": { "time": "22:00", "inferred": true, "source": "E9 [A]" }
+  }
+}

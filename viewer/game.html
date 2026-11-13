@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NPC V2: game view</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="/src/style.css" />
+  <style>
+    #stage canvas { image-rendering: pixelated; }
+    #hud { width: 460px; }
+    .bezel { position: fixed; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 6px #2b2420, inset 0 0 0 9px #d9c9a3; }
+  </style>
+</head>
+<body>
+  <div id="stage"></div>
+  <div class="bezel"></div>
+
+  <div id="hud">
+    <div class="win">
+      <div class="bar"><span>NPC V2 &middot; GAME VIEW</span><a href="/" style="font-family: var(--font-head); font-size: 8px; color: var(--ink);">MODEL CHECK &rarr;</a></div>
+      <div class="body" id="status">loading&hellip;</div>
+    </div>
+  </div>
+
+  <aside id="nav">
+    <div class="win">
+      <div class="bar"><span>FLOOR</span><button class="fold" data-fold>&#9660;</button></div>
+      <div class="body"><div class="row" id="levels"></div><div class="hint">Keys 1 to 5 switch floors (Basement to Level 4).</div></div>
+    </div>
+    <div class="win">
+      <div class="bar"><span>VIEW</span><button class="fold" data-fold>&#9660;</button></div>
+      <div class="body">
+        <div class="row"><button id="zoom-out">ZOOM -</button><button id="zoom-in">ZOOM +</button><b id="zoom-v" style="font-family: var(--font-head); font-size: 9px;">3</b></div>
+        <div class="row"><label class="chk"><input type="checkbox" id="labels" checked /><span>Room labels</span></label></div>
+        <div class="row"><label class="slider"><span>Placeholder people</span><input type="range" id="people" min="0" max="24" value="6" /><b id="people-v">6</b></label></div>
+        <div class="hint">Drag or arrow keys to pan, wheel or + and - to zoom by whole pixels. Every wall, door, window, column, room and piece of furniture comes from the Revit model through the rasteriser (scripts/rasterise.py); the tiles are drawn in code and stand in for a hand-drawn sheet.</div>
+      </div>
+    </div>
+  </aside>
+
+  <script type="module" src="/src/game/main.js"></script>
+</body>
+</html>

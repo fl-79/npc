@@ -1,0 +1,3096 @@
+{
+  "ranAt": "2026-11-12T17:03:47.478Z",
+  "grid": [
+    {
+      "label": "2026-10-13 none everyday s2026",
+      "date": "2026-10-13",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 3833,
+      "remarks": 1884,
+      "kinds": {
+        "intro": 11,
+        "crit_start": 159,
+        "plot_queue": 17,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 1163
+      },
+      "samples": {
+        "09:30": {
+          "floor": 45,
+          "building": 46,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 12,
+          "building": 176,
+          "crit": 2,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 124,
+          "building": 126,
+          "crit": 17,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 2.05,
+        "C4": 56.11,
+        "C6": 0.26,
+        "F1": 16.92,
+        "F2": 1.46,
+        "F4": 8.48,
+        "F8": 0.11
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 580,
+        "meanWait": 44,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 17,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 11,
+      "ticks": 68400,
+      "leaveMean": "21:13",
+      "leaveMeanS": 76428.89772727272,
+      "arriveMin": "07:28",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-15 none everyday s2026",
+      "date": "2026-10-15",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 145,
+      "students": 165,
+      "agents": 176,
+      "events": 3041,
+      "remarks": 1474,
+      "kinds": {
+        "intro": 3,
+        "crit_start": 42,
+        "plot_queue": 104,
+        "paper_out": 42,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 964
+      },
+      "samples": {
+        "09:30": {
+          "floor": 26,
+          "building": 26,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 107,
+          "building": 112,
+          "crit": 6,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 104,
+          "building": 109,
+          "crit": 4,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 2.1,
+        "C4": 55.65,
+        "C6": 0.28,
+        "F1": 16.53,
+        "F2": 1.4,
+        "F4": 6.97,
+        "F8": 7
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "F8 QUEUE",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 446,
+        "meanWait": 25,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 104,
+        "outages": 42
+      },
+      "stuck": 0,
+      "insideAtEnd": 9,
+      "ticks": 68400,
+      "leaveMean": "21:33",
+      "leaveMeanS": 77586.09655172414,
+      "arriveMin": "07:00",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-16 none everyday s2026",
+      "date": "2026-10-16",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 2599,
+      "remarks": 1122,
+      "kinds": {
+        "intro": 0,
+        "crit_start": 151,
+        "plot_queue": 63,
+        "paper_out": 3,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 654
+      },
+      "samples": {
+        "09:30": {
+          "floor": 45,
+          "building": 45,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 95,
+          "building": 176,
+          "crit": 175,
+          "event": 0,
+          "review": 175
+        },
+        "19:00": {
+          "floor": 146,
+          "building": 146,
+          "crit": 22,
+          "event": 20,
+          "review": 1
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 0.9,
+        "C4": 32.61,
+        "C6": 0.32,
+        "F1": 16.4,
+        "F2": 1.21,
+        "F4": 7.21,
+        "F8": 7.38
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F8 QUEUE",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 473,
+        "meanWait": 37,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 63,
+        "outages": 3
+      },
+      "stuck": 0,
+      "insideAtEnd": 10,
+      "ticks": 68400,
+      "leaveMean": "20:52",
+      "leaveMeanS": 75135.54313999681,
+      "arriveMin": "07:00",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-11-02 none everyday s2026",
+      "date": "2026-11-02",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 109,
+      "students": 165,
+      "agents": 176,
+      "events": 1062,
+      "remarks": 512,
+      "kinds": {
+        "intro": 0,
+        "crit_start": 0,
+        "plot_queue": 0,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 329
+      },
+      "samples": {
+        "09:30": {
+          "floor": 20,
+          "building": 28,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 38,
+          "building": 71,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 31,
+          "building": 32,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 0.94,
+        "C4": 26.22,
+        "C6": 0.27,
+        "F1": 17.47,
+        "F2": 1.19,
+        "F4": 4.28,
+        "F8": 0
+      },
+      "suggestions": [
+        "C1 LOW",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 332,
+        "meanWait": 26,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 0,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 0,
+      "ticks": 68400,
+      "leaveMean": "17:33",
+      "leaveMeanS": 63218.34862385321,
+      "arriveMin": "07:27",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-11-13 none everyday s2026",
+      "date": "2026-11-13",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 2927,
+      "remarks": 1301,
+      "kinds": {
+        "intro": 11,
+        "crit_start": 151,
+        "plot_queue": 0,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 879
+      },
+      "samples": {
+        "09:30": {
+          "floor": 51,
+          "building": 53,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 168,
+          "building": 174,
+          "crit": 22,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 64,
+          "building": 66,
+          "crit": 3,
+          "event": 12,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 1.62,
+        "C4": 41.63,
+        "C6": 0.27,
+        "F1": 15.38,
+        "F2": 1.46,
+        "F4": 8.98,
+        "F8": 0
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 371,
+        "meanWait": 7,
+        "maxWait": 70
+      },
+      "plotter": {
+        "jobs": 0,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 1,
+      "ticks": 68400,
+      "leaveMean": "18:08",
+      "leaveMeanS": 65339.67946358732,
+      "arriveMin": "07:00",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-12-05 none everyday s2026",
+      "date": "2026-12-05",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 133,
+      "students": 165,
+      "agents": 176,
+      "events": 1468,
+      "remarks": 668,
+      "kinds": {
+        "intro": 0,
+        "crit_start": 0,
+        "plot_queue": 8,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 516
+      },
+      "samples": {
+        "09:30": {
+          "floor": 0,
+          "building": 0,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 81,
+          "building": 84,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 75,
+          "building": 79,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 1.24,
+        "C4": 30.37,
+        "C6": 0.2,
+        "F1": 17.85,
+        "F2": 1.23,
+        "F4": 4.04,
+        "F8": 0.13
+      },
+      "suggestions": [
+        "C6 LOW",
+        "C1 LOW",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 301,
+        "meanWait": 10,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 8,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 8,
+      "ticks": 68400,
+      "leaveMean": "19:08",
+      "leaveMeanS": 68900.3909774436,
+      "arriveMin": "10:15",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-13 none everyday s2027",
+      "date": "2026-10-13",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2027,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 3827,
+      "remarks": 1865,
+      "kinds": {
+        "intro": 11,
+        "crit_start": 162,
+        "plot_queue": 9,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 1190
+      },
+      "samples": {
+        "09:30": {
+          "floor": 26,
+          "building": 26,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 11,
+          "building": 176,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 135,
+          "building": 138,
+          "crit": 7,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 2.31,
+        "C4": 59.66,
+        "C6": 0.24,
+        "F1": 16.32,
+        "F2": 1.53,
+        "F4": 8.91,
+        "F8": 0.09
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 547,
+        "meanWait": 45,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 9,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 8,
+      "ticks": 68400,
+      "leaveMean": "21:39",
+      "leaveMeanS": 77941.07386363637,
+      "arriveMin": "07:47",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-15 none everyday s2027",
+      "date": "2026-10-15",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2027,
+      "policy": {},
+      "present": 141,
+      "students": 165,
+      "agents": 176,
+      "events": 3025,
+      "remarks": 1442,
+      "kinds": {
+        "intro": 3,
+        "crit_start": 42,
+        "plot_queue": 110,
+        "paper_out": 54,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 974
+      },
+      "samples": {
+        "09:30": {
+          "floor": 24,
+          "building": 24,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 123,
+          "building": 128,
+          "crit": 5,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 103,
+          "building": 105,
+          "crit": 1,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 2.12,
+        "C4": 57.95,
+        "C6": 0.27,
+        "F1": 16.18,
+        "F2": 1.49,
+        "F4": 6.87,
+        "F8": 13.25
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "F8 QUEUE",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 430,
+        "meanWait": 20,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 110,
+        "outages": 54
+      },
+      "stuck": 0,
+      "insideAtEnd": 8,
+      "ticks": 68400,
+      "leaveMean": "21:51",
+      "leaveMeanS": 78714.14893617021,
+      "arriveMin": "07:30",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-16 none everyday s2027",
+      "date": "2026-10-16",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2027,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 2630,
+      "remarks": 1132,
+      "kinds": {
+        "intro": 0,
+        "crit_start": 148,
+        "plot_queue": 69,
+        "paper_out": 14,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 666
+      },
+      "samples": {
+        "09:30": {
+          "floor": 31,
+          "building": 31,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 95,
+          "building": 176,
+          "crit": 175,
+          "event": 0,
+          "review": 175
+        },
+        "19:00": {
+          "floor": 149,
+          "building": 151,
+          "crit": 25,
+          "event": 20,
+          "review": 1
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 0.92,
+        "C4": 32.64,
+        "C6": 0.32,
+        "F1": 16.87,
+        "F2": 1.24,
+        "F4": 6.57,
+        "F8": 16.06
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F8 QUEUE",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 472,
+        "meanWait": 39,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 69,
+        "outages": 14
+      },
+      "stuck": 0,
+      "insideAtEnd": 9,
+      "ticks": 68400,
+      "leaveMean": "21:19",
+      "leaveMeanS": 76763.37635212178,
+      "arriveMin": "08:11",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-11-02 none everyday s2027",
+      "date": "2026-11-02",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2027,
+      "policy": {},
+      "present": 119,
+      "students": 165,
+      "agents": 176,
+      "events": 1137,
+      "remarks": 537,
+      "kinds": {
+        "intro": 0,
+        "crit_start": 0,
+        "plot_queue": 0,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 355
+      },
+      "samples": {
+        "09:30": {
+          "floor": 14,
+          "building": 18,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 57,
+          "building": 60,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 34,
+          "building": 34,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 0.97,
+        "C4": 25.11,
+        "C6": 0.25,
+        "F1": 17.07,
+        "F2": 1.22,
+        "F4": 5.38,
+        "F8": 0
+      },
+      "suggestions": [
+        "C1 LOW",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 303,
+        "meanWait": 36,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 0,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 0,
+      "ticks": 68400,
+      "leaveMean": "17:44",
+      "leaveMeanS": 63844.75630252101,
+      "arriveMin": "07:52",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-11-13 none everyday s2027",
+      "date": "2026-11-13",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2027,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 2883,
+      "remarks": 1296,
+      "kinds": {
+        "intro": 11,
+        "crit_start": 158,
+        "plot_queue": 0,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 828
+      },
+      "samples": {
+        "09:30": {
+          "floor": 26,
+          "building": 27,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 164,
+          "building": 174,
+          "crit": 23,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 68,
+          "building": 72,
+          "crit": 5,
+          "event": 14,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 1.4,
+        "C4": 40.25,
+        "C6": 0.25,
+        "F1": 15.85,
+        "F2": 1.45,
+        "F4": 8.74,
+        "F8": 0
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 347,
+        "meanWait": 8,
+        "maxWait": 112
+      },
+      "plotter": {
+        "jobs": 0,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 0,
+      "ticks": 68400,
+      "leaveMean": "18:18",
+      "leaveMeanS": 65885.69083089515,
+      "arriveMin": "07:29",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-12-05 none everyday s2027",
+      "date": "2026-12-05",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2027,
+      "policy": {},
+      "present": 129,
+      "students": 165,
+      "agents": 176,
+      "events": 1564,
+      "remarks": 714,
+      "kinds": {
+        "intro": 0,
+        "crit_start": 0,
+        "plot_queue": 3,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 584
+      },
+      "samples": {
+        "09:30": {
+          "floor": 0,
+          "building": 0,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 88,
+          "building": 90,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 80,
+          "building": 84,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 1.47,
+        "C4": 36.06,
+        "C6": 0.22,
+        "F1": 18.03,
+        "F2": 1.25,
+        "F4": 3.95,
+        "F8": 0.18
+      },
+      "suggestions": [
+        "C1 LOW",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 268,
+        "meanWait": 10,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 3,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 7,
+      "ticks": 68400,
+      "leaveMean": "20:04",
+      "leaveMeanS": 72247.49612403101,
+      "arriveMin": "10:32",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-13 none everyday s2028",
+      "date": "2026-10-13",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2028,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 3738,
+      "remarks": 1799,
+      "kinds": {
+        "intro": 11,
+        "crit_start": 163,
+        "plot_queue": 9,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 1164
+      },
+      "samples": {
+        "09:30": {
+          "floor": 32,
+          "building": 32,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 11,
+          "building": 176,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 130,
+          "building": 134,
+          "crit": 13,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 2.15,
+        "C4": 57.8,
+        "C6": 0.27,
+        "F1": 16.68,
+        "F2": 1.42,
+        "F4": 8.75,
+        "F8": 0.1
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 619,
+        "meanWait": 43,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 9,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 12,
+      "ticks": 68400,
+      "leaveMean": "21:28",
+      "leaveMeanS": 77300.94886363637,
+      "arriveMin": "07:14",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-15 none everyday s2028",
+      "date": "2026-10-15",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2028,
+      "policy": {},
+      "present": 131,
+      "students": 165,
+      "agents": 176,
+      "events": 2560,
+      "remarks": 1199,
+      "kinds": {
+        "intro": 3,
+        "crit_start": 44,
+        "plot_queue": 93,
+        "paper_out": 32,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 800
+      },
+      "samples": {
+        "09:30": {
+          "floor": 19,
+          "building": 20,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 117,
+          "building": 119,
+          "crit": 6,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 97,
+          "building": 100,
+          "crit": 4,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 1.98,
+        "C4": 49.31,
+        "C6": 0.28,
+        "F1": 16.97,
+        "F2": 1.3,
+        "F4": 5.88,
+        "F8": 6.1
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F8 QUEUE",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 423,
+        "meanWait": 19,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 93,
+        "outages": 32
+      },
+      "stuck": 0,
+      "insideAtEnd": 10,
+      "ticks": 68400,
+      "leaveMean": "21:52",
+      "leaveMeanS": 78746.91603053435,
+      "arriveMin": "07:45",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-16 none everyday s2028",
+      "date": "2026-10-16",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2028,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 2675,
+      "remarks": 1144,
+      "kinds": {
+        "intro": 0,
+        "crit_start": 153,
+        "plot_queue": 70,
+        "paper_out": 12,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 693
+      },
+      "samples": {
+        "09:30": {
+          "floor": 34,
+          "building": 34,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 95,
+          "building": 175,
+          "crit": 174,
+          "event": 0,
+          "review": 174
+        },
+        "19:00": {
+          "floor": 149,
+          "building": 150,
+          "crit": 29,
+          "event": 14,
+          "review": 1
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 0.96,
+        "C4": 32.82,
+        "C6": 0.35,
+        "F1": 16.98,
+        "F2": 1.21,
+        "F4": 7,
+        "F8": 13.84
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F8 QUEUE",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 505,
+        "meanWait": 43,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 70,
+        "outages": 12
+      },
+      "stuck": 0,
+      "insideAtEnd": 9,
+      "ticks": 68400,
+      "leaveMean": "21:15",
+      "leaveMeanS": 76517.21073393375,
+      "arriveMin": "07:41",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-11-02 none everyday s2028",
+      "date": "2026-11-02",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2028,
+      "policy": {},
+      "present": 125,
+      "students": 165,
+      "agents": 176,
+      "events": 1293,
+      "remarks": 594,
+      "kinds": {
+        "intro": 0,
+        "crit_start": 0,
+        "plot_queue": 0,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 446
+      },
+      "samples": {
+        "09:30": {
+          "floor": 18,
+          "building": 23,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 80,
+          "building": 88,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 34,
+          "building": 36,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 1.16,
+        "C4": 29.6,
+        "C6": 0.21,
+        "F1": 16.77,
+        "F2": 1.32,
+        "F4": 5.66,
+        "F8": 0
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 340,
+        "meanWait": 30,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 0,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 0,
+      "ticks": 68400,
+      "leaveMean": "17:45",
+      "leaveMeanS": 63918.632,
+      "arriveMin": "07:14",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-11-13 none everyday s2028",
+      "date": "2026-11-13",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2028,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 2947,
+      "remarks": 1305,
+      "kinds": {
+        "intro": 11,
+        "crit_start": 154,
+        "plot_queue": 0,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 884
+      },
+      "samples": {
+        "09:30": {
+          "floor": 39,
+          "building": 40,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 166,
+          "building": 173,
+          "crit": 24,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 78,
+          "building": 79,
+          "crit": 10,
+          "event": 15,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 1.57,
+        "C4": 42.01,
+        "C6": 0.29,
+        "F1": 16.12,
+        "F2": 1.44,
+        "F4": 8.59,
+        "F8": 0
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 393,
+        "meanWait": 10,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 0,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 0,
+      "ticks": 68400,
+      "leaveMean": "18:30",
+      "leaveMeanS": 66609.40439857946,
+      "arriveMin": "07:37",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-12-05 none everyday s2028",
+      "date": "2026-12-05",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2028,
+      "policy": {},
+      "present": 117,
+      "students": 165,
+      "agents": 176,
+      "events": 1382,
+      "remarks": 670,
+      "kinds": {
+        "intro": 0,
+        "crit_start": 0,
+        "plot_queue": 3,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 470
+      },
+      "samples": {
+        "09:30": {
+          "floor": 0,
+          "building": 0,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 69,
+          "building": 72,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 72,
+          "building": 73,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 1.28,
+        "C4": 31.49,
+        "C6": 0.21,
+        "F1": 17.83,
+        "F2": 1.16,
+        "F4": 3.56,
+        "F8": 0.05
+      },
+      "suggestions": [
+        "C1 LOW",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 263,
+        "meanWait": 6,
+        "maxWait": 51
+      },
+      "plotter": {
+        "jobs": 3,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 9,
+      "ticks": 68400,
+      "leaveMean": "19:40",
+      "leaveMeanS": 70846.71794871795,
+      "arriveMin": "10:03",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-15 none agents s2026",
+      "date": "2026-10-15",
+      "situation": "none",
+      "movement": "agents",
+      "seed": 2026,
+      "policy": {},
+      "present": 145,
+      "students": 165,
+      "agents": 176,
+      "events": 2944,
+      "remarks": 1395,
+      "kinds": {
+        "intro": 3,
+        "crit_start": 42,
+        "plot_queue": 104,
+        "paper_out": 42,
+        "desk_move": 4,
+        "move_veto": 1,
+        "conversation": 944
+      },
+      "samples": {
+        "09:30": {
+          "floor": 26,
+          "building": 26,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 109,
+          "building": 111,
+          "crit": 7,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 106,
+          "building": 108,
+          "crit": 3,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 38.01,
+        "C3": 2.22,
+        "C4": 52.7,
+        "C6": 0.27,
+        "F1": 16.3,
+        "F2": 1.45,
+        "F4": 6.57,
+        "F8": 7.72
+      },
+      "suggestions": [
+        "F2 HIGH",
+        "F8 QUEUE",
+        "WC TRIPS",
+        "MOVES",
+        "MOVES",
+        "MOVES"
+      ],
+      "moves": [
+        "13:00 exposure",
+        "13:00 kitchen",
+        "13:30 exposure",
+        "17:30 queue"
+      ],
+      "lift": {
+        "boarded": 446,
+        "meanWait": 17,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 104,
+        "outages": 42
+      },
+      "stuck": 0,
+      "insideAtEnd": 9,
+      "ticks": 68400,
+      "leaveMean": "21:33",
+      "leaveMeanS": 77586.09655172414,
+      "arriveMin": "07:00",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-15 none free s2026",
+      "date": "2026-10-15",
+      "situation": "none",
+      "movement": "free",
+      "seed": 2026,
+      "policy": {},
+      "present": 145,
+      "students": 165,
+      "agents": 176,
+      "events": 2981,
+      "remarks": 1404,
+      "kinds": {
+        "intro": 3,
+        "crit_start": 42,
+        "plot_queue": 104,
+        "paper_out": 42,
+        "desk_move": 4,
+        "move_veto": 0,
+        "conversation": 969
+      },
+      "samples": {
+        "09:30": {
+          "floor": 26,
+          "building": 26,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 109,
+          "building": 112,
+          "crit": 4,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 103,
+          "building": 108,
+          "crit": 4,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 39.34,
+        "C3": 2.19,
+        "C4": 56.53,
+        "C6": 0.26,
+        "F1": 16.45,
+        "F2": 1.45,
+        "F4": 6.27,
+        "F8": 7.14
+      },
+      "suggestions": [
+        "F2 HIGH",
+        "F8 QUEUE",
+        "WC TRIPS",
+        "MOVES",
+        "MOVES",
+        "MOVES"
+      ],
+      "moves": [
+        "11:30 exposure",
+        "12:00 exposure",
+        "13:00 kitchen",
+        "17:30 queue"
+      ],
+      "lift": {
+        "boarded": 446,
+        "meanWait": 27,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 104,
+        "outages": 42
+      },
+      "stuck": 0,
+      "insideAtEnd": 10,
+      "ticks": 68400,
+      "leaveMean": "21:33",
+      "leaveMeanS": 77586.09655172414,
+      "arriveMin": "07:00",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-15 none agents s2027",
+      "date": "2026-10-15",
+      "situation": "none",
+      "movement": "agents",
+      "seed": 2027,
+      "policy": {},
+      "present": 141,
+      "students": 165,
+      "agents": 176,
+      "events": 3005,
+      "remarks": 1421,
+      "kinds": {
+        "intro": 3,
+        "crit_start": 42,
+        "plot_queue": 110,
+        "paper_out": 55,
+        "desk_move": 4,
+        "move_veto": 0,
+        "conversation": 971
+      },
+      "samples": {
+        "09:30": {
+          "floor": 24,
+          "building": 24,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 124,
+          "building": 128,
+          "crit": 4,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 102,
+          "building": 105,
+          "crit": 1,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 37.83,
+        "C3": 2.34,
+        "C4": 56.61,
+        "C6": 0.21,
+        "F1": 16.08,
+        "F2": 1.55,
+        "F4": 6.41,
+        "F8": 9.72
+      },
+      "suggestions": [
+        "F2 HIGH",
+        "F8 QUEUE",
+        "WC TRIPS",
+        "MOVES",
+        "MOVES",
+        "MOVES"
+      ],
+      "moves": [
+        "12:30 exposure",
+        "13:00 kitchen",
+        "16:00 queue",
+        "21:30 exposure"
+      ],
+      "lift": {
+        "boarded": 424,
+        "meanWait": 23,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 110,
+        "outages": 55
+      },
+      "stuck": 0,
+      "insideAtEnd": 8,
+      "ticks": 68400,
+      "leaveMean": "21:51",
+      "leaveMeanS": 78714.14893617021,
+      "arriveMin": "07:30",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-15 none free s2027",
+      "date": "2026-10-15",
+      "situation": "none",
+      "movement": "free",
+      "seed": 2027,
+      "policy": {},
+      "present": 141,
+      "students": 165,
+      "agents": 176,
+      "events": 3005,
+      "remarks": 1421,
+      "kinds": {
+        "intro": 3,
+        "crit_start": 42,
+        "plot_queue": 110,
+        "paper_out": 55,
+        "desk_move": 4,
+        "move_veto": 0,
+        "conversation": 971
+      },
+      "samples": {
+        "09:30": {
+          "floor": 24,
+          "building": 24,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 124,
+          "building": 128,
+          "crit": 4,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 102,
+          "building": 105,
+          "crit": 1,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 37.83,
+        "C3": 2.34,
+        "C4": 56.61,
+        "C6": 0.21,
+        "F1": 16.08,
+        "F2": 1.55,
+        "F4": 6.41,
+        "F8": 9.72
+      },
+      "suggestions": [
+        "F2 HIGH",
+        "F8 QUEUE",
+        "WC TRIPS",
+        "MOVES",
+        "MOVES",
+        "MOVES"
+      ],
+      "moves": [
+        "12:30 exposure",
+        "13:00 kitchen",
+        "16:00 queue",
+        "21:30 exposure"
+      ],
+      "lift": {
+        "boarded": 424,
+        "meanWait": 23,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 110,
+        "outages": 55
+      },
+      "stuck": 0,
+      "insideAtEnd": 8,
+      "ticks": 68400,
+      "leaveMean": "21:51",
+      "leaveMeanS": 78714.14893617021,
+      "arriveMin": "07:30",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-15 none agents s2028",
+      "date": "2026-10-15",
+      "situation": "none",
+      "movement": "agents",
+      "seed": 2028,
+      "policy": {},
+      "present": 131,
+      "students": 165,
+      "agents": 176,
+      "events": 2544,
+      "remarks": 1178,
+      "kinds": {
+        "intro": 3,
+        "crit_start": 44,
+        "plot_queue": 93,
+        "paper_out": 32,
+        "desk_move": 4,
+        "move_veto": 0,
+        "conversation": 803
+      },
+      "samples": {
+        "09:30": {
+          "floor": 19,
+          "building": 20,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 116,
+          "building": 119,
+          "crit": 6,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 98,
+          "building": 100,
+          "crit": 3,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 38.25,
+        "C3": 2.14,
+        "C4": 49.15,
+        "C6": 0.26,
+        "F1": 16.57,
+        "F2": 1.32,
+        "F4": 5.69,
+        "F8": 5.89
+      },
+      "suggestions": [
+        "F2 HIGH",
+        "F8 QUEUE",
+        "WC TRIPS",
+        "MOVES",
+        "MOVES",
+        "MOVES"
+      ],
+      "moves": [
+        "13:00 kitchen",
+        "13:30 exposure",
+        "18:30 exposure",
+        "21:30 queue"
+      ],
+      "lift": {
+        "boarded": 411,
+        "meanWait": 23,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 93,
+        "outages": 32
+      },
+      "stuck": 0,
+      "insideAtEnd": 10,
+      "ticks": 68400,
+      "leaveMean": "21:52",
+      "leaveMeanS": 78746.91603053435,
+      "arriveMin": "07:45",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-15 none free s2028",
+      "date": "2026-10-15",
+      "situation": "none",
+      "movement": "free",
+      "seed": 2028,
+      "policy": {},
+      "present": 131,
+      "students": 165,
+      "agents": 176,
+      "events": 2564,
+      "remarks": 1185,
+      "kinds": {
+        "intro": 3,
+        "crit_start": 44,
+        "plot_queue": 93,
+        "paper_out": 32,
+        "desk_move": 4,
+        "move_veto": 0,
+        "conversation": 816
+      },
+      "samples": {
+        "09:30": {
+          "floor": 19,
+          "building": 20,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 116,
+          "building": 119,
+          "crit": 6,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 97,
+          "building": 100,
+          "crit": 3,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 38.25,
+        "C3": 2.24,
+        "C4": 50.36,
+        "C6": 0.26,
+        "F1": 16.73,
+        "F2": 1.33,
+        "F4": 5.66,
+        "F8": 5.91
+      },
+      "suggestions": [
+        "F2 HIGH",
+        "F8 QUEUE",
+        "WC TRIPS",
+        "MOVES",
+        "MOVES",
+        "MOVES"
+      ],
+      "moves": [
+        "13:00 kitchen",
+        "13:30 exposure",
+        "18:30 exposure",
+        "21:30 queue"
+      ],
+      "lift": {
+        "boarded": 400,
+        "meanWait": 24,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 93,
+        "outages": 32
+      },
+      "stuck": 0,
+      "insideAtEnd": 10,
+      "ticks": 68400,
+      "leaveMean": "21:52",
+      "leaveMeanS": 78746.91603053435,
+      "arriveMin": "07:45",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    }
+  ],
+  "situations": [
+    {
+      "label": "2026-10-16 review everyday s2026",
+      "date": "2026-10-16",
+      "situation": "review",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 2599,
+      "remarks": 1122,
+      "kinds": {
+        "intro": 0,
+        "crit_start": 151,
+        "plot_queue": 63,
+        "paper_out": 3,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 654
+      },
+      "samples": {
+        "09:30": {
+          "floor": 45,
+          "building": 45,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 95,
+          "building": 176,
+          "crit": 175,
+          "event": 0,
+          "review": 175
+        },
+        "19:00": {
+          "floor": 146,
+          "building": 146,
+          "crit": 22,
+          "event": 20,
+          "review": 1
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 0.9,
+        "C4": 32.61,
+        "C6": 0.32,
+        "F1": 16.4,
+        "F2": 1.21,
+        "F4": 7.21,
+        "F8": 7.38
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F8 QUEUE",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 473,
+        "meanWait": 37,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 63,
+        "outages": 3
+      },
+      "stuck": 0,
+      "insideAtEnd": 10,
+      "ticks": 68400,
+      "leaveMean": "20:52",
+      "leaveMeanS": 75135.54313999681,
+      "arriveMin": "07:00",
+      "situationTitle": "review",
+      "fails": [],
+      "ok": true,
+      "effect": "review"
+    },
+    {
+      "label": "2026-10-09 pinup everyday s2026",
+      "date": "2026-10-09",
+      "situation": "pinup",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 3877,
+      "remarks": 1831,
+      "kinds": {
+        "intro": 0,
+        "crit_start": 162,
+        "plot_queue": 204,
+        "paper_out": 56,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 985
+      },
+      "samples": {
+        "09:30": {
+          "floor": 41,
+          "building": 41,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 170,
+          "building": 175,
+          "crit": 12,
+          "event": 0,
+          "review": 77
+        },
+        "19:00": {
+          "floor": 96,
+          "building": 100,
+          "crit": 9,
+          "event": 8,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 1.28,
+        "C4": 47.39,
+        "C6": 0.33,
+        "F1": 16.78,
+        "F2": 1.26,
+        "F4": 7.15,
+        "F8": 37.11
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F8 QUEUE",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 455,
+        "meanWait": 10,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 122,
+        "outages": 56
+      },
+      "stuck": 0,
+      "insideAtEnd": 7,
+      "ticks": 68400,
+      "leaveMean": "20:03",
+      "leaveMeanS": 72212.6182379193,
+      "arriveMin": "07:05",
+      "situationTitle": "pinup",
+      "fails": [],
+      "ok": true,
+      "effect": "pinup"
+    },
+    {
+      "label": "2026-10-13 lastcrit everyday s2026",
+      "date": "2026-10-13",
+      "situation": "lastcrit",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 4210,
+      "remarks": 1972,
+      "kinds": {
+        "intro": 11,
+        "crit_start": 159,
+        "plot_queue": 136,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 1236
+      },
+      "samples": {
+        "09:30": {
+          "floor": 45,
+          "building": 46,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 170,
+          "building": 175,
+          "crit": 25,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 121,
+          "building": 124,
+          "crit": 13,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 2.38,
+        "C4": 60.62,
+        "C6": 0.27,
+        "F1": 16.28,
+        "F2": 1.47,
+        "F4": 8.15,
+        "F8": 34.84
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "F8 QUEUE",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 441,
+        "meanWait": 8,
+        "maxWait": 102
+      },
+      "plotter": {
+        "jobs": 116,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 9,
+      "ticks": 68400,
+      "leaveMean": "21:13",
+      "leaveMeanS": 76428.89772727272,
+      "arriveMin": "07:28",
+      "situationTitle": "lastcrit",
+      "fails": [],
+      "ok": true,
+      "effect": "lastcrit"
+    },
+    {
+      "label": "2026-10-20 good_times everyday s2026",
+      "date": "2026-10-20",
+      "situation": "good_times",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 3075,
+      "remarks": 1432,
+      "kinds": {
+        "intro": 11,
+        "crit_start": 139,
+        "plot_queue": 0,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 913
+      },
+      "samples": {
+        "09:30": {
+          "floor": 45,
+          "building": 46,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 12,
+          "building": 174,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 83,
+          "building": 86,
+          "crit": 5,
+          "event": 12,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 1.44,
+        "C4": 43.72,
+        "C6": 0.29,
+        "F1": 15.87,
+        "F2": 1.49,
+        "F4": 9.12,
+        "F8": 0
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 520,
+        "meanWait": 48,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 0,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 0,
+      "ticks": 68400,
+      "leaveMean": "18:44",
+      "leaveMeanS": 67459.75660409626,
+      "arriveMin": "07:30",
+      "situationTitle": "good_times",
+      "fails": [],
+      "ok": true,
+      "effect": "good_times"
+    },
+    {
+      "label": "2026-10-15 waffle everyday s2026",
+      "date": "2026-10-15",
+      "situation": "waffle",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 145,
+      "students": 165,
+      "agents": 176,
+      "events": 3296,
+      "remarks": 1583,
+      "kinds": {
+        "intro": 3,
+        "crit_start": 42,
+        "plot_queue": 104,
+        "paper_out": 40,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 1054
+      },
+      "samples": {
+        "09:30": {
+          "floor": 74,
+          "building": 74,
+          "crit": 0,
+          "event": 37,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 105,
+          "building": 111,
+          "crit": 4,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 105,
+          "building": 109,
+          "crit": 4,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 2.33,
+        "C4": 61.82,
+        "C6": 0.29,
+        "F1": 16.47,
+        "F2": 1.45,
+        "F4": 7.24,
+        "F8": 7.47
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "F8 QUEUE",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 413,
+        "meanWait": 30,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 104,
+        "outages": 40
+      },
+      "stuck": 0,
+      "insideAtEnd": 9,
+      "ticks": 68400,
+      "leaveMean": "21:33",
+      "leaveMeanS": 77586.09655172414,
+      "arriveMin": "07:00",
+      "situationTitle": "waffle",
+      "fails": [],
+      "ok": true,
+      "effect": "waffle"
+    },
+    {
+      "label": "2026-10-19 deadline everyday s2026",
+      "date": "2026-10-19",
+      "situation": "deadline",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 124,
+      "students": 165,
+      "agents": 176,
+      "events": 1629,
+      "remarks": 798,
+      "kinds": {
+        "intro": 0,
+        "crit_start": 0,
+        "plot_queue": 0,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 579
+      },
+      "samples": {
+        "09:30": {
+          "floor": 23,
+          "building": 30,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 43,
+          "building": 78,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 78,
+          "building": 80,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 1.68,
+        "C4": 40.07,
+        "C6": 0.23,
+        "F1": 17,
+        "F2": 1.32,
+        "F4": 5.74,
+        "F8": 0
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 344,
+        "meanWait": 33,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 0,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 3,
+      "ticks": 68400,
+      "leaveMean": "19:44",
+      "leaveMeanS": 71080.7741935484,
+      "arriveMin": "07:35",
+      "situationTitle": "deadline",
+      "fails": [],
+      "ok": true,
+      "effect": "deadline"
+    },
+    {
+      "label": "2026-10-15 paper everyday s2026",
+      "date": "2026-10-15",
+      "situation": "paper",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 145,
+      "students": 165,
+      "agents": 176,
+      "events": 3041,
+      "remarks": 1474,
+      "kinds": {
+        "intro": 3,
+        "crit_start": 42,
+        "plot_queue": 104,
+        "paper_out": 42,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 964
+      },
+      "samples": {
+        "09:30": {
+          "floor": 26,
+          "building": 26,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 107,
+          "building": 112,
+          "crit": 6,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 104,
+          "building": 109,
+          "crit": 4,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 2.1,
+        "C4": 55.65,
+        "C6": 0.28,
+        "F1": 16.53,
+        "F2": 1.4,
+        "F4": 6.97,
+        "F8": 7
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "F8 QUEUE",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 446,
+        "meanWait": 25,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 104,
+        "outages": 42
+      },
+      "stuck": 0,
+      "insideAtEnd": 9,
+      "ticks": 68400,
+      "leaveMean": "21:33",
+      "leaveMeanS": 77586.09655172414,
+      "arriveMin": "07:00",
+      "situationTitle": "paper",
+      "fails": [],
+      "ok": true,
+      "effect": "paper"
+    },
+    {
+      "label": "2026-10-13 lift everyday s2026",
+      "date": "2026-10-13",
+      "situation": "lift",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 3555,
+      "remarks": 1706,
+      "kinds": {
+        "intro": 11,
+        "crit_start": 159,
+        "plot_queue": 17,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 1075
+      },
+      "samples": {
+        "09:30": {
+          "floor": 45,
+          "building": 46,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 14,
+          "building": 176,
+          "crit": 2,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 124,
+          "building": 127,
+          "crit": 15,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 2.04,
+        "C4": 52.28,
+        "C6": 0.25,
+        "F1": 17.38,
+        "F2": 1.31,
+        "F4": 8.09,
+        "F8": 0.25
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 0,
+        "meanWait": 0,
+        "maxWait": 0
+      },
+      "plotter": {
+        "jobs": 17,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 10,
+      "ticks": 68400,
+      "leaveMean": "21:13",
+      "leaveMeanS": 76428.89772727272,
+      "arriveMin": "07:28",
+      "situationTitle": "lift",
+      "fails": [],
+      "ok": true,
+      "effect": "lift"
+    },
+    {
+      "label": "2026-10-13 cohort everyday s2026",
+      "date": "2026-10-13",
+      "situation": "cohort",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 191,
+      "students": 180,
+      "agents": 191,
+      "events": 4117,
+      "remarks": 2024,
+      "kinds": {
+        "intro": 11,
+        "crit_start": 174,
+        "plot_queue": 17,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 1254
+      },
+      "samples": {
+        "09:30": {
+          "floor": 55,
+          "building": 56,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 13,
+          "building": 191,
+          "crit": 2,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 134,
+          "building": 136,
+          "crit": 17,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 2.04,
+        "C4": 56.22,
+        "C6": 0.31,
+        "F1": 17,
+        "F2": 1.38,
+        "F4": 8.63,
+        "F8": 0.23
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 630,
+        "meanWait": 45,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 17,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 9,
+      "ticks": 68400,
+      "leaveMean": "21:12",
+      "leaveMeanS": 76339.88481675393,
+      "arriveMin": "07:28",
+      "situationTitle": "cohort",
+      "fails": [],
+      "ok": true,
+      "effect": "cohort"
+    },
+    {
+      "label": "2026-10-30 clash everyday s2026",
+      "date": "2026-10-30",
+      "situation": "clash",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 3553,
+      "remarks": 1701,
+      "kinds": {
+        "intro": 11,
+        "crit_start": 165,
+        "plot_queue": 0,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 1080
+      },
+      "samples": {
+        "09:30": {
+          "floor": 44,
+          "building": 45,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 162,
+          "building": 171,
+          "crit": 22,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 106,
+          "building": 114,
+          "crit": 13,
+          "event": 11,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 1.92,
+        "C4": 53.08,
+        "C6": 0.28,
+        "F1": 16.08,
+        "F2": 1.4,
+        "F4": 7.93,
+        "F8": 0
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 472,
+        "meanWait": 10,
+        "maxWait": 139
+      },
+      "plotter": {
+        "jobs": 0,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 2,
+      "ticks": 68400,
+      "leaveMean": "20:39",
+      "leaveMeanS": 74371.23639570376,
+      "arriveMin": "07:00",
+      "situationTitle": "clash",
+      "fails": [],
+      "ok": true,
+      "effect": "clash"
+    },
+    {
+      "label": "2026-10-13 weekend everyday s2026",
+      "date": "2026-10-13",
+      "situation": "weekend",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {},
+      "present": 130,
+      "students": 165,
+      "agents": 176,
+      "events": 2088,
+      "remarks": 923,
+      "kinds": {
+        "intro": 11,
+        "crit_start": 113,
+        "plot_queue": 7,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 588
+      },
+      "samples": {
+        "09:30": {
+          "floor": 0,
+          "building": 0,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 127,
+          "building": 128,
+          "crit": 17,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 77,
+          "building": 80,
+          "crit": 5,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 1.54,
+        "C4": 39.59,
+        "C6": 0.27,
+        "F1": 18.05,
+        "F2": 1.26,
+        "F4": 6.15,
+        "F8": 0.11
+      },
+      "suggestions": [
+        "C1 LOW",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 269,
+        "meanWait": 7,
+        "maxWait": 43
+      },
+      "plotter": {
+        "jobs": 7,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 1,
+      "ticks": 68400,
+      "leaveMean": "20:16",
+      "leaveMeanS": 72987.15342998791,
+      "arriveMin": "11:00",
+      "situationTitle": "a weekend-like day",
+      "fails": [],
+      "ok": true,
+      "effect": "a weekend-like day"
+    }
+  ],
+  "policies": [
+    {
+      "label": "2026-10-15 paper at all hours",
+      "date": "2026-10-15",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {
+        "paperAllHours": true
+      },
+      "present": 145,
+      "students": 165,
+      "agents": 176,
+      "events": 2973,
+      "remarks": 1414,
+      "kinds": {
+        "intro": 3,
+        "crit_start": 42,
+        "plot_queue": 104,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 957
+      },
+      "samples": {
+        "09:30": {
+          "floor": 26,
+          "building": 26,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 107,
+          "building": 112,
+          "crit": 6,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 105,
+          "building": 109,
+          "crit": 4,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 2.19,
+        "C4": 53.91,
+        "C6": 0.27,
+        "F1": 16.65,
+        "F2": 1.38,
+        "F4": 6.78,
+        "F8": 4.15
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 451,
+        "meanWait": 25,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 104,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 9,
+      "ticks": 68400,
+      "leaveMean": "21:33",
+      "leaveMeanS": 77586.09655172414,
+      "arriveMin": "07:00",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    },
+    {
+      "label": "2026-10-13 shop closed",
+      "date": "2026-10-13",
+      "situation": "none",
+      "movement": "everyday",
+      "seed": 2026,
+      "policy": {
+        "shopOpen": false
+      },
+      "present": 176,
+      "students": 165,
+      "agents": 176,
+      "events": 3867,
+      "remarks": 1905,
+      "kinds": {
+        "intro": 11,
+        "crit_start": 159,
+        "plot_queue": 17,
+        "paper_out": 0,
+        "desk_move": 0,
+        "move_veto": 0,
+        "conversation": 1184
+      },
+      "samples": {
+        "09:30": {
+          "floor": 45,
+          "building": 46,
+          "crit": 0,
+          "event": 0,
+          "review": 0
+        },
+        "14:30": {
+          "floor": 12,
+          "building": 176,
+          "crit": 2,
+          "event": 0,
+          "review": 0
+        },
+        "19:00": {
+          "floor": 124,
+          "building": 126,
+          "crit": 16,
+          "event": 0,
+          "review": 0
+        }
+      },
+      "metrics": {
+        "C1": 22.48,
+        "C3": 2.38,
+        "C4": 57.7,
+        "C6": 0.26,
+        "F1": 16.82,
+        "F2": 1.47,
+        "F4": 8.63,
+        "F8": 0.36
+      },
+      "suggestions": [
+        "C1 LOW",
+        "F2 HIGH",
+        "WC TRIPS"
+      ],
+      "moves": [],
+      "lift": {
+        "boarded": 550,
+        "meanWait": 44,
+        "maxWait": 151
+      },
+      "plotter": {
+        "jobs": 17,
+        "outages": 0
+      },
+      "stuck": 0,
+      "insideAtEnd": 10,
+      "ticks": 68400,
+      "leaveMean": "21:13",
+      "leaveMeanS": 76428.89772727272,
+      "arriveMin": "07:28",
+      "situationTitle": "none",
+      "fails": [],
+      "ok": true
+    }
+  ],
+  "determinism": {
+    "same": true,
+    "a": {
+      "events": 2944,
+      "remarks": 1395,
+      "moves": [
+        "13:00 exposure",
+        "13:00 kitchen",
+        "13:30 exposure",
+        "17:30 queue"
+      ],
+      "metrics": {
+        "C1": 38.01,
+        "C3": 2.22,
+        "C4": 52.7,
+        "C6": 0.27,
+        "F1": 16.3,
+        "F2": 1.45,
+        "F4": 6.57,
+        "F8": 7.72
+      }
+    },
+    "b": {
+      "events": 2944,
+      "remarks": 1395,
+      "moves": [
+        "13:00 exposure",
+        "13:00 kitchen",
+        "13:30 exposure",
+        "17:30 queue"
+      ],
+      "metrics": {
+        "C1": 38.01,
+        "C3": 2.22,
+        "C4": 52.7,
+        "C6": 0.27,
+        "F1": 16.3,
+        "F2": 1.45,
+        "F4": 6.57,
+        "F8": 7.72
+      }
+    }
+  },
+  "term": {
+    "rows": [
+      {
+        "seed": 2026,
+        "normal": 0.19,
+        "preMid": 0.42,
+        "preFinal": 0.44,
+        "hoursNormal": 46.28,
+        "hoursPreMid": 62.34,
+        "allNighters": 20
+      },
+      {
+        "seed": 2027,
+        "normal": 0.15,
+        "preMid": 0.39,
+        "preFinal": 0.4,
+        "hoursNormal": 44.88,
+        "hoursPreMid": 61.47,
+        "allNighters": 20
+      },
+      {
+        "seed": 2028,
+        "normal": 0.24,
+        "preMid": 0.5,
+        "preFinal": 0.48,
+        "hoursNormal": 45.29,
+        "hoursPreMid": 62.3,
+        "allNighters": 29
+      },
+      {
+        "seed": 2029,
+        "normal": 0.18,
+        "preMid": 0.42,
+        "preFinal": 0.41,
+        "hoursNormal": 45.15,
+        "hoursPreMid": 60.22,
+        "allNighters": 17
+      },
+      {
+        "seed": 2030,
+        "normal": 0.16,
+        "preMid": 0.43,
+        "preFinal": 0.41,
+        "hoursNormal": 45.93,
+        "hoursPreMid": 61.32,
+        "allNighters": 17
+      }
+    ],
+    "means": {
+      "normal": 0.18,
+      "preMid": 0.43,
+      "preFinal": 0.43,
+      "hoursNormal": 45.51,
+      "hoursPreMid": 61.53
+    },
+    "fails": []
+  },
+  "failures": []
+}

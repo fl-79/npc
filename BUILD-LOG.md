@@ -1,972 +1,2107 @@
-# Build log: studio day
+# Build log: NPC V2
 
-What was asked, what came back, what was kept, changed or rejected, and why.
+What was asked, what was built, what was rejected or left open, and what was checked.
+Paths are relative to `Tool-V2/` unless written in full.
 
-## 2026-10-19 to 2026-10-20: concept pivot and the plan
+## 2026-11-03: geometry export and the first 3D pixel view
 
-**Asked.** The tool is no longer "moments in a building's life" with scenario comparison. It is
-the experience of a space by agents under a use, design goals and occupant types; then refined to
-subjective, varied feedback with personality parameters, game-like pacing, the plan as the
-stage, play/pause/stop/loop, one simulation at a time.
+**Asked.** Rebuild the tool as V2 from the Revit model (`260630 - Lasserre.rvt`, Revit 2027.1)
+through pyRevit. At this stage only verify that the model can be read and shown in the pixel-art
+game style: a 3D view with orbiting and a navigation panel. Check the geometry for collisions and
+the rooms for boundary problems. Flag anything uncertain; never invent architecture.
 
-**Input.** A 2D plan DXF of Lasserre Level 3 exported from the user's Revit file (millimetres,
-AIA layers, no room polylines because Rooms are not placed in Revit).
+**Read first.** `Handover/V2-HANDOVER.md`, `Handover/V2-export-brief.md`,
+`Handover/V1-graphics-and-plan-geometry.md`.
 
-**What came back from the plan check.** Walls are double lines with cavities; the facade
-pilasters are drawn only by the floor edge; the curtain wall has louver blocks in its gaps; door
-blocks close their openings; one partition (south office to southeast classroom) is missing.
-Rooms could not be polygonised from wall lines directly. Kept: close everything into solids by
-buffering 22 cm and shrinking 12 cm, then take enclosed free-space regions as rooms. Rejected:
-re-exporting with room polylines before building (the user wanted to proceed and correct the
-plan as we go). The user confirmed ten numbered spots (offices, stair doors, service chase,
-desks, glazing, kitchen partition, computer stations, classroom, 3D printers, photography) and
-the Good Times bar; these are in `inputs/level3-plan-config.json`.
-
-## 2026-10-20: first build
-
-**Asked.** Build the tool on this plan: three years, four sections per year, 12 to 15 students
-each (count the desks), one prof per section circulating for desk crits, 13:30 to 18:00 with a
-slow trickle out, Friday with a share at Good Times from 18:30, varied characters with working
-styles and breaks, an interface that stays friendly with that many people, remarks that stay
-easy to read, minimal style first.
-
-**Built.** `tool/`: Vite app, canvas stage, no framework.
-- `scripts/dxf_to_plan.py` turns the DXF into `public/plan/level3.json`: 17 rooms, 11 doors,
-  499 furniture pieces, 175 desks with seats from the nearest chair, 12 sections by balanced
-  k-means on desk positions, five interior columns.
-- `nav.js`: 25 cm grid, walkable inside rooms minus furniture, door openings carved across the
-  wall rim, A* with string pulling. All 175 seats, the kitchen, the printer room and both stair
-  doors are mutually reachable (checked in the browser).
-- `cast.js`: 175 students and 12 profs with six traits, a style, arrival, leaving time, Good
-  Times yes/no, break rhythm. Seeded.
-- `sim.js`: state machines for students (desk, break kinds by style, out and back, leave,
-  bar) and profs (nearest-first round, wait and skip, kitchen, second round, leave); mood from
-  weighted events; crowding by neighbour count while walking; noise as distance to the bar
-  after 18:30; snapshots every two simulated minutes so scrub, stop and loop replay exactly.
-- `remarks.js`: template remarks per event and personality, each with a "because" fact; reviews
-  with a computed rating.
-- `stage.js`, `ui.js`: plan, discs by year, mood as fill, spotlight with trail and path, cast
-  filters, feed filters, measures in the top bar, transport bar with speed and scrubber, Good
-  Times share and seed, run download.
-
-**What it showed on seed 11, 35% Good Times.** 13:53: 151 on the floor, profs starting their
-rounds. 15:07: 166 on the floor, 130 at desks, 11 in crit, 13 on break. 19:30: 65 at Good
-Times, 121 gone home. Profs skip desks that are empty during a kitchen or pin-up break, and the
-students remark on the missed crit when they return.
-
-**Bugs found in the browser and fixed.** The remark generator received the clock instead of
-the random generator (argument order). Door openings were isolated by the buffered rim of
-their own bounding box; fixed by carving the opening across the wall. Returning people were
-labelled "off the floor" at the stair door; now named by the nearest door.
-
-**Rejected for now.** Agent-to-agent avoidance (crowding is measured instead); reading the DXF
-in the browser (a Python step is simpler and runs once); the Claude API for remarks in this
-build (no key on the machine yet; templates make the pipeline testable without cost).
-
-**Still unknown.** Whether 35% is the right Good Times share; the mood weights; whether profs
-really do two rounds; whether the bar area east of the counter is where people actually stand.
-Three spots on the plan remain unconfirmed (see the config).
-
-**Next.** Claude API step for remarks and reviews (one call per event batch, logged with model
-and prompt version), then the interface style pass.
-
-## 2026-10-20, later: remarks about the space, needs, the food line, follow mode, learning
-
-**Asked (user session 2, Felicia).** Comments should be about the design of the space, not the
-activity. Isolate and follow one person to avoid information overload, or group people by
-preference. A line for food should form before Good Times opens; think of the obstacles and
-lingering each activity needs. Each agent acts independently on its own needs. Lunch traffic
-should produce its own comments. Running again should differ because agents act slightly
-differently and learn the space.
+**Setup found on the machine.** Revit 2027.1 open on the model (drafting view `0000_OPEN/SAVE
+VIEW`), pyRevit 7.0.0 loaded with the V1 `NPC.extension` (one button, Room Check). Python 3.14
+with shapely and numpy, Node 24. The Revit ribbon is reachable from outside through Windows UI
+Automation (tab buttons and pushbuttons expose an Invoke pattern), so pyRevit Reload and the NPC
+buttons can be clicked from a script without a hand on the mouse.
 
 **Built.**
-- Needs model (`sim.js`): coffee, hunger, movement, company, print, filling at trait- and
-  style-dependent rates; the fullest need over its threshold decides the next break. Most
-  people arrive hungry, so the kitchen is busy for the first hour.
-- Capacity and lingering: kitchen crowded above seven; printer room holds two, others wait in
-  the hall; a pin-up board needs a free metre in front; door traffic counted per five minutes.
-- Food line from 18:10 along slots from the bar counter down the central aisle; opens 18:30;
-  one served every 18 to 32 s; people whose desks the line passes get a remark.
-- Remarks rewritten about the space with the measured fact embedded (distance to the kitchen,
-  people per m2, aisle clearance, line length and wait, people through a door); each remark
-  has a topic; most activity remarks were cut or made rare.
-- Interface: "follow someone" (dim others, feed to that person, day so far), cast groups
-  (focused, social, restless, noise- and crowd-sensitive, Good Times), feed by topic with
-  counts and sample lines, topic click shows where remarks were made on the plan, run counter,
-  "run again".
-- Learning (`learn()` in `sim.js`): familiarity, visited places, lunch shift after a crowded
-  kitchen, earlier line join after a long wait, a congestion cost map for crowd-sensitive
-  people. "Run again" applies it; "loop" and "stop" replay exactly.
+- `pyrevit/NPC.extension` replaces the V1 extension in `%APPDATA%\pyRevit\pyRevit_config.ini`
+  (`userextensions`); the previous config is kept as `pyRevit_config.ini.2026-11-03.bak`. Three
+  buttons on the NPC tab, Model panel:
+  - Room Check: the V1 script, writing to `exports/rooms.json` here.
+  - Export Model: `exports/model.json` (levels, grids, walls with centrelines and widths,
+    doors and windows with host and offset along it, rooms with boundary loops and the elements
+    that bound them, columns, curtain walls with mullion lines and panel boxes, floors with
+    top-face loops, stairs with runs and landings, railings, furniture and every other family
+    instance with point, rotation and bounding box, other building elements, shaft openings,
+    model lines) and `exports/meshes.json` (every exported element triangulated from its Revit
+    geometry at Medium detail). Metres, origin at the Project Base Point, +Y is Project North.
+    Elements in secondary design options are skipped and their ids listed in `meta`.
+  - Clash Check: `exports/collisions.json`, every pair of model elements whose solids overlap,
+    with the overlap volume (solid boolean intersection) and the overlap box. Pairs that are
+    meant to overlap (opening and host wall, nested family and parent, siblings in one family,
+    panel or mullion and curtain wall, railing and stair) are left out. Under 0.0005 m3 counts
+    as a touch, not an overlap.
+- `scripts/run_revit_button.ps1`: clicks a pyRevit button through UI Automation and waits for
+  the script's done-marker file.
+- `scripts/validate_export.py`: checks the export outside Revit (counts per level, room loops
+  closed and valid, rooms overlapping on a level, blank names and numbers, duplicate numbers,
+  doors and windows without a host, elements without a level or without geometry, stair and
+  shaft names across levels) and writes `exports/checks.json` for the viewer.
+- `viewer/`: Vite and three.js, no framework. Low-resolution render with nearest-neighbour
+  upscale and depth and normal edges (`RenderPixelatedPass`), a toon material with stepped
+  shading, an optional limited-palette pass with ordered dithering. Orbit, pan and zoom; level
+  filter with a cut-above mode; category toggles; room floors tinted and labelled; a checks list
+  (collisions, room problems) that focuses the camera and highlights the elements; click an
+  element for its id, category, family, type and level. Fonts are the V1 Silkscreen and Nunito
+  files, loaded locally.
 
-**What it showed.** Seed 11, 35% Good Times, three runs: lost on the way 9, 0, 0; kitchen
-crowded remarks 83, 65, 67; printer full 24, 21, 17; the line starts 18:10, 17:59, 17:55 and
-the mean wait rises 21, 30, 31 min because people learned to come earlier. 42 in the line at
-its longest (the slot cap), 51 served by 19:30, 59 at the bar at close.
+**Checked.** Export runs in about 40 s (2846 meshes, 3.24 M triangles, 117 MB of JSON);
+Clash Check in 150 s over 3157 elements. The viewer loads the full export and holds a steady
+frame at pixel size 3. Level solo, section cut, room labels, check framing, element picking,
+perspective switch and the palette pass were exercised in the browser.
 
-**Bugs found and fixed.** Fractional step sizes left the clock off the 2 s grid so minute ticks
-fired sporadically; now whole steps only. The browser pane throttles animation frames when
-hidden; a frame may now advance up to one real second so playback keeps its speed. Kitchen
-remarks spammed (294 in one run) because that event bypassed the cooldown; now once per person
-with a higher threshold and fewer coffee trips. Aisle crowding never fired; threshold lowered
-and anyone lingering in the aisle counts. Bar remarks were suppressed by the cooldown right
-after being served.
+**What the export says about the model (2026-11-03).**
+- Levels: Basement -3.69, Level 1 0.00, Level 2 4.01, Level 3 7.55, Level 4 11.66, Roof
+  14.76 m. Plan extent about 22 x 49 m. Grids 1 to 9 and A to D.
+- The whole model sits 614 m below Revit's internal origin, and the Project Base Point and
+  Survey Point were moved down with it (both at internal z = -614 m). The export is relative
+  to the Project Base Point, so Level 1 reads 0. Revit's `Level.Elevation` already follows the
+  base point here; the export uses `Level.ProjectElevation` so levels and geometry share one
+  frame (the first run had levels 614 m above the geometry for that reason).
+- 403 walls (159 curtain walls carrying 1357 mullions and 472 panels, 136 of them empty or
+  replaced by doors), 124 doors all hosted, 0 windows, 202 columns, 5 floors, 8 stairs (two
+  cores, four flights each, 3 runs and 2 landings per flight), 18 railings, 581 furniture and
+  fixture instances, 1 roof with geometry and 1 without, 1 ceiling, 1 fascia. No links, no
+  secondary design options. Phases Existing and New Construction; rooms are in Existing.
+- Every wall type has function Exterior, so interior and exterior cannot be told apart from
+  the type; a later pass can use room boundaries instead.
+- Rooms: 77, all placed and enclosed, none redundant, numbered 1 to 77 (Level 3: 1 to 11,
+  Level 1: 12 to 18, Level 2: 19 to 40, Level 4: 41 to 69, Basement: 70 to 77). Every room
+  is still named `Room` and no department is set. Revit computes room areas at the wall
+  centre (Area and Volume Computations), the exported loops are the finish faces, so loop
+  areas are a uniform 95% of Revit's; five small rooms (5, 6, 31, 66, 67) sit at 87 to 90%,
+  which the perimeter-to-area ratio of a small room explains. Six rooms have one hole; one
+  (74, Basement) has eight.
+- Furniture is on Level 3 almost alone (543 of 581 instances); Level 2 has 35, the others
+  one each. 16 in-place families (kitchen counters, bar edge, benches, recycling, pendants)
+  are on Level 3; they have geometry but no location point.
+- Collisions: 702 overlapping pairs, 541 touching pairs. 508 of the overlaps are walls,
+  mullions, panels, columns and doors running through the floor slabs; the Level 2 and
+  Level 4 slabs are 864 mm thick and the Level 4 slab is a plain rectangle with two holes.
+  42 are stacked columns overlapping the column below (Level 1 on Basement, Level 2 on
+  Level 1). 50 are desks overlapping desks, 5 desks in walls, 4 casework in furniture, 4
+  columns in furniture, 4 columns in doors, 4 stairs in walls, 4 walls in the ceiling. 40
+  louver pieces overlap curtain members, which is expected.
+- The 16 stair railings return no solid geometry at Medium or Fine detail; one roof
+  (`Roofs 1`) has none either. Both are listed, not drawn.
 
-**Rejected.** Agent-to-agent avoidance (still measured, not resolved). Reading the facade
-orientation from Revit for the glazing remarks; assumed east-west and flagged in the because
-line until confirmed.
+**Rejected.** Writing the export in the room-check button (a second button keeps the quick
+check quick). Grouping meshes by base level only (multi-storey columns and the slab above
+then vanished or capped a soloed level); meshes are grouped by the levels they span and a
+section cut does the rest. A global renderer clip (it also clipped highlights). Dithering the
+empty background.
 
-**Still unknown.** Whether 42 slots and 25 s per serving match Good Times; whether seven is the
-right kitchen crowd threshold; whether the second prof round happens in practice.
+**Left open, for the user.** Room names in Revit. Whether the 864 mm slabs and the walls
+through them are intended. The stacked duplicate columns. The desk overlaps on Level 3 (the
+V1 markups removed some of these; an `edits.json` keyed by id is the place for them). The
+railings without geometry. The 614 m offset of the model from the internal origin.
 
-**Next.** Claude API for remarks and reviews against the same events and facts; then the style
-pass.
+## 2026-11-03, later: slab tops and the two views
 
-## 2026-10-20, later still: one colour for students, and a summary with next steps
-
-**Asked.** Students need not be distinguished by year. Add a panel summarising the comments and
-next steps for improving the design and layout; with each run the comments may get more
-specific.
-
-**Built.** Students are one colour (profs black); year groups dropped from the cast filters,
-sections kept. `summary.js` turns a run into headline numbers, topics (people, remarks, where),
-and up to six next steps, each from a rule on computed facts: kitchen peak and far sections,
-printer waits, bunch-up places by nearest section and the narrowest clearance, missed crits,
-food line length, wait, start time and whether it passes working desks, bar peak and density,
-wrong-end trips, desks along the glazing, door peaks. The step text grows with the run number:
-problem and place (run 1), trend across runs from the cast's history (run 2), sizing of the
-change (run 3, with walking distances to a proposed point computed on the plan). From run two,
-people who learned something say so ("Joined the line 10 minutes earlier and still waited 33").
-
-**What it showed (seed 11, 35%).** Runs 1 to 3: kitchen peak 34, 30, 24; line start 18:10,
-17:58, 17:55; mean wait 21, 29, 33 min; wrong-end trips 9, 0, 1; bunch-ups 41, 62, 79.
-
-**Still unknown.** Bunch-ups rise across runs: the learned congestion map reroutes
-crowd-sensitive people and the shorter string-pulling on those routes makes them linger near
-desks. Either the map should decay or the detours should be smoothed; to decide after watching
-a run. The step texts are still templates; the Claude API step should write them from the same
-facts.
-
-## 2026-10-20, evening: the drawing
-
-**Asked.** Doors looked inaccessible (a black box with a red line). Show windows and doors
-properly and make the furniture more defined. Install the "hairline" skill from GitHub to help
-with the linework.
-
-**Checked first.** Hairline (github.com/lucasmarkes/hairline, MIT) is a library of isometric,
-pointer-reactive line figures for web pages plus a skill that draws new figures in that style.
-It has no guidance on architectural drawing, so it was not installed; the user can add it with
-`npx skills add lucasmarkes/hairline` if wanted for something else. Its one transferable idea,
-stroke widths fixed in screen pixels at any zoom, was already the case here.
-
-**Why the doors looked wrong.** To derive rooms, each door's bounding box had been added to the
-wall network before thickening, which left a thin solid frame around every opening; the stage
-painted that frame like a wall and drew an orange centre line across it. Routing was never
-affected (openings are carved in the grid); only the picture said the door was shut.
-
-**Built.** The converter now exports the DXF's actual linework, simplified: wall lines, floor
-edge, curtain wall panels, mullions and louvers, stair treads and handrails, each door block's
-frame, leaf and swing arc, and each furniture piece's outline with a vertex budget per kind
-(chairs 70, desks 60, counters 120). Arcs and splines are flattened at 4 mm so the file stays at
-750 KB. A separate poché is built from walls and floor edge only, with the door openings
-subtracted. The stage draws in plan hierarchy with fixed screen-pixel weights: room tone,
-furniture fill then furniture lines (0.6 px, chairs 0.5 px), stairs, glazing (0.75 px), floor
-edge, poché, columns, door leaves and swings (0.7 px), then room names at a point inside the
-room. Static layers are cached in an offscreen canvas per view and redrawn only on pan or zoom;
-people, the food line and topic markers draw on top each frame. Chairs collapse to a circle
-below a zoom threshold so the overview stays clean. A stacked layout now applies below 1000 px.
-
-**Rejected.** Drawing the thickened network as walls (too heavy, and it hid the openings).
-Drawing furniture as boxes (the question was exactly that they were undefined).
-
-## 2026-10-20, night: run-first flow, brief to spec, goals, jump links, seeds
-
-**Asked.** Run the simulation once with a Claude-specified distribution of people and
-personalities, get the list of design recommendations, then play back or run a new one.
-Represent the group so it stays editable while individuals stay editable too, with a text
-prompt for the design goals and the group to test.
+**Asked.** Fix the walls and columns that intersect the slabs: they should be joined to the
+slab underside. Remove orbiting; the viewer gets two views only, an isometric and a game view
+like the classic pixel examples the user attached (a 2:1 isometric room; a top-down RPG plan
+with every south face standing up).
 
 **Built.**
-- `spec.js`: the group spec (use, goals with metrics, occupant types with counts, patterns,
-  shares and trait ranges, pinned individuals). `makeCastFromSpec` deals desks by seed and
-  draws traits within each type's ranges; pinned overrides survive regeneration. A local parse
-  turns a brief into a spec without the API (numbers, shares, goal sentences by keyword).
-- Brief to spec via the Claude API: a Vite dev-server middleware (`/api/spec`) reads the key
-  from `.env`, calls `claude-opus-5-5` with a JSON schema output format and the server-side
-  fallback default, and returns the spec plus model, prompt version, usage and request id for
-  the manifest. The browser never holds the key. `/api/status` tells the UI whether a key exists.
-- `runner.js`: computes a whole afternoon in 20-minute chunks so the page stays responsive,
-  for one to five seeds; the first seed is the playable run; stability counts how often each
-  step title and each goal verdict appears across seeds.
-- `summary.js`: goals from the spec answered with measured facts and verdict thresholds; every
-  step and goal carries a jump (time, place, person) into the recording.
-- Interface: left panel tabs Setup (brief, spec table, goals, distribution, individuals) and
-  Cast; a Run button with a seed count and progress; the Summary opens after a run with goals,
-  stability and jump links; editing and pinning on the person card; the feed shows remarks up
-  to the playback clock so playback reads as live.
-
-**Checked in the browser.** Two seeds (11 and 112) computed; all six steps held in 2 of 2;
-goal verdicts aggregated. A jump moved the playback to 18:53 at the bar. Playback after a run
-starts from 13:30 and the feed fills with the clock. The local parse of a brief with "about
-150 students" and "a third stay for Good Times" produced 60/51/39 students and a 33% share.
-No key on the machine, so the Claude path is written against the documented request shape but
-not yet exercised.
-
-**Rejected.** Running the API per remark (one spec call per cast is where the model adds
-something templates cannot; the facts and ranking stay computed). Storing the key in the
-browser.
-
-**Still unknown.** The verdict thresholds in `evaluateGoals` are first guesses. A hidden
-browser pane throttles the chunked computation to about one chunk per second; in a visible tab
-a seed takes about 15 s.
-
-## 2026-10-21: Good Times as social behaviour, annotations, archetype cards, thoughts box
-
-**Asked (user session 3, Felicia).** During Good Times people should split off to sit, trickle
-out, and some should set up. The brief should be the use, short; design goals second; the group
-as preset archetypes with an assumed distribution, an edit button, new archetypes and a focus,
-not exact counts. The summary should be concise, with the areas toggled and the findings as
-annotations on the plan with detail in the panel. A small box of incoming thoughts while the
-program runs, paced so it is not overstimulating.
-
-**Built.**
-- Good Times (`sim.js`): seats from the plan's sofas, benches and classroom chairs plus the
-  desks of people who left; a setup crew of three from 17:45 with the clearance at the counter
-  measured; after 6 to 16 minutes at the bar people sit if a seat is free within 15 m (friends
-  follow to the same cluster), go back to a desk for a print, or from 19:00 leave in a rising
-  wave; seats are freed when people move on. New remark kinds: setup, no seat, sat down,
-  splinter, late desk, leaving the party; new topic and goal metric "seating"; a "Seats within
-  reach of the bar" step. The bar enclosure has no door in the export, so the crew works beside
-  the counter when it cannot be reached; unreachable seats are remembered and skipped.
-- Annotations (`stage.js`, `ui.js`): each next step is drawn as a numbered amber disc at the
-  place its jump points to, with a short label at closer zoom; area chips in the summary show or
-  hide topics; clicking a disc or a step line expands it. The summary itself is now one line per
-  goal and per step, with evidence, jump and two quotes on expand, topic counts in one line, and
-  the runs table folded.
-- Archetype cards (`ui.js`): share bars with rebalancing, counts in small type, edit panel,
-  focus (dims others on the plan, filters feed and thoughts), remove, and "add" from a sentence
-  with pattern, mobility and trait hints parsed locally. The use and the goals are separate
-  fields; "propose the group" sends both to the brief-to-spec step.
-- Thoughts box: during compute one sampled remark every three seconds with the running count;
-  during playback at most one every three seconds at the clock's pace, preferring the followed
-  person or the focused group.
-
-**What it showed (seed 11, local-parse spec of 150 students).** 40 seats near the bar (21
-within 15 m); 55 people sat during the evening, none failed to find a seat because the empty
-desks became the lounge; groups ended in the northeast classroom (15), the east desk rows (15)
-and on the sofas in the open floor (21); 37 left Good Times before 19:30; the crew had 0.5 m
-clear at the counter and 2.6 m2 behind it; the bar peak fell from about 60 standing to 22.
-
-**Bug found and fixed.** The crew's route into the closed bar enclosure failed and was retried
-every step, which stalled a run; routes are now checked first and fall back.
-
-**Rejected.** Exact counts as the main control (kept visible and editable, but the share bar is
-the interface). Making the API write remarks (still one call per group spec).
-
-**Still unknown.** Whether the empty desks should count as seats for the goal; whether 15 m is
-the right reach; mobility has no routing effect yet.
-
-## 2026-10-21, later: the feed, the gap before Good Times, qualities, profs
-
-**Asked (user session 4, Felicia).** Nothing shows in the feed. People jump from finishing
-class to Good Times; those staying for the evening would stay in the space. The time of day
-should be near the play button; the where-people-are counts matter less. Focused is not
-exclusive of noise-sensitive: qualities should overlap and combine, and some could be
-studio-wide, such as a deadline for a section. Profs circulate for desk crits in a changing
-order and do not spend much time in the kitchen or at Good Times; the offices at either end
-hold profs with an office routine.
-
-**Why the feed was empty.** Playback restarts the recording from 13:30 and regenerates the
-remarks live, so the stream only filled as the clock advanced, and the first remarks are the
-quiet kind. Fixed: the run keeps its full recording and the feed, the thoughts box and the
-summary read from it up to the playback clock.
-
-**Built.**
-- Good Times goers no longer leave and reappear: at their finishing time they wind down on the
-  floor (visits, kitchen and pin-up more often) until the line forms; a quiet remark says so.
-- Studio qualities in the spec (`studio`): deadline pressure 0 to 1 and sections under a
-  deadline (fewer breaks, later leaving, more print jobs, fewer at Good Times, slower needs);
-  shares who are noise-sensitive, crowd-sensitive and new to the building, drawn per person
-  independently of the pattern. Sliders and section chips in Setup; the brief-to-spec schema
-  and prompt carry them; the local parse reads "deadline" and "sections C, D".
-- Profs: pick among the three nearest unvisited desks (order varies by run), alternate the
-  entry stair by run, no kitchen round, never at the bar. Two office profs (role `office`) sit
-  in the north and south offices with an office routine: coffee, a walk past the pin-ups, a
-  meeting out, leave by 17:45. Drawn as squares like the profs.
-- Clock moved beside the play button; the top bar keeps only people on the floor, at Good
-  Times and gone home.
-
-**Bugs found and fixed.** The office profs drew names from the same twelve surnames the profs
-had used, so the unique-name loop never ended and the page hung. The printer-room wait
-teleported people to a spot that could land in the photography room, from which no route
-exists; every later search failed and a run took 40 s. Now the wait is a routed walk to a
-spot outside the door, and a full afternoon computes in about 2.5 s.
-
-**What it showed (seed 11, 150 students).** 47 winding down at 18:00 and no Good Times goer off
-the floor; all twelve profs home by 18:00 with 7 to 13 crits each; 53 sat during the evening;
-32 left the party before close; bar peak 28.
-
-**Still unknown.** Whether the wind-down should also mean "hanging around" at the sofas before
-the line; what the office profs should say about the offices (no office-specific remarks yet).
-
-## 2026-10-21, evening: pixel-art view
-
-**Asked.** A 2D game look like the noodle shop and bakery references: plan view with the
-oblique that shows elevations head-on; the interface in the same style; conventions from
-Pokemon, Zelda and Stardew Valley for desks, chairs, bars, model clutter and pin-up boards.
-Evaluated first: pixel art judged the most feasible (the plan is already a grid, sprites are
-small and procedural, people are cheap), isometric possible later, the painterly reference
-kept for the chrome rather than the world.
-
-**Built (`pixel.js`, a second mode of the stage).** A 16 px tile is half a metre. Tiles are
-classified from the plan (void, floor by room style, wall, glass, door); walls get a dark cap
-in plan and a three-tile south face with a baseboard, glazing a tall pale face with mullions,
-the kitchen a checker floor, the offices wood, the halls grey, with stair treads from the
-linework. Furniture sprites are procedural per kind with a top and a front face: desks with
-sheets, a laptop or a model and a mug, chairs with a back, pin-up boards as tall faces with
-pinned sheets, counters with bottles, sofas, printers, shelves. People are 16 by 24 sprites
-with four facings, a two-frame walk and a seated pose, colours per archetype and profs in a
-jacket; mood fades the sprite. Drawing is depth-sorted by tile row (walls and furniture are
-pre-rendered into one strip per row) so a person below a wall is in front of it and one above
-is hidden. Everything is drawn at native size and scaled by whole numbers; the wheel steps the
-zoom. The panels switch to an RPG box style (thick borders, cream fill, monospace, chunky
-buttons) with the view. The plan drawing stays as the other mode, since tile snapping moves
-walls by up to a quarter metre.
-
-**Still to come.** Sprites drawn from photos of the actual studio (desks, pin-up boards, the
-bar and keg, the kitchen, sofas) replacing the procedural set through a sprite sheet; a pixel
-font bundled locally; the thoughts box as a speech bubble in the world; door faces on
-horizontal walls.
-
-## 2026-10-21, night: doors, windows, offices, bubbles, cards, layout
-
-**Asked (user session 5, Felicia).** Offices, doors and windows had been lost in the pixel view
-and the outside elevation looked off; infer a typical office layout; show doors opening and
-closing at access points; remarks as game-like speech bubbles in a different colour; drop
-"sections under a deadline"; office profs adjustable like the other archetypes with the same
-card components, with warnings when a mix makes no sense; the archetype name box obstructed the
-name; describe types in a sentence and a short list of qualities (access, sociability) rather
-than percentages; goals are access to amenities and comfortable working and collaboration
-space; what is tested is a typical Friday with a total number of people; the Feed collapsible
-rather than a tab so it visibly feeds the suggestions; more behaviour detail in the help; keep
-the pixel view with the plan view kept as a backup; make Cast and "follow someone" clearer and
-less entangled with Setup.
-
-**Built.**
-- Doors (`pixel.js`): every door knows its wall row; in horizontal walls it is a face with a
-  frame, a leaf capped at a metre and any extra width drawn as a glazed sidelite; the leaf
-  slides open when anyone is within a metre and closes after. In vertical walls the leaf is seen
-  in plan, closed across the opening and swung into the room when open, between two frame posts.
-- Windows: glass tiles on side walls draw as a pale window band in the cap, so the long facades
-  read as glazing; south-facing glass keeps the tall face. The end walls seen from outside are
-  concrete with a pilaster every three metres and a plinth. A true elevation would need a
-  straight-on photo or an elevation DXF; asked for either.
-- Offices: `officeLayout` in `plan.js` infers a desk against the wall away from the door, the
-  chair facing it, a shelf, a visitor chair, a cabinet and a plant, flagged inferred; the pixel
-  view draws them and the office profs sit on the inferred chair.
-- Speech bubbles (`stage.js`): remarks from the last two simulated minutes appear over the
-  speaker as pale-yellow boxes with a tail, in both views.
-- Cards: the same layout for every archetype (name, count with a slider, a sentence, a
-  qualities list, edit, focus, remove); warnings when one type is over 60 % of the studio, when
-  office profs outnumber offices, when profs do not match the twelve sections, or when there are
-  more students than desks. "Sections under a deadline" removed from the panel.
-- Layout: Setup alone on the left; People is a button in the top bar that opens a drawer over
-  the stage with the list, spotlight, follow, edit and pin; the Summary fills the right panel
-  with "follow someone" in its head and a "follow <name>" button on each expanded step; the Feed
-  is a drawer under the Summary, collapsed to the latest six remarks and opened to the stream
-  with the because-lines. Help rewritten with the behaviours and activities.
-- Goals: new metrics `access` (mean walk from a desk to the kitchen and the printers, desks
-  over 35 m from one of them) and `comfort` (tight desks, bunch-ups, people within earshot of
-  the bar); the defaults are now those two goals and a one-line use.
-
-**Checked in the browser.** No errors; offices furnished with the prof at the desk; windows on
-the facades; door with sidelite at the vestibule; feed drawer opens to 80 remarks; the first
-card reads as a sentence with a qualities list.
-
-**Still to come.** Real sprites from photos; an elevation for the end walls; mobility effects
-in routing; office-specific remarks.
-
-## 2026-10-22: walls first, legible palette, drawn glazing, plotters
-
-**Asked (user session 6, Felicia).** Walls should take precedence; many were disconnected
-(offices, kitchen, bar, service chase, stair cores, printer and photography rooms). Desks must
-not cover columns or walls. The wall colour was too close to the floor; the real floor is dark
-exposed concrete, and at this stage colour should serve legibility, not realism. Glazing
-looked like glass blocks and should be the pixel version of the plan drawing, glass and
-mullions. The plotters and printers by the north desks are what everyone uses, which matters
-programmatically.
-
-**Built.**
-- Tiles: a tile is wall if any of nine sample points falls in the wall solids (the centre test
-  let thin walls fall through the half-metre grid); wall tiles went from 244 to 499 and every
-  room reads closed. Furniture sprites are clipped against a wall mask (caps and faces) when
-  the strips are built, so nothing covers a wall or a column. Wall bodies are outlined only on
-  their outer edges.
-- Palette: dark exposed-concrete floor with faint joints, cream wall caps with a dark outline,
-  tan faces with a dark baseboard, mid-grey halls, darker kitchen checker, wood offices, a
-  near-black void outside. People and furniture keep their colours and now sit on a dark ground.
-- Glazing: facade glass tiles are no longer blocks; the plan's own glazing linework (panels,
-  mullions, louvers) is drawn on the floor layer as an ink frame with a glass-blue line, so the
-  long facades read as the drawing did. South-facing glass runs (the vestibule doors) keep a
-  tall face.
-- Plotters: `plan.plotters` are the printer-kind pieces outside the printer room (two plotters
-  and the big printer at the north end of the spine). Seventy percent of print trips go to a
-  plotter, with a wait and a remark when someone is already at it; the rest go to the 3D printer
-  room. The printers step in the summary names both.
-
-**Checked.** No errors; the north core, offices, kitchen and bar enclosure read as closed
-rooms; the plotters draw beside the vestibule wall; speech bubbles show over the kitchen crowd.
-
-## 2026-10-22, later: doors in their walls, lintels, glass doors, map export
-
-**Asked (user session 7, Felicia).** The south facade window had gone; a stray outline at the
-office doors; the facade glazing not attached to the columns; the printer and photography
-room doors still wrong; headers wanted over doors; desks apparently in front of the printer
-room door; the service chase not enclosed; kitchen doorways too narrow and without headers;
-the classroom by the kitchen unreadable at its access; the end office missing a header and its
-window; and whether obstacles need an outline or the cut line was the confusion.
-
-**Found by exporting the whole pixel map as a PNG** (new dev endpoint, outputs/pixel-debug).
-The stray lines were door-frame bars drawn a metre above the wall. Door tiles were never
-marked, because the opening is free space inside a room, so doors had no header and the wall
-read as broken. The chase corner fell between sample points on a 10 cm wall. The south "window"
-is a glazed curtain-wall door that only drew during playback. The pieces by the printer room
-door are the recycling bins and waste containers from the plan, not desks.
-
-**Built.** Wall sampling at 25 points per tile. Each door now finds the wall line it sits in
-(the bbox edge with wall tiles beyond its ends) and opens only that line; horizontal-wall doors
-keep the wall cap and the top of the face as a header, vertical-wall doors get a thin lintel at
-cap height; glazed doors draw as glass in a frame, the rest as wood with any extra frame width
-as a sidelite. Door-frame bars removed. Wall height reduced to two tiles so small rooms are not
-swallowed by faces. Glass faces drawn wherever the south side is open, outside included. The
-glazing linework is drawn at cap height so it meets the column caps, with a faint footprint
-on the floor. The export draws doors closed so the map can be checked without a run.
-
-**On outlines.** The cream cap is the cut line; with the dark floor it reads, and walls are
-outlined only on their outer edges. The confusion was the shifted cap plus missing headers,
-not the absence of outlines.
-
-**Still open.** Non-door openings narrower than a tile (the kitchen's 0.8 m gap) snap to one
-tile; a real elevation for the end walls; sprites from photos.
-
-## 2026-10-21: one-tile walls, headers that join, no holes, fonts
-
-**Asked (user session 8, Felicia).** Door headers were not connected to their walls; black voids in
-places; a chair under a column; the stair inner core overinflated; the stairwell glazing connected
-to nothing; a grey box under the exterior glazing; a pixel font for headings and a readable,
-game-like face for everything else instead of Courier New.
-
-**Found.** The headers broke because a door opened one row of a two-row-thick wall and the cap
-outline treated the door tile as "not wall". The black boxes were the cap row above a glass face
-(glass had no cap) and a few pockets of void the room polygons missed. Furniture was clipped by a
-global wall mask even when it stood south of the column, so the column showed through it. Thin walls
-took two tiles because any sample hit marked a tile. A north-south glass run drew a full face block
-at its ends.
-
-**Built (`pixel.js`, `stage.js`, `style.css`, `public/fonts/`).**
-- Walls: a tile is wall when the solids cover at least 40 % of it, or when it carries more wall than
-  each of its four neighbours (ties go west and north). Thin walls, the stair cores and columns are
-  one tile; thick walls stay thick. Wall tiles fell from 499 to 359.
-- Doors: the rows (or columns) of a door box where the wall continues past both ends are the wall's
-  thickness; the leaf hangs in the southernmost row, the rows behind it stay solid, and cap outlines
-  treat headers and lintels as wall, so a wall and its door read as one piece. The door is drawn at
-  its real width inside the tile opening; the rest is jamb, or glass for a door with a sidelite;
-  double doors have two leaves. Doors in north-south walls are a slot in the wall top with the leaf
-  seen in plan, since the floor along such a wall lies under the lifted cap.
-- Glass: a run's direction and the line's position in each tile are kept. East-west runs show a
-  face, reaching the top of the neighbouring caps where the outside is behind them. North-south runs
-  are seen edge on: a thin post at each end from the cap line to the floor, and a mullion or
-  pilaster at the end of a run is a post under its cap, not a box. Glass lines crossing floor at a
-  room edge count too, so the stair-hall glass walls have their posts.
-- Voids: pockets of void shut inside the building become floor and take the room of a neighbour.
-- Furniture: only a wall or column standing inside a piece's footprint is cut out of it; a piece
-  south of a wall is drawn later and stands in front, so a chair beside a column is whole.
-- Fonts: Silkscreen (pixel) for headings, the clock, tabs and buttons; Nunito (rounded, readable) for
-  everything people read, including speech bubbles. Both are SIL Open Font License files served from
-  `public/fonts/` (latin subsets from Google Fonts), so nothing is fetched at run time.
-
-**Checked.** Full-size map crops in `outputs/pixel-debug/` (full4, cA2 to cK): headers continuous
-over the stair, office, classroom and service-chase doors; no black pockets; the north office glass
-meets the cap tops; stair cores one tile; posts at the ends of the facade and stair-hall glass;
-desks and chairs whole beside columns; the lobby doors show as slots with leaf and sidelite.
-
-**Known limit.** In this oblique a person passing through a north-south door is hidden by the
-lintel for a tile or two; the four such doors are the lobby doors and the glass curtain-wall doors.
-
-## 2026-10-21, later: walls from centrelines, hosted doors, columns back, lunch styles, conditions note, speech boxes
-
-**Asked (user session 9, Felicia).** The markups were not being understood: walls must join at
-corners with no missing corners, shafts are rectangles of consistent thickness, doors are hosted by a
-wall and never float, glazing is hosted and attached, the exterior columns between the glazing had
-been removed and must come back, furniture that is wrong or awkwardly placed must be flagged or
-resolved rather than ignored. Also: not everyone who eats lunch needs the kitchen; the goals should
-speak generally of access to amenities and comfort of working in the layout; the studio qualities
-should read as generated from a text note about conditions affecting everyone; the feed and the
-thoughts box should look like an RPG speech box; the cut of the walls brighter.
-
-**Rejected (own earlier approach).** Tile voting with sample counts and local maxima. It could not
-give consistent thickness or closed corners, and the door-row scoring could not tell the hosting
-wall from a wall meeting it at a corner, so doors drifted a row or a column off their wall.
-
-**Built.**
-- Walls (`pixel.js build`): the wall solids are rasterised at 10 cm, thinned to one-pixel
-  centrelines (Zhang-Suen), each line end pushed back out to the solid's edge, and a tile is wall
-  when a centreline runs through it, when it is solid right through, or when it holds a column.
-  Every wall is one tile; corners and T-junctions close because the centrelines meet; the stair
-  cores, the service chase and the small rooms are clean rectangles.
-- Columns: solid cores at least 0.3 m from every edge and under a metre across are columns, found
-  with a distance transform on the same raster; the five interior columns are added from the plan.
-  Column tiles are never turned into glass, so the facade pilasters stand between the glazing
-  panels again with their caps and faces, and the glass line runs into them.
-- Doors: among the tile rows (or columns) a door box covers, the host is the one whose wall or
-  glass run continues past both ends of the opening (a wall meeting at a corner scores low). A run
-  of glass beyond the ends makes it a glass-hosted door, drawn on the glass line with posts and the
-  leaf, no cap block. The four lobby and curtain-wall doors are glass-hosted; the rest sit in walls
-  with headers.
-- Glazing: end posts only where nothing hosts the end; horizontal faces as before.
-- Furniture flags (`tool/scripts/check_furniture.py`): pieces overlapping a wall or column, chairs
-  with nothing to sit at, pieces within 0.6 m of a door, pieces outside every room, written to
-  `outputs/plan-check/furniture-flags.json` and copied beside the plan as `level3-flags.json`;
-  flagged pieces carry a red mark in the pixel view. 33 of 495 pieces are flagged; the ones that
-  matter are listed in the reply and below.
-- Lunch (`spec.js`, `sim.js`, `remarks.js`): each person has a lunch style: kitchen (3/8), food
-  brought back (2/8), out and back later (2/8), packed lunch at the desk (1/8); people who do not
-  use the kitchen bring food back instead. Out means 35 to 55 min off the floor; bringing food 12
-  to 22 min; at the desk 12 to 20 min seated. Two remark kinds, lunchOut and lunchDesk, with the
-  distance as the fact.
-- Goals: spec version 2 with the general wording (access to amenities; comfort of working in this
-  layout); a saved spec older than version 2 takes the new goals and use.
-- Conditions note (section 3): a text note about the day replaces the bare sliders; a keyword pass
-  (`parseConditions`) reads deadline, noise, crowding and the share new to the building, and the
-  sliders show what was read and can be nudged. The note goes into the brief sent to the API.
-- Speech boxes: a 9-slice pixel frame (stepped corners, grey offset shadow) on the thoughts box,
-  with a blinking cue, and on each feed remark; the canvas bubbles are white with a black frame and
-  shadow to match. Wall caps are now near white.
-
-**Flagged furniture (from the DXF, not changed).** A chair in the doorway of the double door to
-the service chase (F648, 19.6, -14.6; no desk near it). A 60x90 table in front of the photography
-room door, overlapping the wall (F792, 25.8, -27.1). Two desks within 0.6 m of the double door and
-the chase door (F353, F355, F357). Desks and plotters along the west and north walls overlap the
-wall band by 0.1 to 0.2 m2 (pushed against pilasters). Kitchen counters 1 to 3 and the cutting
-table overlap walls by 0.2 to 0.5 m2 (built-in casework drawn over the wall line). The bar edge and
-its pin-up board sit outside every room polygon (on the enclosure line).
-
-**Checked.** Full map and crops in `outputs/pixel-debug/` (full6, qA, qB, qD, pA to pE, raster
-views rN, rS, rC); a full run with the lunch styles (59 kitchen, 39 bring, 36 out, 16 desk in the
-first cast); the setup shows the conditions note; the feed remarks are speech boxes.
-
-## 2026-10-21, evening: owner's corrections, mullion posts, solid shafts, chat feed, window panels
-
-**Asked (user session 10, Felicia).** Markups: X on things to remove, a check on furniture that is
-fine; the opening the DXF shows between the office alcove and the classroom should not exist; the
-small exterior columns between the window panes were missing; the closet in the middle of the
-floor is rarely used and should not be part of regular activity. Interface: the feed as a chat
-room; all panels as vintage computer windows with an emphasised title band, collapsible rather than
-closable; the plan bubbles cut sentences, so go back to the corner box as a continuously updated
-highlighted comment; the trails had stopped doing anything; old-fashioned check boxes; People as a
-collapsed window on the left; zooming out to the whole floor was no longer possible.
-
-**Built.**
-- Corrections (`tool/public/plan/level3-edits.json`, applied in `plan.js loadPlan`; the DXF and
-  level3.json are untouched): five pieces removed (the table in front of the photography room
-  door, a recycling bin by the south core, a desk and its chair south of the middle block, the
-  table by the north office door); the two alcove-to-classroom doors removed and the classroom
-  walls closed there with added wall rectangles; the two doors into the middle closet removed;
-  the two doors into the middle closet kept in the drawing but marked unused, so no one routes
-  through them. Each entry carries its reason. The other flagged pieces stay as drawn.
-- (Corrected the same evening.) The elevator shafts and the middle closet were briefly drawn as
-  solid blocks; the owner said no: they keep their walls and their interior, as the DXF has them.
-  Enclosed pockets of void become floor, whatever their size.
-- Mullions: the small closed rectangles in the glazing linework (119 of them) are drawn as thin
-  posts from the cap line to the floor, so the panes read between small columns; the larger
-  pilasters keep their full caps. In the pass before, the DXF's mullion rectangles were only ticks
-  on the glass line and the pilaster tiles had been turned into glass; both are restored.
-- Feed as a chat (`ui.js`, `style.css`): an avatar square with the initial, the name and time,
-  the remark in a speech box, the fact line beneath when the feed is open.
-- Window panels: Setup, People, Summary and Feed have a dark title band with three vintage
-  buttons; clicking the band collapses the body. People is a collapsed window at the bottom of
-  the left column; the top-bar button is gone; jumping to a person opens it.
-- The corner box is the running comment: who and where, the remark in full, and a tally of the
-  topics so far; a small speech mark on the plan sits over whoever is being quoted. The canvas
-  bubbles are gone.
-- Trails: everyone's recent path drawn faintly, the followed person's in red; the line breaks
-  where a position jumps. Pixel check boxes.
-- Zoom: levels 1/4, 1/2, 1, 2, 3, 4; fit picks the largest that shows the whole floor.
-
-**Checked.** Map crops (yA to yD, full7): alcoves closed, shafts and the middle block solid, posts
-between the panes; a run of 390 remarks; windows, chat feed and toggles in the browser.
-
-**Open.** The short wall below the north shaft (the stair's side wall) is in the DXF and was
-kept; the markup near it may have meant the shaft's south face, which the solid block now removes.
-
-## 2026-10-21, late: south office east wall
-
-**Asked (Felicia).** Remove the desk at the south office's east side and close the opening it stood in.
-
-**Built.** In `level3-edits.json`: desk F830 and the table F795 drawn over it removed; a wall
-rectangle (x 19.7 to 20.0, y -34.4 to -32.6) closes the 1.7 m gap in the office's east wall.
-The DXF stays as exported; the office is enclosed on all four sides now.
-
-## 2026-10-21, late: the short walls in both stair halls
-
-**Asked (Felicia).** Remove the short wall between the hall wall and the elevator shaft, in both
-stairwells.
-
-**Built.** `cut_walls` in `level3-edits.json`: two boxes cut out of the wall solids when the plan
-loads (the raster the pixel walls come from, the routing grid, and the plan view all honour them).
-South hall: x 20.55 to 21.1, y -24.7 to -23.8. North hall: x 20.55 to 21.1, y 1.6 to 3.2. The DXF
-stays as exported.
-
-## 2026-10-21, late: spurs
-
-**Asked (Felicia).** The south stairwell cut left a piece; one-tile nubs on walls, like the one on
-the south core's north wall, should not be there in general.
-
-**Built.** After the walls are marked, a one-tile dead end that hangs off a wall at right angles,
-with little centreline in it, is dropped; it is a spur the thinning leaves where a line end is
-pushed into the next tile, not a wall. A straight wall's last tile keeps, since its neighbour
-continues in the same direction. Two tiles went: the remnant of the south stub and the nub on
-the core wall. Checked on both cores and the full map.
-
-## 2026-10-21, late: the vestibule windows
-
-**Asked (Felicia).** Resolve the north office window: a stepped notch beside it and posts that
-stopped short.
-
-**Built.** A tile with no more than a one-pixel sliver of solid under it is never a wall, which
-removes the two-tile spur the thinning left at the T beside the window. The spur rule now drops
-any one-tile dead end at right angles to a wall, whatever centreline it carries, which removes
-the frame return hanging below the south window. Mullion posts run from the cap line to the
-floor line of the pane. Checked on both vestibule windows and the full map. Wall tiles within a metre of a door are left alone by the spur rule, so a short jamb between a door and a corner stays.
-
-## 2026-10-21, late: glazing hosted at the stair halls
-
-**Asked (Felicia).** The stair-hall glazing must be hosted by a wall at both ends; the mullion at
-the wall junction and the glass-to-wall joint were loose.
-
-**Built.** A glass run's end joins its host wall: where the wall stands one tile across from the
-run's end, the corner tile between them is wall; where the wall stands beside the run's last tile,
-that tile becomes the wall's end, so the cap reaches over the line. End posts are drawn only where
-nothing hosts the end. Mullion posts are computed after the walls and doors and never stand in a
-wall tile. Checked on both stair halls, the east facade and the full map.
-
-## 2026-10-21, late: the classroom doors are back
-
-**Asked (Felicia).** Doors missing at the classrooms.
-
-**Found.** The earlier note about an opening that should not exist was about the gap in the south
-office's east wall (closed two passes ago), not the doors with sidelites that lead from the
-alcoves by the offices into the two classrooms. Those were real doors and had been removed, with
-the classroom walls filled behind them.
-
-**Built.** Both door removals and both wall fills are taken out of `level3-edits.json`; the two
-alcove doors are back, hosted in the classrooms' west walls. Door hosting also changed: a framed door takes the wall run past its ends, whatever glass
-runs nearby; only a curtain-wall door can be hosted by glass. Before that, the south alcove door
-had been placed on the stair hall's glass line. Checked on both classrooms and the full map.
-
-## 2026-10-21, late: doors in north-south walls as openings
-
-**Asked (Felicia).** The classroom door looked as if it went into the wall; at the north one, wall
-and door were drawn in the same place; it is one or the other.
-
-**Found.** A door in a north-south wall was drawn as a slot in the wall's cap with the leaf inside
-it, so the cap continued over the door. And because caps are lifted two tiles, a door that sits
-at an inside corner is drawn where the crossing wall's face hangs, which read as the door going
-into that wall. The door box also overlapped the crossing wall's tile by a few centimetres, so
-that wall's tile had been opened too.
-
-**Built.** No lintel over such doors: the cap stops at a post on each side and the opening between
-shows floor, painted over whatever hangs behind it; the leaf and sidelite span the opening at the
-same height. A door's tiles are trimmed where they fall on a crossing wall run. Checked on both
-alcove doors. Then, at the owner's word, the floor patch behind the door was dropped: just the posts, the leaf and the sidelite.
-Then: such doors are drawn before the strips of their own rows, so the walls around them are painted later and stand in front, as the hierarchy says (walls over doors).
-Corrected the same hour: not before everything, at its own depth. The door is painted after the walls north of it and before the strip of its south end, so the southernmost wall covers the sidelite and the leaf shows over the wall behind it.
-
-## 2026-10-21, late: the closet south of the service chase
-
-**Asked (Felicia).** The closet should be enclosed as marked; the desk interfering with it removed.
-
-**Found.** The closet's east and south walls are drawn so thin in the export that the 10 cm raster
-kept only a sliver of them, so the tiles were dropped and the closet stood open to the east and
-south; its double door floated a row below where the wall should be. A desk and its chair from the
-DXF stood inside and in the doorway.
-
-**Built.** In `level3-edits.json`: desk F357 and chair F648 removed; two wall rectangles close
-the closet's east and south sides, and the double door now sits in that south wall.
-
-## 2026-10-21, late: two tables by the north stair hall
-
-**Asked (Felicia).** Remove the two desks west of the north stair hall's glass.
-
-**Built.** F579 (SALA_Table_30x60in) and F602 (SALA_Table_24x64in) removed through
-`level3-edits.json`.
-
-## 2026-10-21, late: the south office floor
-
-**Asked (Felicia).** A patch of the wrong floor inside the south office, and a post hanging below
-its window outside.
-
-**Found.** The studio's polygon and the office's overlap by a few tiles; the studio was tested
-first, so those tiles took its dark floor. The post was a mullion of the vestibule's glazing
-return, whose tile is no longer glass.
-
-**Built.** Where room polygons overlap, the smallest room wins the tile. Mullion posts are drawn
-only in glass tiles.
-Second look: the patch was a leftover unnamed region of the converter (Region 14) lying over the office's corner, which the smallest-room rule then preferred; such regions no longer claim tiles. The post was a lone floor tile outside the facade that the office polygon's edge had caught; a floor tile with no floor beside it and void around it is void. Third look: the studio polygon itself dips into the office's corner; studio tiles cut off from the studio's connected floor now take the room around them. Fourth look, the real cause: the studio polygon reaches through the office doorway into the door's swing inside the office, so that strip was studio floor; the cut-off check now runs after the doors are marked, when the doorway no longer joins the strip to the studio, and the strip takes the office. Checked on both offices and the full map.
-
-## 2026-10-21, late: no post where a wall holds a door's end
-
-**Asked (Felicia).** A nub on the north core's north wall at the alcove door: make it one straight line.
-
-**Found.** The door's end post was painted on top of the core wall's cap and stood four pixels proud of it.
-
-**Built.** A door in a north-south wall gets a post only at an end no wall tile already holds. The bump that remained was the cap's missing top outline at the door column: door tiles no longer count as continuing a cap for outlining, so the wall line is straight.
-
-## 2026-10-21, late: desks in front of walls; the north window's hosting
-
-**Asked (Felicia).** Desks along the north wall should stand in front of the wall, and the north
-office window should be hosted properly.
-
-**Found.** A desk pushed against a wall overlaps the wall band by a few centimetres, and the wall
-was being cut out of the desk as if it stood inside it. At the window, a one-tile return of the
-glazing frame counted as a glass run, and the corner rule added a wall tile one row above the end
-wall on the window's west side only, so the window looked stepped.
-
-**Built.** A wall or column is cut out of a piece only when its tile centre lies well inside the
-piece's footprint (0.2 m in); a desk against a wall is drawn in front of it. A lone glass tile is
-not a run and claims no corner tile. Checked on the north end and the office window.
-
-## 2026-10-21, late: topics as feed filters
-
-**Asked (Felicia).** The topic links in the summary should filter the feed instead.
-
-**Built.** The feed opens with a row of chips, "all" and each topic heard so far with its count;
-a chip filters the chat to that topic and marks its places on the plan. The summary's "What people
-said" row is the same chips: one click opens the feed filtered to that topic, and the active topic
-shows highlighted in both places.
-
-## 2026-10-21, late: panel arrows, no view toggle, the title, profs come back, fuller suggestions
-
-**Asked (Felicia).** A clear expand/collapse arrow on the panels; remove the trails / room names /
-dim / plan-view toggle bar for now, with a backup that keeps the plan view; the title is "Studio Day
-at SALA"; nobody misses a crit just because the prof did not see them; the design suggestions need
-more specifics; the panel subtitles were near white on the title bands.
-
-**Built.**
-- Backup: `backups/tool-2026-10-21-with-plan-view/` is the tool as it was, without node_modules,
-  with the view toggle still in it (see its BACKUP-NOTE.md). The plan drawing itself stays in
-  `stage.js` (setMode("plan")); only the toggle and the overlay bar are gone from the interface.
-  Trails and room names stay on.
-- Panels: one arrow at the right of each title band, down when open and right when collapsed; the
-  Feed's arrow moved there too. Subtitles on the bands are ochre (#f3c66b); the top-bar subtitle is
-  dark ochre (#854f0b). The brand reads "Studio Day at SALA · Lasserre Level 3 · desks, sections".
-- Profs (`sim.js`): a student who is away is not skipped; the prof notes it (profLater, quiet) and
-  tries that desk again once the student is back, taking whoever is at their desk first; when
-  everyone left is away the prof pauses four minutes and looks again. Only when the prof leaves
-  are the unreached students counted, and those still on the floor say the round ran out
-  (critTimeout). The old missedCrit and profSkip paths are no longer taken.
-- Suggestions (`summary.js`): every step now says what was measured, why it matters and what to
-  do, with the numbers from the run, from the first run on (before, the "what to do" came only on
-  the third run and some steps were a single sentence). The crit step became "Shorten the prof's
-  round", with the round's length in metres and the section size.
-
-## 2026-10-21, late: the second goal, darker titles
-
-**Asked (Felicia).** The second default goal is about a layout that supports collaboration, working
-and learning, not just comfort; the panel titles and their arrows should be darker.
-
-**Built.** The goal reads "A layout that works for collaboration, working and learning: room to
-move and to stand for a crit, desks where you can hear yourself, and places to work together"
-(spec version 3; an older saved spec takes it). The title bands are light like the top bar, with
-dark brown titles and arrows and dark ochre subtitles.
-
-## 2026-10-21: a demo video for the slides
-
-**Asked (Felicia).** A short demo video of the proof of concept for a slide, cheaply: inputs,
-toggles, the simulation, the design suggestions.
-
-**Built.** `tool/scripts/demo-video.mjs` drives the page with Playwright through the installed
-Chrome (playwright-core only, no browser download) and records about a minute: the use, goals and
-conditions note typed in, an archetype card opened, the People window, a run, the summary with its
-first step opened and its jump into the playback, following one person at 4 min/s with the corner
-comment, the feed filtered by a topic, and the evening at the bar. The recording is converted to
-H.264 mp4 with the ffmpeg that ships in the imageio-ffmpeg wheel (also lent to Playwright). Output:
-`outputs/demo/studio-day-demo.mp4` (1440x900, about 64 s) and the .webm original.
-
-## 2026-10-21: the demo, faster and guided; people more solid
-
-**Asked (Felicia).** Speed the video up; the people in the simulation are too faint; a guide box or
-focal point on what is being shown next.
-
-**Built.** People are drawn at 72 to 100 percent opacity by mood (was 45 to 100), and the others
-fade only to 55 percent while someone is followed (was 35). The demo script shows a red pixel guide
-box with a label that slides to each thing in turn (what is tested, goals, the conditions note and
-sliders, an archetype card, People, Run, the summary, a step, the plan, the corner comment, the
-feed, the evening); its pauses are shorter and the conversion runs at 1.35x, so the video is about
-39 s.
-
-## 2026-10-21: flag marks off
-
-**Asked (Felicia).** Remove the red "!" marks but keep the flags to come back to.
-
-**Built.** The marks are behind `stage.opts.flags`, off by default; the flags file still loads with
-the plan and the check script still writes it. Setting the option true (and rebuilding the pixel
-strips, or reloading) brings the marks back.
-
-## 2026-10-21: the demo's first second cut
-
-**Asked (Felicia).** The video flashed white with the unstyled page at the start.
-
-**Built.** The recording starts before the page has loaded; the first second is now cut in the
-conversion (the command is at the top of `demo-video.mjs`). The mp4 opens on the finished interface.
-
-## 2026-10-23: the front door, a title screen and a tour
-
-**Asked (Felicia).** A landing page like the start of a game: NPC as the name, a subtitle along the
-lines of "design simulation test", a blinking start, a pixel person walking or tracing a path, then
-how-to instructions that can be skipped or go through everything, as the demo video did.
-
-**Built (`src/intro.js`, styles in `style.css`).**
-- Title screen over the app on the first visit (or with `?intro` in the address, or the intro
-  button in the top bar): "NPC" in the pixel face with a stacked shadow, "a design simulation
-  test", "Studio Day at SALA · Lasserre Level 3", a blinking PRESS START, and a footer line. Behind
-  it the floor itself at close range, with one person walking real routes between the stairs, the
-  kitchen, a plotter, the bar and a few desks, found with the tool's own path-finder, leaving a
-  red trail; the camera follows. Enter, space or a click starts; "skip the intro" and Escape go
-  straight to the tool.
-- The tour: nine steps on the real interface, each a red guide box with a label on the element
-  (what is tested, the goals, the conditions note, the group, People, Run, the summary, the feed,
-  the day's controls) and a speech-box caption with Back, Next and Skip; arrow keys work; the
-  last step's button reads Start. "Take the tour" in the help panel replays the tour alone.
-- Seen once, the intro stays out of the way (localStorage).
-
-## 2026-10-23: title screen wording
-
-**Asked (Felicia).** The subtitle is "An Occupant Simulation Tool", the prompt is "Click anywhere to
-start", and the tour's captions should read as prose rather than clipped notes.
-
-**Built.** Both lines changed; the nine captions rewritten as full sentences in one voice.
-
-## 2026-10-23: published
-
-**Pushed** to github.com/fl-79/npc (commit 95c1df5); the Pages site at fl-79.github.io/npc rebuilds on
-push. **The claude.ai artifact** ("Studio day") is a separate copy of the built `dist/` folder and does
-not follow the push; it was republished by hand as version 3 (`npm run build`, then the page and
-its changed assets published to the same artifact URL). Any later change needs both: a push, and a
-rebuild and republish of the artifact. The rebuild must use the relative base, `npx vite build
---base=./`, as the Pages workflow does; a plain `npm run build` writes absolute asset paths that the
-artifact's page cannot reach, which is what broke version 3 (fixed in version 4).
-
-## 2026-10-23: desks out of the wall
-
-**Asked (Felicia).** The desks along the wall west of the south office were drawn in the wall.
-
-**Found.** A wall tile is half a metre wide, the wall itself a fifth; those desks reach into the
-tile by up to 0.3 m, so the wall's cap was painted over their edge.
-
-**Built.** A piece whose edge reaches into a wall's tile by 0.3 m or less is drawn nudged out of
-the tile; the plan's positions and seats are untouched. A wall standing well inside a footprint is
-still cut out of the piece, as before. That nudge alone
-was not enough: those desks reach 0.4 m into the tile because the wall's real line sits at the tile's
-far edge. So north-south walls are now drawn at their real line, a cap 10 px wide centred on the
-centreline's position inside the tile (corners, junctions, columns and east-west walls keep the full
-tile), and furniture is nudged against that line, up to 0.45 m. Checked on the wall by the south
-office, the north core and the full map.
-
-## 2026-10-23: the plotters and tables by the north office
-
-**Asked (Felicia).** The same collision on the wall west of the north office: plotters and tables
-drawn into the wall.
-
-**Found.** The nudge measured only the narrow caps; rows where that wall meets another keep a full
-tile, and the pieces still ran into those.
-
-**Built.** The nudge clears the widest cap over the piece's rows. Checked at both walls. Each piece clears the widest cap along the whole wall run beside it, so a column of desks along one wall stays aligned.
-
-## 2026-10-23: narrow walls, joined and without holes
-
-**Asked (Felicia).** A north-south wall disconnected at its end by the north office, and holes in
-the wall at the office window's corners.
-
-**Found.** Two effects of the narrow north-south caps: where a run's centreline shifted by a few
-pixels between tiles the cap jogged, and where a narrow cap sat below an east-west wall, that
-wall's face was not drawn (a wall tile stood south of it) and the uncovered part of the tile
-showed the floor.
-
-**Built.** A contiguous north-south run takes one cap offset, its mean. A wall draws its face when
-the tile south of it is a narrow north-south wall; the narrow cap then sits over the middle of that
-face. Checked at the office wall's end, the window corners, the north core and the full map.
-
-## 2026-10-23: published again
-
-Pushed as 968d0ea; the artifact republished as version 5 from a relative-base build.
-
-## 2026-10-23: next steps in two groups, with who felt them
-
-**Asked (Felicia).** Group the design suggestions into what the plan alone says and what people
-experienced, the latter centred on working time (could students settle and focus?); the bar's
-after-hours noise matters less; no archetype focus mode.
-
-**Built (`summary.js`, `ui.js`).**
-- Two groups under Next steps: "From how people experienced the day" and "From the plan alone ·
-  geometry, before anyone walks it". Numbering runs across both; the plan-alone group holds the
-  glazing step and a new "Long walks from the far sections" step (sections over 30 m from the
-  kitchen or 35 m from the printer room, by the aisles), each tagged "computed from the plan".
-- A new working-time step, "Protect working time at the desks": students who could not settle,
-  from desks with three or more neighbours within 1.6 m, bunch-ups in their row while working, and
-  no room to stand for a crit; it ranks with the kitchen, printers, aisles and crits steps.
-- After-hours steps (food line, bar seats, bar noise, the exit) carry an "after hours" tag and are
-  weighted down (0.4 to 0.6) so they sit below the working-day steps.
-- Every experience step says who felt it, by archetype: "social students 21 of 60, restless 9 of
-  45; focused not at all", from the run's own logs; a step nobody felt says nothing.
-After-hours steps always sit below every working-time step, whatever their score. Checked on a run:
-working time (desks, kitchen, printers, aisles, crits), then the food line after hours, then the two
-plan-alone steps; the first step names focused students 50 of 70, restless 27 of 42, social 28 of 60.
-
-## 2026-10-23: bullets, mandatory crits, the printers, more voices
-
-**Asked (Felicia).** Keep the step details to concise bullet points. Nobody leaves until the prof
-has seen them, even if the round runs over: the crit is a required part of the class. Not everyone
-uses the plotters or the 3D printers, only under deadline; the letter and tabloid printers at the
-north end get heavy traffic no matter what. The feed repeated the same comments for what seemed
-the same archetype.
-
-**Built.**
-- Steps (`summary.js`, `ui.js`): every step is three or four short points, the last one "Do: ...".
-- Crits (`sim.js`): a student does not leave or wind down before their crit, or before their
-  prof has gone; after twenty minutes past their own time they say so (waitingCrit). The prof
-  leaves at their time only once everyone is seen, otherwise runs over, up to ten minutes before
-  the day ends; the leave note says how far over. On the test run 171 of 172 were seen and two
-  profs ran over.
-- Printers (`plan.js`, `spec.js`, `sim.js`): the plotters (the two Designjets) and the big letter
-  printer are separate. Nearly everyone prints letter and tabloid at the big printer, a sheet
-  every few hours, under two minutes at the machine, a queue when four are at it (printQueue);
-  the plotters are used by 8 percent of people plus deadline pressure (up to 90 percent), the 3D
-  printer room by 4 percent plus deadline. The printer step now asks for a second letter printer
-  at the south core.
-- Remarks (`remarks.js`): more variants for the frequent kinds, including arrive, leave, crits and
-  the food line; a voice per archetype for crits, tight desks, the kitchen, the bar noise and
-  friend visits (focused, social and restless each say it their way); no two remarks of a kind in
-  a row with the same words, and nobody repeats themselves.
-- Tuning after the first check (`sim.js`, `remarks.js`): a letter print takes 40 to 90 s and the
-  queue remark needs three others at the machine (the first run had 74 printQueue remarks); the
-  MORE pool had critStart and critTight twice, so the second entry silently replaced the first and
-  the crits had four lines between them; merged. On the check run: 172 of 172 students seen, no
-  prof over by more than five minutes, print queue peaks at five, 483 remarks with 7 to 19 distinct
-  lines for the frequent kinds (crits, tight desks, the kitchen, the food line).
-
-## 2026-10-23: nuance inside an archetype
-
-The feed still repeated itself: with 170 speakers and five to ten lines per kind, the same line
-came up thirteen times in a day (measured: the most repeated line 13 times, 483 remarks).
-- `remarks.js`: a second, wider pool (MORE2) for the kinds that come up most, so most have 12 to 20
-  lines now; the friend's name reaches the friend-visit lines (`sim.js` keeps `a.friendName`).
-- Each person now has a voice of their own on top of the archetype, from their continuous traits
-  and a hash of their id (`voiceOf`): the quiet ones (low sociability) keep the first sentence of a
-  line and drop the rest; the talkative add a second thought drawn from their own situation
-  (TAILS: a deadline, being new to the building, a far kitchen, a window desk at the hour it
-  matters, mood, noise or crowd sensitivity, patience, the hour, distance walked, year, section);
-  some fall back on a signature phrase (TICS) now and then. Tails are kept off remarks already about
-  that topic.
-- The last ten lines of each kind, floor-wide, are not reused; nobody repeats themselves; a short
-  food-line wait (under 8 min) no longer earns a line from everyone.
-- On the check run: 495 remarks, 434 distinct, the most repeated line 6 times (was 13).
+- NPC tab > Slab Tops (`pyrevit/.../SlabTops.pushbutton`): for every wall (basic and
+  curtain) and column, finds the floor slabs whose footprint covers it (top-face loops, holes
+  respected) and whose underside lies between its base and top. An element that ends inside
+  that slab gets its top set to the underside (Top Offset for a level-constrained wall or
+  column, Unconnected Height otherwise); an element that continues above the slab is joined to
+  it with the slab cutting. One transaction, the file is not saved; `exports/fix-tops.json`
+  lists every change with the old and new values. Run on the model: 235 tops set, 128 joins
+  (48 walls and 102 columns crossing intermediate slabs), 32 curtain walls that span several
+  levels skipped because a curtain wall cannot be joined. The same convention was already in
+  the model for 34 walls (Level 2 to the Level 4 underside with Top Offset -0.864), so the fix
+  follows what the user had started by hand.
+- Viewer: `OrbitControls` removed. ISOMETRIC is a fixed orthographic camera at azimuth 45 deg
+  and elevation 30 deg (the 2:1 pixel isometric), turned in quarter steps only. GAME VIEW is an
+  oblique projection: the camera looks straight down and the world is sheared so a metre of
+  height moves a surface north on screen by "Wall height" metres (default 0.5), which puts
+  every south face under its top edge and draws anything further south in front, exactly the
+  V1 drawing order but done by the depth buffer. Pan by dragging, zoom at the cursor, keys for
+  pan, quarter turns, fit. Entering the game view with nothing hidden solos Level 3.
+- `scripts/run_revit_button.ps1`: after a pyRevit reload the ribbon exposes only its newest
+  button to UI Automation (the others are virtualised items without peers; Realize does not
+  help); `-Index n` clicks a panel item by its position instead. pyRevit's Search palette was
+  tried as a route and did not take the typed command.
+
+**Checked.** Re-exported after the fix (41 s) and re-ran the clash check (164 s): overlapping
+pairs went from 702 to 302. Walls through slabs 153 to 2 (ids 1229087 and 1304187, 0.11 and
+0.01 m3, both joined walls with a sliver left), columns through slabs 79 to 1 (1213475,
+0.01 m3), doors in slabs 21 to 9. Of the 112 slab overlaps left, 96 are mullions and panels of
+the 32 skipped multi-storey curtain walls. Everything not about slabs is unchanged: 50 desk
+overlaps, 42 stacked columns, louvers on the curtain wall, and so on. In
+the viewer, Level 3 soloed with the section cut off shows the Level 4 slab resting on the
+walls and glazing with nothing poking through its top; the columns and walls that continue to
+the roof still pass it, cut by the join. Both views exercised in the browser; the game view of
+Level 3 reads as a plan with desk fronts and wall faces.
+
+**Rejected.** Attach Top/Base (no API). Global renderer clipping (clips highlights). Splitting
+the 32 multi-storey curtain walls per level: a bigger model change, left to the user.
+
+**Left open, for the user.** Save the model in Revit once the Slab Tops result looks right
+(Ctrl+Z reverts it before saving). The 32 curtain walls through slabs. Everything listed on
+2026-11-03 above that is not about slabs.
+
+## 2026-11-03, later still: building or one floor, one floor colour
+
+**Asked.** Keep only the isometric and the game view; the level choice is the whole building
+or one floor soloed; every floor the same colour whether or not a room is placed on it.
+
+**Built.** The LEVELS window is a row of buttons (BUILDING, then each level); a level shows
+that floor alone with the section cut, nothing else. Per-level ticks and CUT are gone. Room
+polygons no longer tint the floor by room type: they are the slab colour, off by default, and
+a flagged room is marked by its label and the checks list only. In a pane narrower than
+1000 px the LAYERS, ROOMS, CHECKS and SELECTED windows start folded so the view stays visible.
+
+**Then (same day).** Asked: BUILDING shows the whole building with no cutting planes; no Roof
+button, only the floor plans; with BUILDING the game view and the turns show elevations; and
+why the basement looks empty. Built: the section cut now exists only when one floor is chosen;
+the Roof level has no button (its elements still show in BUILDING); in BUILDING the game view
+is a straight orthographic elevation from the south and TURN L / TURN R go round west, north
+and east; the VIEW window names the current view. Checked in the browser pane: south and
+east elevations, Basement plan. The basement is not missing from the export (59 walls, 28
+doors, 8 rooms, 32 columns, 2 stairs, 1 floor): the model has almost nothing inside it (one
+elevator, no partitions beyond the eight rooms), and the Cut height slider in the pane had
+been moved to 0.5 m, which sliced every wall to a half-metre stub in the plan view. Reset to
+2.6 m the basement walls and doors read as on the other floors.
+
+**Then.** Asked: no cut height for the whole building, which should read enclosed; and the
+plan information (walls, furniture) seemed lost. Found: the pane was on Level 1 with the
+section cut switched off, and the Level 2 slab, 864 mm thick, reached down into the Level 1
+band and so belonged to Level 1 too; seen from above it covered the whole plan. Built: a slab
+(floor, ceiling, roof) now belongs only to the level its top sits on, so a plan is never
+covered by the slab above even with the cut off; the cut checkbox and slider are disabled in
+BUILDING; the roof is on by default so BUILDING shows the enclosed volume. Nothing was lost
+from the export; the counts in the status line are unchanged.
+
+**Then.** Asked: a floor view shows only that floor plate and what is hosted on it, nothing
+from the floors below or above; and two markups, missing floor in the basement and columns
+standing clear of the Level 1 plan. Built: an element belongs to exactly one floor, its Revit
+level (base level for walls, columns and stairs; the host wall's level for doors, panels and
+mullions; the slab's own level), so a basement-to-Level 4 column appears only in the Basement
+view. The validator checks whether each level's slab reaches under its rooms and its columns.
+Found in the model: the Basement slab has a notch cut out of its north-west corner, so room
+70 has a floor under only 6% of it, and two basement columns (1209642, 1211417) stand in that
+notch with no slab under them. The stair rooms (17, 18, 39, 40, 7, 8) sit over the slab
+openings, which is expected and listed as info. The Level 1 columns are all on the Level 1
+plate; what showed north of the plan was the oblique projection of the 11.7 m columns with
+the cut switched off (a column that tall draws 5.8 m up the screen at Wall height 0.5).
+
+**Then.** Asked: the exterior walls and windows had gone from the floor views; a floor view
+must include them, bounded between its two levels. Built: a floor view is the storey slice
+between its level and the next level line. Everything whose geometry reaches into that band
+belongs to it (walls, curtain walls, columns, stairs through several storeys show their part
+of this one, cut at both level lines); a slab belongs only to its own level. The cut is
+always the storey; the "Lower cut" checkbox sections it at "Cut height" instead and is off by
+default. This replaces the by-Revit-level rule of the previous entry.
+
+## 2026-11-03, evening: urban context
+
+**Asked.** Add the surrounding urban context to the whole-building views (isometric and
+elevations), not to the floor views. The building is the Frederic Lasserre Building at UBC.
+
+**Built.** `scripts/fetch_context.py` pulls OpenStreetMap through the Overpass API (one
+request, 38 s): 81 buildings with heights (height tag, else levels x 3.3 m, else 7 m), 470
+roads and paths, 59 green and parking areas, 4 water bodies, 123 trees within 320 m. The
+model has no shared coordinates, so the script fits the minimum-area rectangle of the Level 1
+to 3 slab outlines (49.5 x 24.1 m) to the OSM footprint of the building (49.5 x 23.0 m): the
+rotation between project north and true north comes out at 61.7 degrees, the candidate
+closest to zero; the 180 degree alternative is noted. All features are written in model
+coordinates to `exports/context.json`, with the alignment and its "inferred" flag in meta.
+`viewer/src/context.js` draws them as blocks (buildings), ribbons (roads), flat polygons
+(green, water, parking), trunk-and-canopy blocks (trees) on a ground plane at Level 1, in
+muted colours; the Lasserre footprint itself is left out since the model stands there. Shown
+only with BUILDING; a layer toggle turns it off; the status line carries the counts, the
+inferred rotation and the OpenStreetMap attribution.
+
+**Left open.** The ground is flat at Level 1 (the real site slopes); the 180 degree
+alternative if the facade reads the wrong way round against Main Mall and Memorial Road.
+
+**Then.** The user confirmed the inferred orientation (the building sits correctly against
+Main Mall and Memorial Road), asked for the context in the game view and after turns, and
+for FIT to go. Built: every view change (BUILDING or floor, ISOMETRIC or GAME VIEW, a turn)
+frames itself: a floor on its own, the building with 70 m of surroundings on each side when
+the context is on. FIT and the F key are gone. The confirmation is noted in the fetch
+script and the README.
+In the elevations the neighbours that stand between the camera and the building hid the
+facade, so an elevation now clips away everything nearer the camera than the building's own
+near face (plus 2 m), as an elevation drawing does; what is beside and behind stays.
+
+**Then.** Asked: the context shows in the whole-building views and in the floor plan (game)
+views; the only place it is hidden is a floor's isometric. Built: the context group is
+exempt from the storey clip (it is ground and neighbours, not part of a storey) and is
+visible unless a floor is shown in the isometric. Neighbouring blocks in a floor plan are
+seen from above with their fronts, as the game view draws everything.
+
+**Then.** The basement plan was hidden by the context, whose ground sits at Level 1, 3.7 m
+above the basement floor. Built: in a floor's plan view the context group is moved to that
+floor's level (ground just under the slab), so the surroundings read as a map around the
+plan for every floor, below ground included. The whole-building views keep the context at
+Level 1.
+
+## 2026-11-03, night: the game view
+
+**Asked.** Implement whichever of the pixel-art skill or Phaser best attains the retro game
+style of the `Graphics/` references (top-down RPG rooms with wall faces under light caps,
+patterned floors, furniture with fronts, chunky people with speech bubbles; a Kairosoft-style
+isometric office; a Smallville-like town).
+
+**Built.** Phaser 3.90 (MIT, npm) for the game interface; the pixel-art skill is left for the
+sprite sheet once the geometry is signed off.
+- `scripts/rasterise.py`: every level to a 0.5 m tile map from the model alone (walls from
+  centreline and width, curtain walls as glass, doors clearing their host over their width,
+  columns, rooms by index, slab, stairs, furniture boxes with a kind from the V1 family
+  table). Multi-storey walls appear on every storey they pass. 1.4 s for five levels; a
+  debug PNG per level.
+- `viewer/game.html` and `viewer/src/game/`: a Phaser scene per level. Floor as a tilemap
+  (style by room type: concrete, parquet, checker, tile, carpet, hall, service), every wall,
+  glass, door, column and stair tile as an image at the depth of its bottom edge, furniture
+  as an image at its plan size with a front face, people as 16 x 24 sprites with a
+  four-direction walk, depth by feet, so what is further south stands in front. Procedural
+  tileset and sprites drawn on canvas at true pixel size, one-pixel outlines, caps light and
+  faces dark. Six placeholder people wander walkable tiles and say placeholder lines; the
+  status line says so. Canvas renderer, integer zoom, fold-away chrome in the same vintage
+  windows.
+
+**Checked.** Level 3 in the browser: desks with chairs, pin-up boards, counters, sofas, the
+elevator, glazing, doors, the stair cores, room labels, people with bubbles. Other levels
+switch with keys 1 to 5.
+
+**Rejected or fixed on the way.** Two canvas-drawing bugs (argument order in the pixel
+helper, patterns bleeding across sheet cells) made walls and furniture invisible at first.
+WebGL was not the cause; the canvas renderer is kept for crispness.
+
+**Left open.** All rooms are still named "Room", so every floor is concrete; room types (and
+so floor patterns) follow once the rooms are named in Revit. Furniture rotation is not drawn
+(boxes are axis-aligned bounding boxes). A hand-drawn sheet (pixel-art skill) replaces the
+procedural tiles later. No simulation: the people are placeholders.
+
+### 2026-11-03, late: game view failed to load on a fresh open
+
+Opening `/game.html` fresh showed "loading…" forever. Phaser auto-started the level scene from the
+`scene:` config before the page had chosen a floor, so the scene asked for `exports/tiles/undefined.json`
+(404) and threw in `create`. Fix in `viewer/src/game/main.js`: the scene is added with
+`game.scene.add('level', LevelScene, false)` and only started once the fonts are ready and a floor is
+chosen; `start()` restarts it when it is already running or loading. Verified: fresh load fetches only
+`tiles/level-3.json`, keys and the ZOOM buttons work.
+
+### 2026-11-03, afternoon: the game view gets the V1 graphics
+
+The first Phaser tileset was a fresh, simpler rewrite (one-tile walls, flat boxes for furniture) and
+did not look like the iterated V1 renderer. `viewer/src/game/tileset.js` now ports V1's `pixel.js`
+drawing rules and palette onto the V2 tile maps, nothing else changed upstream:
+
+- The floor is one pre-rendered canvas: V1's dark concrete with a grid every four tiles, office
+  wood, kitchen checker, hall grey, a darker threshold under door tiles, stair treads across the
+  run, a faint footprint under glazing, dots in the void.
+- One strip per tile row (as V1 `buildStrips`), each a Phaser image at the depth of its row: wall
+  caps (near-white, outlined on outer edges only so runs read as one piece; north-south runs at a
+  10 px cap), faces two tiles tall where the south side is open (cream with a baseboard inside, the
+  plainer outside face with a pilaster every six tiles, headers over east-west doors), east-west
+  glazing as panes with a highlight and mullions reaching the cap top on the outside, north-south
+  glazing edge-on as a line at cap height with posts at the ends.
+- Doors from `L.doors`: east-west leaves at their real width with a sidelite where the family says
+  so and two leaves for double doors; north-south doors as a leaf in plan at cap height with posts
+  where no wall holds the end, drawn in the strip before their south end.
+- Furniture sprites per kind, V1's set and colours, drawn into the strip of the row their feet
+  are in; a wall whose tile centre lies well inside a piece's footprint is cut out of the piece.
+  Lamps and the elevator are not drawn (the shaft walls stand for it).
+- People are V1's 16 by 24 figure (jacket for one in four, glasses for some), three frames.
+
+Fixed on the way: switching floors rebuilt the people textures while their walk animations still
+pointed at the removed ones (a `sourceSize` of null); the textures are deterministic per index and
+are now kept across floors. Screenshots 12 to 14. Verified on Level 3 at zoom 2 and 3; the
+basement after the fix.
+
+Two more things found while checking floor changes, both in place now:
+
+- Changing floors did nothing: the scene loaded every floor's JSON under one cache key, and
+  Phaser's loader skips a key that is already cached, so a restart got the first floor's tiles
+  again (it had only ever seemed to work because the very first load had failed). The key is now
+  per floor (`tiles:<file>`).
+- The first floor could start before the game had booted (the scene list is empty until then),
+  which threw on fast loads; `main.js` now waits for both the fonts and Phaser's ready event.
+Verified: Basement, Level 1 and Level 3 in turn, people walking, no errors.
+
+### 2026-11-03, evening: the pixel plan inside the model-check interface
+
+The user wants yesterday's interface (BUILDING or one floor; ISOMETRIC or GAME VIEW; turns for
+the building) with the V1 graphics, and a way to zoom out to a whole floor. Done:
+
+- `viewer/src/game/embed.js`: `PixelFloorView`, a Phaser game in a hidden `#game` container
+  inside the stage of `index.html`. When one floor is shown in GAME VIEW, `main.js` adds
+  `pixel` to the stage (the three.js canvas and labels hide), shows that floor's tiles
+  (`tileFileOf("Level 3")` = `level-3`), and rests the controls that mean nothing there
+  (turns, cut, wall height, pixel size, edges, dither). Any other choice hides it and sleeps
+  the game loop. Room labels, the urban-context layer and a new "Placeholder people" slider
+  reach through to it. The three.js shear game view of a floor is no longer reachable; the
+  building's game view (elevations) and both isometrics are as before.
+- `scene.js`: zoom steps `ZOOMS = [0.25, 0.5, 1, 2, 3, 4, 6]`; `fit()` picks the largest that
+  shows the whole floor and centres it, and every floor opens fitted; FIT FLOOR button and F.
+  Camera binding (drag, wheel, arrows) moved into the scene so both pages share it.
+- `tileset.js`: `buildContextCanvas` draws `exports/context.json` in the floor's pixel frame,
+  60 tiles (30 m) beyond it on every side: ground with dots, green areas, parking, water, roads
+  as edged ribbons with a dash on the wide ones, neighbouring buildings as flat blocks with a
+  south face scaled by their height, trees as a canopy on a trunk; the Lasserre footprint left
+  out. The floor canvas leaves the void transparent so the ground shows through.
+- `game.html` now uses the same `PixelFloorView` and shows the context too.
+
+Verified in the pane: Level 3 and the Basement open fitted at a quarter zoom with the context
+around them (screenshots 15 and 16: fitted, and zoom 2); + and - step the zoom, FIT FLOOR
+returns; ISOMETRIC and BUILDING bring the three.js stage back; no errors. The in-app browser's
+key presses did not reach the page in this test, so the key handler was checked by dispatching
+the events; the buttons and wheel are the same code path.
+
+### 2026-11-05: no elevations; the isolated floors get a pixel isometric
+
+The user asked to remove the game view for the whole building and to add an isometric view for
+each isolated floor (Basement to Level 4). Done:
+
+- BUILDING now has one view, the three.js isometric of the whole block with its context; the
+  GAME VIEW button is greyed with it, and choosing BUILDING while in the game view switches to
+  ISOMETRIC. The elevation code stays in `scene.js` but is not reachable.
+- `viewer/src/game/iso.js`: a pixel isometric of one floor from the same tile map as the plan.
+  A 2:1 dimetric: every 0.5 m tile a 32 x 16 diamond, a storey 48 px; walls as blocks with the
+  V1 cap and two faces (south lit, west shaded, a baseboard, the plainer outside face where the
+  tile beyond is void), caps outlined on their outer edges only; glazing as blocks with a pane
+  stripe and mullion edges; doors as a lower block under a header; columns merged over the tiles
+  they cover and drawn as one block; furniture as boxes at their plan footprint and export height
+  (chairs kept low), with a screen on computers and some desks and pinned sheets on pin-up
+  boards; room labels at their tiles. Seen from one of four corners (azimuth 0 south-west, then
+  clockwise, the three.js names), by mapping the tile grid into (u, v) axes; TURN L / TURN R and
+  Q / E rebuild it from the next corner. Drawn crisp by scanline fills, no anti-aliasing. No
+  people and no context in the isometric. Painter's order: the floor first, then everything
+  standing by its nearest corner (u + v), far to near.
+- `scene.js` takes `view` ("plan" or "iso") and `azimuth`; `fit` uses the drawn world size, so
+  the isometric opens fitted as well. `embed.js` restarts the scene when the floor, view, corner
+  or people count changes.
+- `main.js`: one floor is always the Phaser stage now (ISOMETRIC = pixel isometric, GAME VIEW =
+  pixel plan); the three.js controls that mean nothing there rest, turns rest in the plan.
+
+Verified: Level 3 isometric opens fitted at a quarter zoom, turns to the south-east corner and
+back to a quarter, zoom 2 detail is crisp (screenshots 17 and 18); GAME VIEW keeps people and
+context; BUILDING is the three.js isometric with the game view greyed; no errors.
+
+### 2026-11-05, later: the PROGRAM window
+
+The user wants to describe the program for the simulation: each room's name, use and who may
+enter, room by room and floor by floor, with the option to skip a room, have it flagged, and be
+reminded of it later; the influential rooms first, service rooms afterwards. Built:
+
+- `viewer/index.html` has a PROGRAM window; `main.js` runs it. The queue is the export's 77
+  rooms ordered Level 1, 2, 3, 4, then Basement, largest first. Each room shows its level,
+  number, area and id, and a form: name, use (a list that maps to the floor patterns), access
+  (open, students and staff, staff only, restricted group, limited hours, nobody), who and when,
+  notes. SAVE & NEXT (or Enter in a text field) keeps the entry and moves to the next room not
+  yet opened; SKIP & FLAG keeps it on the FLAGGED FOR LATER list with an optional reason; BACK
+  and NEXT step without saving; DEFER SMALL flags every unopened room under 8 m² at once.
+- Stepping to a room shows its floor (the current view, plan or isometric) and lights the room
+  in amber (`LevelScene.focusRoom`: tiles in the plan with an outline against other rooms,
+  diamonds in the isometric), at zoom 1 at least, and selects it so the SELECTED window shows
+  its Revit data.
+- Saving goes through the dev server: `vite.config.js` serves `/program/*` from `../program`
+  and takes a POST of the whole file at `/program/rooms.json`, writing `program/rooms.json` and
+  regenerating `program/TODO.md` (the flagged rooms as a checklist). Local only, nothing leaves
+  the machine; the export is untouched; the file is keyed by Revit room id.
+- The labels feed back: a labelled room's name replaces "Room" on its label in the pixel views,
+  its use picks the floor pattern (studio concrete, office wood, kitchen checker, hall grey), and
+  the ROOMS list marks rooms done or later. Every page load puts a PROGRAM line at the top of the
+  status window with the counts flagged and not yet labelled.
+- Typing in the form no longer triggers the view keys (text areas and selects are excluded).
+
+Verified in the pane with a test label and a test flag on Level 1 (written, reloaded, shown on
+the label and in TODO.md), then removed so the owner starts from an empty program.
+
+### 2026-11-05, evening: PROGRAM window corrections from first use
+
+- Phaser's keyboard plugin listened to W, A, S, D and the arrows on the whole window, so typing
+  in the form moved the map. The letter keys are gone; the arrows stay, but the plugin no longer
+  captures events (`disableGlobalCapture`) and the camera ignores them while an input, select or
+  text area has the focus.
+- A room saved without a name now shows its use as its name (labels, ROOMS list).
+- Access is now the school's own set: all campus students when they have class there;
+  architecture students only; architecture students when they have class there; all architecture
+  students any time (studio); professor office; staff only; bookable for classes or clubs; nobody.
+  A separate OPERATION field holds business hours or 24/7. The "who" field keeps optional details.
+  Stored as `access` and `hours` in `program/rooms.json`.
+
+### 2026-11-06: the program moves to chat; first corrections to the model
+
+The owner entered uses for 73 of the 77 rooms in the PROGRAM window and asked for it to be
+removed: the rest is confirmed by room number in chat. Also from chat: room 10 on Level 3 is
+the student lounge (Good Times and Waffle Times happen there); the door between it and the
+kitchen (room 9) is missing from the model; the southern stairwell has an elevator; room 31 on
+Level 2 is the women's washroom (not an office); room 5 on Level 3 is for photographing models;
+room 6 holds the 3D printers; room 22 on Level 2 is a large classroom that also serves as crit
+space; the studio needs card access (architecture students, professors, staff); crit rooms are
+for architecture; the ground-floor lecture halls are more for other campus students.
+
+- `scripts/apply_chat_2026-11-06.py` (run once) folded those into `program/rooms.json`, each
+  entry naming its source. Blank access rules that follow from the general remarks (crit →
+  architecture students with a class; studio → all architecture students; Level 1 classrooms →
+  campus students with a class) were filled and marked `access_inferred` with the remark, so
+  they can be confirmed. The owner's explicit entries were not touched. The file as it was
+  before the script is kept as `program/rooms.before-chat-2026-11-06.json`.
+- `program/edits.json` starts the corrections file the handover asked for: E1 adds the lounge
+  to kitchen door on wall 1229097 (position inferred: the middle of the wall, 0.9 m); N1 records
+  that the model already has the elevator in the south core on every level, so nothing changes.
+  `scripts/rasterise.py` reads the edits and draws an added door like any other (flagged
+  `edit: true` in the tiles); the export is untouched. The tiles were rebuilt.
+- The pixel views now draw the elevator car (metal top, two doors on its face; a block in the
+  isometric) instead of leaving the shaft empty, since the owner looked for it.
+- New uses `lounge` (wood floor) and `photo` (hall grey).
+- `scripts/program_todo.py` regenerates `program/TODO.md`: flagged rooms, rooms labelled
+  without an access rule, rooms with an inferred rule, rooms without an operation, and a
+  per-level summary. It replaces the panel's reminder; the viewer's status window still shows
+  the counts on every load, and the ROOMS list shows the program names with `later` and
+  `access?` marks.
+- Removed: the PROGRAM window, its form code, the POST endpoint in `vite.config.js` (the
+  folder is served read-only now), the form styles.
+
+### 2026-11-06, later: washroom names
+
+From chat: washrooms are "Men's WR" or "Women's WR" when the gender is known, "WR" when not.
+`scripts/apply_chat_2026-11-06b.py` renamed every room with use `wc` that way (14 and 38 Men's
+WR; 16 and 31 Women's WR; 66 and 67 WR), and the WR use label is "WR" in the viewer so an
+unnamed washroom reads the same.
+
+### 2026-11-06, evening: objects and activities, starting with the Level 3 crit rooms
+
+Asked: outline the objects in the model (Level 3 first) and how agents interact with them,
+knowing that some are not modelled (pin-up boards, projectors in the crit rooms). The export
+was counted per room: the studio holds nearly everything (172 desks, 206 chairs, 36 boards, 27
+tables, 20 computer stations, printers, bins, sofas); crit room 1 has one classroom table (a
+3 cm placeholder family), a computer station and 20 chairs; crit room 4 two tables and 11
+chairs; the kitchen two counters; the lounge a sofa, two benches and the keg fridge; offices 2
+and 3, the photography room 5 and the 3D-printing room 6 are empty; there is no projector,
+screen or wall pin-up anywhere.
+
+Method chosen (README section 8): three layers under `program/`, all the owner's.
+`affordances.json` is the catalogue of kinds and what an agent does with each; `objects.json`
+adds what the model lacks, per room, with a placement rule and `inferred_position: true`;
+`activities` on the room entry in `rooms.json` say what pulls people in and how the room is
+arranged. Modelled pieces need no entry. Spots (where an agent sits or stands) will be derived
+in code from these, never typed in.
+
+From the owner, for both crit rooms: pin-up felt fixed directly to every opaque wall; a
+projector in each room, its screen descending from a housing high on the short wall on the
+door's side (the west wall in both); tables on casters, rolled aside or stacked top to top for
+presentations; chairs turned and shifted as the groups cycle wall to wall; between crits,
+chairs round the tables for history seminars and other classes, studio lectures and internal
+slide presentations. The crit session's own parameters come from the studio-culture handover
+notes, not read yet (the owner will import all handover notes later): recorded as `pending`.
+Room 1's door into the kitchen (room 9) is confirmed, and room 9 opens on to the lounge (10).
+
+- `program/affordances.json`: 15 kinds; pin-up wall, screen, projector, chair and the crit
+  room table rules from the owner; the rest filled from general use and marked `inferred`.
+- `program/objects.json`: O1 to O6 (pin-up walls, screens, projectors for rooms 1 and 4) and
+  the furniture rules for both rooms.
+- `scripts/apply_chat_2026-11-06c.py` (run once): three activities (crit, seminar, lecture)
+  and notes on rooms 1 and 4.
+- `scripts/rasterise.py` reads `program/objects.json` and places each object from the room's
+  open floor tiles and the wall or column tiles beside them: felt as a 6 cm surface on the
+  inside face of every opaque run of 1.5 m or more (runs end at doors and glass), the screen
+  centred on the longest opaque run of its wall, the projector on the screen's centre line
+  3.5 m into the room. Every placed piece is `inferred: true` with its object id and a `z`
+  (height above the floor). Level 3 gets 10 pieces; the debug PNG shows them amber.
+- The pixel plan draws felt on an east-west wall as a panel with pinned sheets on the wall's
+  face, and edge on (a strip) on a north-south wall; the screen as a housing and a white sheet;
+  the projector as a small box at ceiling height; every added object with amber dashes. The
+  isometric draws them as blocks at their height with amber edges. Checked in the pane: felt on
+  the far walls shows, felt on the walls nearest the camera stays behind them (compared the
+  isometric with and without the added objects pixel by pixel).
+- `scripts/program_todo.py` adds an "Objects and activities" section to `program/TODO.md`.
+- Screenshots 19 to 21 (room 1 plan, rooms 1 and 4 isometric).
+
+Open: the crit activity's parameters (handover import), the rest of Level 3 room by room
+(lounge, kitchen, photography, 3D printing, offices, the studio's rules), then the other
+floors; a run of the catalogue with the owner to confirm the general-use entries.
+
+### 2026-11-06, night: kitchen and student lounge (Level 3 rooms 9 and 10)
+
+From the owner, with a plan screenshot of the lounge: the door from crit room 1 leads through
+a pass-through doorway with no panel in the wall across the kitchen (the model shows that wall
+unbroken, a dead end one metre deep); the doorway from the kitchen to the lounge has no panel
+either; counters along both kitchen walls (modelled), a fridge in the north-east corner, the
+sink in the middle of the west counter (modelled), a microwave on each counter, kettles, a
+coffee machine and other tabletop appliances, communal and not used by everyone. In the lounge:
+a fridge in the north-east corner; the bar on the west side against the full-height service
+shaft (the doorless enclosure in the model), two beers on tap, a counter longer than modelled;
+church-pew benches with a high back against the studio desks on the south edge; a couch with a
+coffee table in front (the model's "Bench2").
+
+- `program/edits.json`: E1 is now a doorway without a leaf; E2 adds the pass-through opening
+  in wall 1229363 on the centre line of door 1230417 (position inferred: in line, width taken
+  from that door); N2 records the service shaft (walls 1232203, 1232024, 1231820, 1231709), no
+  change. New edit kind `add_opening`; `leaf: false` on a door entry means no panel.
+- `program/objects.json` (schema 2): O7 to O13 (kitchen fridge, two microwaves, kettle,
+  coffee machine, lounge fridge, pew bench) with three new placement rules: a room corner (on
+  the room's main floor, so the kitchen's cut-off lobby does not count), on a modelled counter
+  at a fraction along it, and a box in model metres (the pew along the north edge of desks
+  1359773 to 1359775). A `rekind` table gives the owner's kind to modelled pieces the family
+  name misnames: 1360412 coffee table, 1359220 bar, 1360331 and 1360332 beer taps (kind
+  inferred, drawn amber). Rules: communal appliances; the bar longer than modelled.
+- `program/affordances.json`: sink, fridge, microwave, kettle, coffee machine, bar, beer tap,
+  pew bench, coffee table. `use_share` on the communal appliances is pending.
+- `scripts/apply_chat_2026-11-06d.py` (run once): notes and activities on rooms 9 (heat food
+  and make drinks; event preparation, pending) and 10 (Good Times, Waffle Times, everyday
+  lounge use, all with their parameters pending).
+- `scripts/rasterise.py`: `add_opening`, the leaf flag, the sink as its own kind, rekinds
+  (with a `z` for every piece), the three placements. Level 3: 19 inferred pieces.
+- Viewer: a doorway without a leaf is drawn open under its header in the plan (jambs amber
+  when it is an edit) and in the isometric; sprites and iso colours for the nine new kinds (the
+  pew with its high back, the bar with a brass rail, the tap tower, the white fridge).
+- `scripts/program_todo.py` lists inferred rekinds. Screenshots 22 and 23.
+
+Still to ask: the long 1 m high piece along the kitchen wall (Family5) and the 2.3 m piece
+along the glass (Family9), whether the UOKR124 pieces are the taps, how long the bar is, the
+open south and west edges, what Good Times and Waffle Times are (when, how many, who, served
+from where), everyday use, and the access and hours of both rooms.
+
+### 2026-11-06, night, later: lounge answers
+
+From the owner: the long piece along the kitchen wall is a kitchen- or bar-height serving
+table; the taps are the two squares with a small faucet behind the bar (the UOKR124 pieces,
+no longer a guess); the piece along the glass north of the couch is another couch or bench;
+the bar counter extends to match the shaft wall while leaving a pass-through to get behind it;
+the lounge is open to the studio with nothing marking the edge but the back of the pew bench
+and the backs of the studio desks; everyday use is lunch, social space and group work; the
+Good Times and Waffle Times schedule comes with the handover document; the entire floor is
+behind key card from the stairwell.
+
+- `program/objects.json`: rekinds 1359756 serving_table and 1359762 seating; the taps' kind
+  is the owner's now; O14 carries the bar counter 0.46 m south to the shaft wall's end over the
+  keg fridge, with the pass-through read as the existing gap between the counter's north end
+  and the bench (inferred, noted); rules for the bar and the open edges.
+- `program/affordances.json`: serving_table (its use at events inferred); beer_tap confirmed.
+- `scripts/apply_chat_2026-11-06e.py` (run once): `floor_access` note on all eleven Level 3
+  rooms; kitchen and lounge access `arch_all`, marked inferred from the floor-wide key card;
+  the lounge's everyday activity and the two events' pending notes updated; notes extended.
+- Viewer: serving table sprite and iso colour. Screenshot 24.
+
+Open: the event schedule (handover import); the hours of the floor (24/7 was not stated);
+the rest of Level 3 (photography 5, 3D printing 6, offices 2 and 3, the studio's own rules).
+
+### 2026-11-06, night, later still: photography room (5) and 3D-printing room (6)
+
+The model has two empty 2.5 m square windowless cells against the east side by the stair core,
+the 3D-printing room entered from the studio and the photography room entered only through it.
+From the owner: on the wall opposite the window (the west wall; the east wall covers the window)
+a shelf with at least six small 3D printers; any architecture student may use them and brings
+their own filament; people come back to collect once the print ends; unforeseen problems stop
+prints; when the printers are very busy a student moves another's work aside. The photography
+room has a backdrop that drops down, a table and some lights, nothing else.
+
+- `program/affordances.json`: shelf, 3D printer (start a print, collect, move another's work
+  aside; print duration and failure share pending), backdrop, photo light (two assumed); the
+  table gains the photographing use.
+- `program/objects.json`: O15 shelf on the west wall of room 6 (size assumed), O16 six
+  printers spread along it, O17 backdrop on the south wall of room 5 (the wall is assumed:
+  opposite the door), O18 the table in front of it, O19 and O20 two lights either side (count
+  and places assumed). Two placement rules: against a wall at any mount (high, shelf, floor)
+  with a depth, and count pieces along the top of another added object.
+- `scripts/apply_chat_2026-11-06f.py` (run once): room 6 access `arch_all` (the owner's: any
+  architecture student), room 5 `arch_all` inferred from the floor key card and the route
+  through room 6; notes and the print and photograph activities, parameters pending.
+- Viewer: sprites and iso colours for the printer, backdrop and light; an added object's face
+  is as tall as its own height. Two drawing fixes the shelf exposed: a piece standing on
+  another is drawn in its base's strip after it (printers on the shelf, microwaves on the
+  counters), and a strip's canvas now grows upward to hold a deep piece or a raised one
+  instead of clipping it. Screenshots 25 to 27.
+
+### 2026-11-06, night: a desk in every individual office, all floors
+
+The owner: the offices on all floors are likely individual offices; put a desk in each based on
+the size of the room, and ask when unsure. The program has 43 offices (14 on Level 2, 2 on
+Level 3, 27 on Level 4), all empty in the model.
+
+- `program/objects.json` gains `by_use`: a rule that applies to every room of a use in the
+  program. The office rule puts a desk sized by the room's area (1.4 by 0.7 m up to 12 m2,
+  1.6 by 0.8 up to 18, 1.8 by 0.8 up to 25) along the longest opaque wall that has no door,
+  pulled off the wall by a chair's depth, with the chair between wall and desk so the occupant
+  faces the room; every piece is flagged inferred (which wall, the sizes and the facing are
+  assumed). Offices above 25 m2 are left for the owner: rooms 32 (28 m2), 33 (55), 34 (162),
+  35 (56) on Level 2 and 55 (34) on Level 4 may be shared or something else. 38 offices got a
+  desk and chair.
+- `scripts/rasterise.py` reads the program's uses and applies the rules by use after the
+  per-room objects.
+- `scripts/apply_chat_2026-11-06g.py` (run once): an office-work activity on the 38 offices
+  (occupant, hours and office-hours visits pending) and a note on the 5 larger ones.
+- Checked on Level 4 in the plan: a desk and chair in every office, against the wall away
+  from the door. Screenshot 28.
+
+Open: what the five large "offices" are; whether the offices are professors' (access
+`professor`) and their hours; the studio's own rules on Level 3; then the other floors' rooms.
+
+### 2026-11-06, night: offices, second word
+
+From the owner: the large offices have shared desks, number unknown; in the individual offices
+the desks usually face the door; on the fourth floor in particular there may be another counter
+along the window; a visitor chair at the desk; some shelving in each, as an assumption.
+
+- The office rule in `program/objects.json` now puts the desk along the side opposite the
+  door (window or wall), pulled off it by the chair, so the occupant faces the door; a visitor
+  chair across the desk; a 0.9 m shelving unit on an opaque wall without a door, at an end of
+  its run clear of the desk; and on Level 4 a 0.5 m counter along the glazed side (panes and
+  mullions as one run), with the occupant's chair pulled clear of it. Every piece is flagged
+  inferred; the shelving and the counter carry the owner's words as `assumption`. 38 offices:
+  38 desks, 76 chairs, 38 shelving units, 18 window counters (the Level 4 offices with glass).
+- Rooms 32, 33, 34, 35 (Level 2) and 55 (Level 4): "shared desks, number unknown" as a rule in
+  objects.json and a note and a pending shared-office activity in rooms.json; nothing placed.
+- `scripts/apply_chat_2026-11-06h.py` (run once) updated the notes and activities.
+- `scripts/rasterise.py`: edge runs take the struct codes to match (walls, glass, columns).
+- Checked on Levels 4 and 2 in the plan. A piece right against a south wall (Level 2 room 25's
+  chair) stands behind that wall's face in the plan view, the V1 projection's nature; the
+  isometric shows it. Screenshot 29.
+
+Open: the count of shared desks in the five large offices; the offices' access (professor or
+staff) and hours; the studio's own rules on Level 3; the other floors' rooms.
+
+### 2026-11-06, night: offices are professors'; two Level 2 walls the model lacks
+
+From the owner: the offices are professors', business hours, the professor and their guests;
+room 32 has desks along the north wall (game view north up); room 33 just needs some desks to
+show the program; a wall should divide rooms 31 and 30, with a small kitchenette on room 30's
+side; the wall between room 38 and rooms 36, 37 and 35 is missing.
+
+- `scripts/apply_chat_2026-11-06i.py` (run once): all 43 offices `professor`, `business`,
+  who "the professor and their guests"; notes on rooms 30, 31, 32, 33, 38.
+- `program/edits.json`: new kind `add_wall`, a wall between rooms painted one tile thick on
+  the `wall_on` room's side of the shared boundary. E3 between the women's washroom (31) and
+  crit room 30, on the washroom's side (9 tiles); E4 between the men's washroom (38) and rooms
+  36, 37, 35, on the washroom's side (10 tiles). Both positions inferred (thickness and exact
+  line not given); the tiles name the edit in `src`, and the tile file lists them under
+  `walls_added`. Both washrooms keep their doors from the west corridor.
+- `program/objects.json`: O21 a 1.8 m kitchenette counter on room 30's side of the new wall
+  (size and contents assumed); O22 desks along room 32's north wall, as many 1.6 m desks as fill
+  it (four), each with a chair on the room side; O23 four desks in two facing pairs at the
+  centre of room 33. Both counts stand in for the real ones (`count_unknown`). Two placement
+  rules: a row along a wall, a cluster at the centre.
+- Checked on Level 2 in the plan. Screenshots 30 to 32.
+
+Open: the real desk counts in rooms 32, 33, 34, 35 and 55 (nothing yet in 34, 35, 55); the
+studio's own rules on Level 3; the other floors' rooms; the handover import.
+
+### 2026-11-06, night: the studio's rules
+
+From the owner: the studio's desks and pin-up boards are on casters, not typically moved during
+the semester, but the simulation gets a toggle that makes them movable; the board at the end of
+each bay is more a divider; presence over time and the cohort ratios come with the handover;
+the eastern desks and the southernmost area are third years, the middle first years, the
+northernmost second years, generally; the four tall pieces along the lounge edge are the pews;
+beside the plotters at the north end there are three large printers (8.5x11 and 11x17); the
+desktop computers mid-floor are primarily for printing to the plotters; all of it is used by
+all students, so printing is concentrated in that one area for the whole floor; service shafts,
+closets and similar service areas are not occupiable.
+
+- `program/objects.json`: `toggles.movable_furniture` (off by default); rules for the studio
+  (desks and boards: casters, movable by toggle, the board a divider; the printing area); the
+  pews rekinded from the four 'Family7' pieces (1359757 to 1359760) and the added O13 withdrawn;
+  O24 to O26 the three printers west of the plotters (places assumed); `zones` for the studio:
+  year 3 east of x 18.5 m and south of y -19, year 1 between y -19 and -3, year 2 north of y -3,
+  the lines assumed as thirds of the length; `global_rules.service_areas`.
+- `scripts/rasterise.py`: every desk and chair of a zoned room carries `cohort`, its zone and
+  `cohort_inferred` (Level 3: 40 desks year 1, 44 year 2, 88 year 3); a `no_go` list per level
+  of tiles nobody may occupy: rooms whose use is service or elevator, and enclosed floor
+  cavities without a door (the shaft behind the lounge bar, 11 tiles; smaller cavities on the
+  other floors). The viewer's people treat them as occupied.
+- `program/affordances.json`: printer (plotters and printers, all students), computers (send a
+  print), the pin-up board as divider, the desk's casters and zone, the pews modelled.
+- `scripts/apply_chat_2026-11-06j.py` (run once): the studio's notes and three activities
+  (desk work by cohort, printing, desk crit), parameters pending with the handover.
+- The printers first landed inside office 2 (a tile dump misread); moved to the studio side of
+  the partition and checked. Screenshots 33 and 34.
+
+Open: what the two 5 cm casework tops near the large tables are (ids 1360052, 1360064, at
+counter height), and the two small 'Family11' pieces on something at 0.9 m beside the plotters
+(1360036, 1360037); the cohort ratios, presence over time and crit parameters (handover).
+
+### 2026-11-06, night: the southern elevator is usable
+
+From the owner: people should be allowed to use the southern elevator. `global_rules.elevator`
+in `program/objects.json` says so; the no-go rule now covers service rooms and doorless
+cavities only; the rasteriser flags the elevator car `transit` on every level, and the viewer's
+people may walk into it (the car is the one modelled piece whose tiles are not occupied). The
+elevator's affordance names the owner as its source.
+The car's tiles have no slab under them (the shaft is void in the model) and are ringed by walls
+and stair tiles, so the walkable rule takes a transit tile whatever is painted under it. The
+wandering placeholder people still do not reach it, since stair tiles are not walkable for
+them; reachability of the elevator and the stairs is the simulation's path model, to come.
+
+### 2026-11-06, night: the first simulation piece, stairs and the elevator
+
+Asked: build the elevator and stair path model as the first simulation piece, with the
+elevator serving people first come first served and picking up people on the way when they go
+the same way. Nothing of the simulation existed before this; the viewer only had placeholder
+wanderers on one floor.
+
+- `program/simulation.json`: the parameters, every number marked assumed until the owner or
+  the handover confirms it: the elevator (capacity 6, 3 s per floor, doors 5 s open and 1.5 s
+  to move, 1.2 s per person boarding, collective control), walking (1.3 m/s, 18 s per floor on
+  the stairs), the stairs-or-lift choice (stairs for one floor 80 % of the time, the lift for
+  more 70 %), and the test agents (12, dwelling 20 to 90 s between trips).
+- `viewer/src/sim/grid.js`: a floor as a walkable grid from its tiles: floor and door tiles
+  walk, stair tiles walk slowly, the elevator car's tiles are transit, furniture and no-go
+  tiles block; eight directions without cutting corners; the floor's connected pieces, agents
+  living on the largest.
+- `viewer/src/sim/path.js`: A* on a floor.
+- `viewer/src/sim/building.js`: the levels bottom to top; each stair's tiles on the level it
+  starts from become a portal to the tiles over its far end on the level above, with an entry
+  tile beside it, and the reverse portal down (46 portals: two cores on every level, three runs
+  each); the elevator's landing on every level is the walkable tile beside the car with the
+  most open neighbours, since the model does not say which side the doors are on (inferred).
+- `viewer/src/sim/elevator.js`: collective control. Landing calls carry a floor and a
+  direction, car calls a floor; the car keeps its direction while any call lies ahead, stopping
+  for car calls and for landing calls its way when it has room, so it picks up people going
+  the same way; it reverses only when nothing is left ahead, and idle it answers the oldest
+  call. Doors are held for someone who can board; a full car wipes nobody's call (the waiters
+  press again) and is not held open by people it cannot take.
+- `viewer/src/sim/sim.js`: the agents and the loop. A test agent picks a destination on
+  another floor, chooses stairs or lift by the rule (or the window's setting), walks the A*
+  path, climbs hop by hop or presses the button and waits, boards first come first served
+  when the doors open at its floor and the car goes its way, steps out at its floor, walks on,
+  dwells, repeats. A log of what each agent and the lift do, and counts.
+- `viewer/test/sim-smoke.mjs`: a headless run in Node (`node test/sim-smoke.mjs 3600 12 auto`
+  from viewer/). An hour with 12 agents: 276 trips, 146 by lift, 43 of 147 boardings picked up
+  on the way, wait 52 s on average and 240 s at most, the car busy all the time (doors take 8 s
+  a stop). 30 agents on the lift alone saturate it (wait 288 s on average): the demand of the
+  test agents is far above the building's, and the handover's presence will replace it.
+- The page: a SIMULATION window (START, PAUSE, RESET, speed 1x/5x/20x, agents, stairs or lift
+  by rule / lift only / stairs only, the counts and the last log lines). The scene draws the
+  agents of the floor on show as the people sprites with their number, those in the car at the
+  car's place when it is on that floor, and marks the car (grey elsewhere, amber here, green
+  with the doors open) with its floor, way and load, and the landing tile in amber. The
+  placeholder wanderers rest while a simulation runs.
+- Bugs found by the smoke test on the way: an agent spawned in a closed pocket re-planned
+  without end (spawn and goals now on the floor's main piece, a failed plan waits a tick); the
+  full-car call wipe and door hold above; boarding order by agent number (now by waiting time).
+- Checked in the pane on Level 3: the car marked in the south core with "LIFT Basement v 1/6",
+  an agent waiting at the landing, the window counting. Screenshots 35 and 36.
+
+Open: the elevator's real capacity and timings; the door side of the car; whether the stairs
+are walked at the assumed pace; the agents' schedules (activities and the handover) in place
+of random trips; drawing the agents in the isometric.
+
+### 2026-11-06, night: the other crit rooms by rule
+
+From the owner: the smaller crit rooms in the basement and on the second floor are similar to
+the ones on the third floor, and the same interactions are enough for now.
+
+- `program/objects.json` by_use `crit`: every crit room without its own felt, screen or
+  projector gets Level 3's set: pin-up felt on every opaque wall, a screen high on the short
+  wall on the door's side (room 21 has no door and no short opaque wall in the model, so its
+  screen went on the north wall, marked guessed), a projector facing it. Rooms 19, 21 and 30
+  on Level 2 and 72 and 73 in the Basement. Tables and chairs are not placed (number unknown).
+- `scripts/apply_chat_2026-11-06k.py` (run once): Level 3's crit, seminar and lecture
+  activities on those five rooms, and a note.
+- `scripts/rasterise.py`: the crit set; a by_use rule skips a room only when the room's own
+  objects are of the kinds the rule places (room 30 has the kitchenette and still got its set).
+- Checked on Level 2 room 30 in the plan: felt on the north wall and beside the kitchenette on
+  the new west wall, the screen edge on above the counter, the projector mid-room.
+  Screenshot 37.
+
+### 2026-11-06, night: tables and bookings for rooms 21, 22, 72, 73
+
+From the owner: rooms 21 and 22 (Level 2) and 72 and 73 (Basement) have the same tables as the
+third floor crit rooms; they are booked for reviews or for a class lecture or discussion, and
+student organizations or clubs can use them too.
+
+- `program/objects.json`: O27 to O30, a `table_set` placement: pairs of the Level 3 crit
+  rooms' SALA 60x90 in tables pushed together at the room's centre with ten chairs round each
+  pair, one pair in 21, 72 and 73, two in the large classroom 22; the counts stand in
+  (`count_unknown`). Rules for the four rooms: tables on casters, stackable, chairs turned
+  wall to wall, as on Level 3. Room 22 joins the crit rule (`also_rooms`): felt on its opaque
+  walls, a screen (on the south wall, guessed: no door on a short wall), a projector.
+- `scripts/apply_chat_2026-11-06l.py` (run once): the four rooms' access `bookable`, who
+  "booked for reviews, class lectures and discussions; also student organizations and clubs",
+  and three activities (review, class, club meeting) with parameters pending.
+- Checked on Level 2 room 22 in the plan. Screenshot 38.
+
+Rooms 19 and 30 keep the crit set without tables and their inferred access, as the owner did
+not list them.
+
+### 2026-11-06, night: room 19 matches; room 22 in rows
+
+From the owner: room 19 should match rooms 21, 72 and 73; room 22 should have rows of the same
+tables with more chairs, at least five rows if possible, to see how that fits.
+
+- Room 19: a stand-in pair of the Level 3 tables (O31), the casters rules, access bookable and
+  the review, class and club activities (`scripts/apply_chat_2026-11-06m.py`, run once).
+- Room 22: a `table_rows` placement: rows of tables across the room facing the screen's wall
+  (south, guessed), three chairs behind each table, as many rows and tables per row as the
+  room allows. Five rows do not fit: a 1.57 m table and a chair row need 2.25 m before any
+  gap, and the room is 11.5 m deep. With 1.2 m clear at the front and 0.5 m behind each chair
+  row three rows fit; with 1.0 m and 0.3 m four rows fit, three tables each, 36 chairs. Set to
+  the tight four, every count marked as following from the room, not the owner.
+- Checked on Level 2 in the plan: four rows of three tables, chairs behind, facing the screen wall. Screenshot 39.
+
+### 2026-11-06, night: room 22 turned
+
+From the owner: rotate the tables 90 degrees; the drop-down projector screen is on the wall
+opposite the window, so the rows are long ones.
+
+- The crit rule takes `screen_wall` per room: room 22's screen is on the east wall, opposite
+  the glazed west wall; the projector faces it.
+- Room 22's rows now run north to south facing east, the tables' 2.29 m side along the row,
+  four tables a row along the 11.5 m depth, chairs on the west side of each table. Across the
+  8.5 m width a row needs 2.35 m plus a gap: with 0.85 m clear in front of the screen and
+  0.3 m behind each chair row three rows fit, the last against the window; set so (three rows
+  of four, 36 chairs). A per-room layout reads the rule's screen wall when it runs before the
+  rule has placed the screen.
+- Checked on Level 2 in the plan: three long rows of four tables, chairs on the west side, the screen on the east wall. Screenshot 40.
+
+### 2026-11-06, night: room 22's tables half as deep
+
+From the owner: the tables should be half the depth, so more rows fit; they are on casters.
+Room 22's tables are now 2.29 by 0.78 m (rule and O28): four rows of four with 48 chairs fit
+across the 8.5 m width with 0.85 m clear at the screen and 0.3 m behind each chair row; five
+would leave no space to walk behind a row.
+- Checked on Level 2 in the plan: four long rows of four shallow tables, chairs on the west side, facing the east wall. Screenshot 41.
+
+### 2026-11-06, night: room 15, the lecture set-up
+
+From the owner: room 15 is a lecture set-up, two projection screens on the long wall opposite
+the doors, a speaker's laptop in the middle between them, and rows of tables and chairs facing
+them like room 22.
+
+- `program/objects.json` O32 to O38: two screens high on the east wall at three and seven
+  tenths of its length, the speaker's table centred between them against the wall with a
+  laptop on it, two ceiling projectors each facing its screen, and rows of the shallow tables
+  on casters facing east: four rows of up to five tables, 20 tables and 60 chairs, with 1.3 m
+  clear in front for the speaker. Three new placement options: `along` for a piece at a point
+  of a wall, `screen_object` for a projector aimed at one of several screens, `front` for rows
+  in a room without a screen rule; a table that would stand on a column is left out.
+- `scripts/apply_chat_2026-11-06n.py` (run once): the room's note and a lecture activity
+  (class sizes, timetable and other bookings pending).
+- Checked on Level 1 in the plan: four rows of five tables facing the east wall, the speaker's table with the laptop between the screens, the projectors mid-room. Screenshot 42.
+
+### 2026-11-06, night: room 15 condensed; rooms 12 and 13
+
+From the owner: condense room 15, less space or smaller tables, so the four rows fit with room
+to spare; rooms 12 and 13 both have two projection screens on the short wall opposite the door
+and several rows of lecture seating with tables not as deep as a typical desk, the count
+unknown and to be estimated from the size.
+
+- Room 15: tables 1.8 by 0.6 m, 0.15 m between tables, 0.25 m behind each chair row: four
+  rows of seven, 28 tables and 84 chairs, 1.3 m clear in front.
+- Rooms 12 and 13 (O39a to g, O40a to g): two screens high on the short wall opposite the
+  doors (room 12's north wall, its doors being on the south; room 13's south wall, its doors on
+  the north), a speaker's table with a laptop between them assumed as in room 15, two ceiling
+  projectors, and rows of the same shallow tables facing the screens: eight rows of four,
+  32 tables and 96 chairs in each. All counts follow from the rule and the room's size.
+- `scripts/apply_chat_2026-11-06o.py` (run once): notes and a lecture activity on 12 and 13
+  (class sizes, timetable, other bookings and the west side's glazing or wall pending).
+- Checked on Level 1 at half zoom: the three lecture rooms in rows facing their screens. Screenshot 43.
+
+### 2026-11-06, night: solid west walls on Level 1; shallower lecture tables
+
+From the owner: the west side of rooms 12 and 13 is a solid wall; their tables could be less
+deep, like room 15's, so a bit of the floor still shows.
+
+- `program/edits.json` E5 and E6: `add_wall` against the outside on the west side of rooms 12
+  and 13, painted one tile thick on the room's side wherever its west edge had no structure
+  (the model had a strip of slab there and then nothing); thickness and line not given. The
+  walkable grid no longer lets anyone out of the building there.
+- Rooms 12 and 13: tables 1.8 by 0.45 m with 0.4 m of floor behind each chair row: eight rows
+  of four in room 12 (32 tables, 96 chairs), nine rows of four in room 13 (36 tables, 108
+  chairs), by the rule.
+- With the new west wall taking half a metre of each room, the rows hold three tables: room 12: 8 rows, 24 tables, 72 chairs; room 13: 9 rows, 27 tables, 81 chairs. Checked on Level 1 room 13 in the plan. Screenshot 44.
+
+### 2026-11-06, night: room 13's north wall
+
+From the owner: room 13's north edge is a wall with the two doors in it. `program/edits.json`
+E7 paints it on the room's side of the edge wherever it was open; the two modelled doors stay
+as openings. Room 13 is now closed on every side.
+
+### 2026-11-06, night: the washrooms by rule
+
+From the owner: design the washrooms, approximately four stalls and three sinks.
+
+- `program/objects.json` by_use `wc`: stalls 0.9 by 1.5 m along the longest opaque wall
+  without a door, each with its toilet against the wall, and a 0.55 m counter with sinks along
+  another wall, opposite the stalls where it can be; fewer where the wall is shorter. The six
+  washrooms: 14 and 16 (Level 1) four stalls and three sinks; 31 (Level 2) three stalls and
+  three sinks; 38 (Level 2) three stalls and one sink, its free walls being short; 66 and 67
+  (Level 4, 8 m2) two stalls and three sinks. Counts approximate by the owner's word, walls
+  by rule, sizes assumed.
+- `program/affordances.json`: stall (use, 2 to 6 min, one at a time); the sink's washroom use.
+- `scripts/apply_chat_2026-11-06p.py` (run once): a washroom activity on the six rooms
+  (frequency and urinals pending).
+- Viewer: a stall sprite (pale floor, partitions, the toilet) and its iso colours.
+- Checked on Level 1 room 16 in the plan: four stalls along the north wall with their toilets; the sink counter on the south wall stands behind that wall's face in this projection. Screenshot 45.
+
+### 2026-11-06, night: the washrooms, second pass
+
+From the owner: in 31 the stalls along the wall farthest from the door, the sinks on the small
+partition facing the stalls; in 38 the stalls where they make sense without blocking the door,
+the small U-shaped space would work; on Level 1 the stalls at the corner, or in 14 against the
+back wall like 31; 66 and 67 are probably single washrooms by their size.
+
+- The washroom rule now puts the stalls along the opaque wall farthest from the door tiles,
+  aligned to the end farthest from the door, with per-room overrides: 31 stalls on the south
+  wall and sinks on the partition's south face (`sink_run: inner`); 14 stalls on the east wall
+  and the sink on the partition facing them; 16 stalls along the north wall at its east
+  corner; 66 and 67 single, one toilet and one sink each. A sink run must hold at least one
+  sink or the next wall is tried.
+- Room 38 by hand (O41 to O45): the U-shaped pocket north of the main space as one larger
+  stall, two stalls against the west wall of the main space facing east, a counter with two
+  sinks against the south wall, all clear of the west door lobby and the east door; the rule
+  skips the room since it has its own pieces (rules now name the kinds they place).
+- Counts now: 14 three stalls and one sink; 16 four and three; 31 three and three; 38 three and two; 66 and 67 one and one. Checked 31 and 38 on Level 2 in the plan. Screenshots 46 and 47.
+
+### 2026-11-06, night: the stair closed off; washrooms, third pass
+
+From the owner: the small room beside stair 18 is unknown but should not be open to the stair,
+the stair is separate; 38 looked wrong with the sink blocking circulation (smaller stalls
+against the wall, or a urinal per the code); no sinks on top of stalls in 66 and 67; in 16 the
+sink could not be seen and may have been under a stall.
+
+- `program/edits.json` E8: `add_wall` round the stairs of room 18 on Level 1: every open tile
+  of the room that touches a stair tile becomes wall (16 tiles), with a 1 m doorway and door
+  cut in the middle of the west run so the stairs are entered from the lobby (place assumed).
+  The two pockets east of the stairs end up enclosed without a door and count as service
+  space. The rasteriser applies these walls after it paints the stairs.
+- Room 38 re-laid (O41 to O46): two 0.75 by 1.2 m stalls side by side in the U-shaped pocket,
+  two urinals on the west wall of the main space, one sink on a counter against the east wall
+  south of the east door; the path from the west door lobby to the east door is clear. New
+  kind `urinal` (affordance, sprite, iso colour).
+- The washroom rule: a sink counter is placed only where it is clear of every stall, moving
+  along its wall or to another wall, with fewer sinks if need be; the single washrooms 66 and
+  67 get a 0.8 by 1.2 m toilet space; the sinks avoid the south wall when another wall will
+  do, since the plan view hides what stands against it (room 16's three sinks were there, not
+  under a stall; now one sink on the east wall where it shows). Washroom counters are plain.
+- Counts now: 14 three stalls and one sink; 16 four and one; 31 three and three; 38 two stalls,
+  two urinals, one sink; 66 and 67 one and one.
+- Checked: Level 1 stair 18 walled off from the lobby with its door and from the east pockets (now not walkable); room 38 at zoom 3; room 31 with its plain counter. Screenshots 48 and 49.
+
+### 2026-11-06, night: the stair enclosure put right; three translation errors fixed; an enclosure audit
+
+The owner marked the Level 1 south stair: the walls I had added east of the stairs would block
+them, and the stair's north end stood open to the corridor; and asked for a recheck of all the
+geometry between rooms and why such errors from model to pixel occur. Three causes, all in
+`scripts/rasterise.py`, all fixed:
+
+- A thin wall (the model's 165 mm partitions) lying on a tile boundary has no tile centre within
+  its painting reach (0.22 m against 0.25 m to the centres), so stretches of it vanished. Walls
+  now also paint every tile their centreline runs through. Wall tiles rose by a fifth on every
+  level (Level 1 from 329 to 420). The same for doors: a door in such a wall cleared nothing,
+  which is why room 13's two doors had no tiles; a door now opens the tiles its own line runs
+  through as well. Every door on every level has tiles now.
+- Stair runs painted over whatever was there, including the wall at a stair's end, which is
+  how the south core's north end was open to the corridor on every level. Stairs now paint only
+  open tiles.
+- Stair landings were not painted at all (the export has them); the spaces east of the Level 1
+  south stair that I took for pockets were its landings. Landings are painted as stair tiles.
+
+Edit E8 now closes the stair off from the lobby only (`sides: ["west"]`, 6 tiles, a 1 m door),
+as the owner's markup shows; the landings stay open to the runs.
+
+`scripts/check_enclosure.py` writes `program/enclosure-report.md`: for every room, the open
+edges to other rooms, the corridor or the outside (side, length, what lies beyond), rooms with
+no door, and rooms whose open floor in the tiles is under half Revit's area. After the fixes
+the only findings are the lounge's open sides to the studio (meant), Basement shop 74 without
+a door (asked), and Level 3 office 3, whose only door tile sits in the corner where its north
+and east walls meet and does not reach the room: a wall-corner door in the model, to look at.
+Checked the Level 1 south stair in the plan against the owner's markup. Screenshot 50.
+Correction: after the door fix Level 3 office 3's door opens into the room, so the audit's findings are the lounge's open sides and shop 74 only.
+
+### 2026-11-06, night: the lobby wall withdrawn; room 34 as a placeholder office
+
+The owner marked the Level 1 south stair again: the wall between the lobby and the stairs
+blocks the runs, which are entered from the lobby. Edit E8 is withdrawn (kept in the file with
+the reason; the rasteriser skips a withdrawn edit). The gap it was meant to close was the
+stair-over-wall fault, fixed earlier today, so nothing is lost: room 18 is enclosed by the
+model's own walls, and the stairs are reached from the lobby as before.
+
+Room 34 on Level 2 (162 m2, L-shaped, 'office'): the owner asked for it to be populated like
+an academic administrative office as a placeholder, and noted as such. `program/objects.json`
+O47, a `boxes` placement of 32 hand-laid pieces in model metres: a reception counter inside the
+east door with the receptionist's and two visitors' chairs, six workstations in three facing
+pairs, a meeting table with six chairs, three shelving units along the north wall, a printer,
+a waiting bench in the middle part, two desks in the south part. Every piece carries
+`placeholder: true`. `scripts/apply_chat_2026-11-06q.py` (run once): use admin, access staff,
+a PLACEHOLDER note, and three activities (administrative work, a visit to the reception, a
+meeting) with their parameters pending. The office rule leaves the room alone, as before,
+being over 25 m2.
+- Checked: Level 1 stair 18 with the runs open to the lobby and the core closed by the model's walls; room 34 with its placeholder layout. The enclosure audit still finds only the lounge and shop 74. Screenshots 51 and 52.
+
+From the owner: a placeholder is flagged in the code or in a note, never in the room name. Room 34's name is "Administrative office"; the note and every piece keep the flag.
+
+### 2026-11-06, night: the Basement shops
+
+From the owner: no game view for the whole building (a general note: the page already offers
+BUILDING as the isometric only, the GAME VIEW button disabled for it); there are unknowns in
+the Basement; 74 is the workshop, more wood tools and one metal bending tool; 75 is the
+assembly room for models; both have hours since they need supervision; the other rooms will
+be confirmed later.
+
+- `program/objects.json` O48 (room 74, 13 pieces): workbenches along the north wall and
+  mid-room, a table saw with room round it, a band saw, a drill press and a sander towards the
+  east wall, the metal brake and a dust collector on the south wall, material racks on the east
+  wall. O49 (room 75, 22 pieces): six assembly tables with a stool on each long side, material
+  shelving on the north wall, a cutting table. The kinds are the owner's; the tool list beyond
+  "wood tools and one metal bending tool", the counts and every place are assumed and say so.
+  New kind `machine` (affordance, sprite, iso colour), each piece naming its tool.
+- `scripts/apply_chat_2026-11-06r.py` (run once): 74 "Workshop" and 75 "Model assembly room",
+  access architecture students under supervision, hours business, activities (a workshop
+  session, model assembly) with their parameters pending. Rooms 70, 71, 76 and 77 stay
+  flagged. Room 74 still has no door in the model and its west side is open to the outside in
+  the tiles, as the Basement's west edge is along 70, 74 and 77: to confirm, like Level 1's.
+- Checked in the Basement plan: the workshop's benches and machines, the assembly room's six tables with stools; the GAME VIEW button is disabled for BUILDING. The Basement's west edge along 74 is a wall now (the thin-wall fix), so only 74's door remains open. Screenshots 53 and 54.
+
+### 2026-11-06, night: the building view's controls; a floor on the floors below; the entrances
+
+From the owner: with the whole building, GAME VIEW turned it into the elevation; GAME VIEW,
+TURN L and TURN R must not be options for the building view, while an isolated floor has every
+view. Could a floor's isometric show the rest of the building below that floor's cut and the
+context? And the south door in the game view is the one with 24/7 key-card access; the other
+doors lock and have no scanner.
+
+- The page: the three buttons are disabled whenever the whole building is on show (on load
+  too, which was the gap: the earlier code only disabled GAME VIEW when a level button was
+  clicked), the keys Q and E do nothing then, and the building keeps its one corner.
+- A floor's isometric now stands on the floors below it: each lower floor's isometric is built
+  (cached per floor and corner) and placed one wall height lower per storey, aligned through a
+  shared model point; the surroundings are the plan context canvas drawn under the
+  isometric's affine map as a ground plane at Level 1, with storeys below grade under it;
+  floors above are cut away. A VIEW checkbox, "Floors below and surroundings (floor
+  isometric)", on by default. The first show of a high floor builds several isometrics and
+  takes a few seconds; after that they are cached. `embed.js` fetches every level's tiles once.
+- `program/building.json`: the entrances. Level 1's six entrance doors are glass double doors
+  set in the curtain walls (family Doors_Dbl_Glass_1), four on the east line and two on the
+  west; they are curtain panels in the export, not doors, so the walkable grid had no way in.
+  The rasteriser now opens a curtain wall over a panel whose type or family says door (six on
+  Level 1, flagged `curtain_panel`). The southernmost, 1290443 in the east line near the south
+  end, is taken as "the south door" with 24/7 card access, inferred and to confirm; the other
+  five are locked outside business hours with no scanner.
+- Two slips on the way, both caught: the new curtain-door loop reused the level's variable
+  `name`, so one rebuild wrote every level under the name of a glass panel (the stray file is
+  removed, the variable renamed); and a glass door panel's box sits beside its wall's line, so
+  the door is now opened where the line is (the panel's centre projected onto the wall). All six
+  entrance doors have four door tiles each. Enclosure audit unchanged: the lounge and shop 74.
+- Checked: Level 2 and Level 3 isometrics standing on the floors below and the ground
+  (screenshots 55 and 56); the building's three buttons disabled on load.
+
+### 2026-11-06, night: the 24/7 door confirmed
+
+From the owner: the 24/7 card door is the door to stair 18 from the outside. That is the
+glazed double door in the south glazing of stair 18's lobby (1290443), the one taken as "the
+south door": confirmed, no longer inferred. The tiles show what lies beyond it: Level 1's south
+end, and mirrored its north end, is slab with a row of columns and no walls, a covered area
+under the floors above, outside the envelope; the lobbies open onto it. `program/building.json`
+now lists two outside doors on the stair lobbies (the south one with the card, the north one
+locked outside business hours), the two west doors in the model at rooms 12 and 13 (to
+confirm, since the owner called that wall solid), and the lobbies' two corridor doors as
+interior glazed doors, not entrances.
+
+### 2026-11-07: the research notes read in; traits only; the empty simulation interface
+
+The research notes (`research/`, 13 files) were read in full and checked against the tool. No
+tool edits came from that. Three owner facts were recorded in the notes: the 3D printers are on
+the 3rd floor (the notes had them in the basement from the 2024 accreditation report), the 7
+spare studio desks toward the middle are unclaimed hot desks, and history seminars (1.5 h) are
+held in the crit rooms while most other-course lectures are in another building. Two design
+decisions were taken in the notes, not the tool: agents are built from a Big Five draw plus
+circumstances and four sampled variables (no personas as inputs), and the trait population is
+a multivariate normal in general-population units with a design-field shift and a per-agent sex
+shift from meta-analyses, to be replaced by a cohort survey.
+
+Then the methodology for the tool was settled in chat (two time scales: a term layer over every
+day of the term and a day run on the grid for the picked day; inputs, outputs, state; an avatar
+later) and the interface was built empty:
+
+- `viewer/index.html`: a left column (`#side`) with the title window and SCENARIO, RUN, ANALYSIS,
+  AGENT, AVATAR and LOG; the right column keeps the model-check windows. The SIMULATION window
+  of the first piece moved into RUN under "TEST PIECE: STAIRS AND LIFT" with its ids unchanged.
+- `viewer/src/ui/panels.js`: draws the term calendar from `program/calendar.json` (studio days
+  shaded, closures struck, reviews in red, last desk crits outlined, deadlines and events dotted,
+  exams greyed), handles the day pick and the quick picks (normal week, last crit, midterm,
+  final, Good Times), fills the metric table with the core set, and folds the lower windows in a
+  narrow pane. Everything else is disabled with a "not wired yet" hint.
+- `program/calendar.json`: the Fall 2026 term from the notes (B1, B2, B8–B11, C11, F9): dates,
+  closures, sessions by year, reviews and last desk crits, phases, other-course deadlines, Good
+  Times, Waffle Wednesday, Halloween, shop and business hours. Assumed dates carry `inferred`.
+- `viewer/src/style.css`: the left column and the calendar, clock, metric table, trait bars.
+
+Checked in the browser: no console errors; the calendar renders with the marks; picking a day
+updates the description and the RUN clock; the test piece still starts. Screenshots 57–60.
+
+### 2026-11-07, later: the interface as a console menu, in steps
+
+The owner's design notes on the first empty interface: no model-check window; the work runs in
+steps (pick a view, then the day, then run, then analyse); format it like the menus of vintage
+Nintendo pixel-art games. The conventions taken from those games (Dragon Quest's command window,
+Final Fantasy's cursor and cascading windows, Pokémon's START menu and text box, SimCity SNES's
+advisor messages): one bordered window per task, opened in place and closed with B; a vertical
+command list with a cursor on the current line; earlier choices shown on their lines; a message
+box along the bottom that says one thing at a time with a "more" mark; no hover states, no
+scrollbars; a bitmap font on a pixel grid.
+
+- `viewer/index.html` rebuilt: a command window (`#cmd`) with 1 VIEW, 2 DAY, 3 RUN, 4 ANALYSE,
+  5 WALK and the commands AGENT, LOG, MODEL; one step window open at a time (`#steps`); the
+  message box (`#msg`) along the bottom. The model-check status window is gone: `#status` and
+  the LAYERS / ROOMS / CHECKS / SELECTED boxes live behind MODEL. VIEW now holds the floor list
+  (`#levels`, still drawn by main.js), the view buttons and the drawing options; every id main.js
+  uses is unchanged, so the views and the test piece work as before.
+- `viewer/src/ui/panels.js`: the menu (cursor, open, close, NEXT, Up/Down/Enter/Esc), the
+  step summaries on the command lines (the view name and the picked day, with a check), the
+  message box with the step help and the mirrored model status, the calendar and the day pick.
+- `viewer/src/style.css`: windows with a double border; the command list with a blinking cursor;
+  the message box; the LEVELS hint text dropped from main.js (the message box carries it).
+
+Checked in the browser: no console errors; the steps open and close by click and by key; the
+VIEW line reads "Level 2, game view: pixel plan" after the floor and view are picked; the DAY
+line reads the picked day; the test piece runs from RUN. Screenshots 61–65.
+
+### 2026-11-07, later still: back between steps, the view at every step, greyed buttons
+
+Owner's notes on the menu: steps must go back as well as forward; the view must be changeable
+throughout the steps; a view that does not apply (GAME VIEW for the whole building) should be
+absent or greyed.
+
+- `viewer/index.html`: 1 VIEW is pinned (`.step.pinned`, "stays open" in its bar, no close mark);
+  its drawing options sit behind a DRAWING fold (`#view-drawing`). Every other main step has
+  BACK and NEXT at its foot; WALK has BACK only; AGENT, LOG and MODEL have a back mark in the
+  bar that returns to the step that was open.
+- `viewer/src/ui/panels.js`: the pinned window is never hidden; opening another step folds the
+  drawing options, opening VIEW unfolds them; `state.last` remembers the main step for the
+  extras' back; Esc closes the open step or folds the drawing; Up/Down/Enter work on the list
+  while only VIEW is open.
+- `viewer/src/style.css`: `button:disabled` is drawn greyed (main.js already disabled GAME VIEW,
+  TURN L, TURN R, FIT FLOOR, the people slider and the stack box where they do not apply, but
+  the buttons had no disabled look); BACK is the lighter button on the left, NEXT the dark one
+  on the right.
+
+Checked in the browser: BUILDING greys GAME VIEW, the turns and FIT; Level 3 game view greys
+the turns; BACK from RUN opens DAY with the view line reading "Level 3, game view: pixel plan";
+the back mark in AGENT returns to DAY. Screenshots 66–68.
+
+### 2026-11-07, evening: VIEW collapses, PLAN VIEW, no turns, the stress test made explicit
+
+Owner's notes: VIEW should collapse while the other steps are used, with a drop-down arrow to
+reopen it; "game view" should be called plan view; turning is not needed; where does the user
+enter the stress-test situation, and where is the toggle that lets agents move objects.
+
+- `viewer/index.html`: VIEW's bar has a fold arrow and names the current view; the DRAWING
+  sub-fold is gone (the whole window collapses). GAME VIEW reads PLAN VIEW; TURN L / TURN R are
+  hidden (their ids stay, Q and E still turn the isometric). Step 2 is now DAY AND SCENARIO and
+  its lower half is the stress test: a Situation preset (none, review-day crowd, plotter paper
+  runs out at 18:00, lift out of service, an event in the lounge, fifteen more students,
+  deadline clash, custom), ADD EVENT (what, where, when, who), AGENTS MAY MOVE OBJECTS (desks and
+  pin-up boards on casters, crit-room tables on casters, chairs) and POLICY (24/7 access,
+  plotter paper at all hours, basement shop). The movable toggle maps to
+  `program/objects.json` `toggles.movable_furniture`, off by default as the owner set it.
+- `viewer/src/ui/panels.js`: opening another step adds `folded` to VIEW; the arrow (the generic
+  fold handler in main.js) reopens it in place; choosing VIEW unfolds it; the view summary also
+  goes to VIEW's bar.
+- `viewer/src/main.js`: the view name reads "plan view".
+
+Checked in the browser: opening DAY collapses VIEW to "1 · VIEW  Level 3, plan view ▼"; the
+arrow reopens it with DAY still open; no console errors. Screenshots 69–71.
+
+### 2026-11-07, night: DAY and SITUATION as two steps
+
+Owner's note: the day and the situation are two separate options; the situation is a dropdown
+of events attached to the picked day, with "other" opening a text box whose description is read
+into an existing event or taken as an entirely untested situation.
+
+- `viewer/index.html`: the steps are now 1 VIEW · 2 DAY · 3 SITUATION · 4 RUN · 5 ANALYSE ·
+  6 WALK. DAY keeps the calendar, the hours, the cohort and "on this day, from the calendar".
+  SITUATION shows the day it is attached to (CHANGE DAY goes back), a Test dropdown in two
+  groups, events from the calendar (review day, pin-up, last desk crit, Good Times, Waffle
+  Wednesday, a deadline) and stresses on the floor (plotter paper runs out, lift out of service,
+  fifteen more students, a deadline clash, a weekend before a review), plus "other: describe
+  it", which opens a text box with INTERPRET and a reading line; then when and where, AGENTS
+  MAY MOVE OBJECTS and POLICY. BACK and NEXT re-chained.
+- `viewer/src/ui/panels.js`: the situation step in the main order; choosing a test writes its
+  name on the command line and marks the step done; "other" shows the text box and the message
+  box explains INTERPRET; the picked day labels the situation step.
+
+Checked in the browser: picking "lift out of service" writes it on the SITUATION line; "other"
+opens the text box; CHANGE DAY returns to DAY; no console errors. Screenshots 72–73.
+
+### 2026-11-07, late: a day OR a situation, one step with a switch
+
+Owner's correction: the day and the situation are alternatives, not one after the other. Step 2
+is now DAY OR SITUATION with a two-way switch at its top. A DAY shows the calendar and runs the
+day as the calendar has it. A SITUATION shows the dropdown (events from the calendar, stresses on
+the floor, other with the text box); a pick attaches itself to a day that fits it from
+`program/calendar.json` (a review day to the midterm review, the last desk crit to its date, Good
+Times to a Friday, a deadline to the October assignment, a weekend before a review to Sat Dec 5,
+the floor stresses to the day already picked), shown as "On Fri 16 October 2026" with CHANGE DAY,
+which switches to the calendar and back. The command line reads "a review day · Fri 16 Oct" in
+situation mode and the plain day otherwise. The cohort, the move-objects toggles and the policies
+sit under both. Steps renumbered: 3 RUN, 4 ANALYSE, 5 WALK.
+
+Files: `viewer/index.html` (the step rebuilt), `viewer/src/ui/panels.js` (the switch, the
+attaching, the summary), `viewer/src/style.css` (the switch row). Checked in the browser: the
+attach, CHANGE DAY to Tue Oct 20 and back, other opening the text box; no console errors.
+Screenshots 74–76.
+
+### 2026-11-07, later: the occupants are read, the rules sit in RUN, the test piece in MODEL
+
+Owner's notes: the number of occupants is the number of agents and must not be editable; where
+is the toggle that lets agents move things (it sat below the calendar in step 2, greyed, and was
+missed).
+
+- `program/cohort.json` (new): the cohort from the confirmed checklist (45 / 60 / 60 students
+  in 3 / 4 / 4 sections, 11 instructors), the optional staff, the 172 studio desks with 7
+  unclaimed hot desks. The interface reads it; nothing about it is typed.
+- Step 2 shows OCCUPANTS as a line, "176 agents: 45 year 1 · 60 year 2 · 60 year 3 · 11
+  instructors", in place of the cohort inputs.
+- RUN opens with RULES OF THE RUN: the agent count (read-only), "May move" with the three boxes
+  (desks and pin-up boards on casters, crit-room tables on casters, chairs; the first two off,
+  as `toggles.movable_furniture` in program/objects.json), "Policy" with the three boxes, and
+  the mode; the transport, clock and headcounts follow under RUN. The boxes are live interface
+  state and the message box confirms each change.
+- The stairs-and-lift test piece, with its "Test agents" slider, moved out of RUN into MODEL as
+  a diagnostic sub-window; its ids are unchanged and it still runs.
+
+Checked in the browser: RUN reads "Agents 176 (165 students, 11 instructors)"; ticking "desks
+and pin-up boards" says "Agents may move desks and pin-up boards."; START in MODEL still runs
+the test piece; no console errors. Screenshots 77–78.
+
+### 2026-11-07, night: movement levels, a horizon, an ensemble, a timeline
+
+Owner's design, agreed in chat: moving objects is two things. Everyday movement (chairs, tables
+and boards moved for activities and returned home) is how the school works and is always on.
+Rearrangement by preference is a slow, social process that must not become agents undoing each
+other: a layout manager settles proposals by rule (benefit to the mover against cost to those
+affected; owners may veto; circulation and egress are hard limits on the walk grid; the floor norm
+is the threshold; ownership, section, first come, a cooldown and a weekly budget settle conflicts).
+Because it is slow, it lives in the term layer, which makes longer horizons and projections
+possible: the term, the school year with the cohort turning over, N terms; weekly snapshots; an
+ensemble of seeds for a spread. Projections under the model's rules, not predictions.
+
+- `viewer/index.html`: RUN's rules now hold Movement (everyday use only, the default; rearrangement
+  by groups; free rearrangement, flagged unrealistic) with a note, the policies, Horizon (the
+  picked day, the term, the school year, N terms with a count) and Ensemble (seeds). The mode
+  select is gone: a day runs on the grid, a longer horizon runs the term layer. ANALYSE gained a
+  TIMELINE OVER THE HORIZON (a week slider, a curves placeholder, the band box, the run count)
+  and "layout drift" in the overlay list; the metric table is "at this week".
+- `viewer/src/ui/panels.js`: the movement level and the horizon write their explanation under
+  the control and in the message box; the command line reads "not run · the term ·
+  rearrangement by groups".
+- The three move boxes are gone; the engine will read the level and the mobility records to be
+  added to `program/objects.json` (class, home, owner, effort, norm per object).
+
+Checked in the browser: the selects, the summary line, the timeline block; no console errors.
+Screenshots 79–80.
+
+### 2026-11-07, late night: button choices, less text
+
+Owner's notes: short option lists should be multiple-choice buttons, not dropdowns; too much
+text makes the interface hard to use.
+
+- Button choices (`.choice`, one lit, a hidden input keeps the id and fires `change`): movement
+  (EVERYDAY USE / BY GROUPS / FREE), horizon (A DAY / THE TERM / THE YEAR / N TERMS), speed,
+  the situation's where, the comparison in ANALYSE, the entry door in WALK. The situation list
+  and the overlay layer stay dropdowns (12 and 9 options).
+- Text cut to a few words everywhere: the step help lines, the movement and horizon notes, the
+  situation notes, the occupants line, the timeline and Pareto captions, the walk, agent, log and
+  test-piece hints; the closing hints of ANALYSE removed. The message box carries one short line.
+
+Checked in the browser: the choices set their hidden inputs and the summary line; no console
+errors. Screenshots 81–82.
+
+Incident while applying this: the patch helper opened the target for writing before the patch
+function ran, so a failed anchor emptied `viewer/index.html` and then `viewer/src/ui/panels.js`.
+Both were rebuilt by replaying every patch of the day from a saved base copy
+(`scratchpad/replay_index.py`, `scratchpad/replay_panels.py`), checked in the browser and
+syntax-checked with node. The project is not under git; a memory note now says to compute the
+patched text before opening the file.
+
+### 2026-11-07, later: a sample of the analysis
+
+The owner asked what the analysis looks like, numerical or an overlay. `viewer/analysis-sample.html`
+answers with both, on the real Level 3 tiles and with made-up numbers (a banner says so): seven
+overlays (occupancy, encounters, paths and overlap, queues, noise, by year, drift), the core metric
+table with A and B against the notes' benchmarks and an in-range / watch chip, a 14-week timeline
+with the review weeks shaded and a 20-seed band, and a Pareto view of three scenarios. The paths
+are real BFS routes on the walk grid from a sample of desks to the plotters, the kitchen, the
+lounge and the 3D printers; everything else is synthetic. The page is a design target for the
+ANALYSE step, not a result. Screenshots 83–86.
+
+### 2026-11-07, later: the sample as a vector diagram, with details, a summary and readable metrics
+
+Owner's notes on the sample: the overlay need not be pixel art, vector diagrammatic is fine; a
+details dropdown with the references per overlay; a summary with design suggestions; metrics
+easier to read; what are the timeline graph and the Pareto view.
+
+`viewer/analysis-sample.html` rebuilt: the plan is SVG (room fills from tile runs, wall lines,
+furniture outlines, room numbers) and every overlay is vector (circles, translucent polylines,
+soft discs, ticks, arrows). Each overlay carries a DETAILS fold with what it measures, how it is
+computed, the registry IDs it feeds and its references (Bernstein & Turban 2018, Kabo 2014,
+Hillier, Allen, Mark 2008, Furnham & Strbac 2002, Doshi 1986, Kossinets & Watts 2006, Sailer &
+Penn 2009, Festinger 1950). A SUMMARY window lists five rule-based suggestions, each from a
+metric against its benchmark or from A against B and naming the place on the plan (sample text).
+The metrics are cards grouped collaboration / focus / layout: name, A and B as big numbers, a bar
+for each with the benchmark as a green mark, and a one-line reading. The timeline and the Pareto
+view each have a "what this is" caption, and the Pareto view draws the front. Screenshots 87–90.
+
+### 2026-11-07, night: the overlay drawn like the reference diagrams; the feed and the trace
+
+The owner put five plan diagrams in `graphics/Plan-diagram` and asked for their lineweights,
+contrast and colouring in the overlay; and asked to bring back V1's "chat", agents' comments
+live, so a design suggestion can be traced to the situations behind it (the verification) and
+the run can be seen playing.
+
+What the diagrams share: walls as heavy black poché on white (or a single hue's densest hatch);
+hairline grey for everything else in the plan; one hue per reading; movement as smooth coloured
+lines with small arrowheads, one colour per actor or group, loops and dwell drawn as loops; an
+aggregate flow as one darker, heavier line; fields as soft blobs (red for warmth or activity,
+blue for cold or retreat) or as hatch density; zones as faint tinted blocks with a pattern;
+hairline circles at nodes; a legend, a scale bar, a north arrow.
+
+- `viewer/analysis-sample.html` redrawn to those rules: white ground, black wall runs, 0.08 grey
+  furniture outlines, Nunito room numbers, a 5 m scale bar and a north arrow turned to the
+  model's rotation; ACTIVITY as red and blue radial blobs; ENCOUNTERS as hairline-outlined
+  circles; PATHS as Chaikin-smoothed BFS routes in the year's colour with arrowhead markers and
+  one dark line through the most-shared tiles; NOISE as soft discs; BY YEAR as hatched tints
+  (`<pattern>`) under the plan; DRIFT as dashed start, filled now, displacement line.
+- The feed, in the sample: a FEED window that plays itself (the clock advances, one item every
+  2.6 s): remarks in the agent's voice with a "because" line (the V1 pattern, `remarks.js`),
+  the engine's events, and suggestions as their rules fire; filters ALL / REMARKS / EVENTS /
+  SUGGESTIONS. Each summary suggestion has a TRACE fold: situation, metric, events, remarks;
+  clicking an event or remark pulses a mark on the plan and scrolls the feed to it.
+- The main page: a FEED window top right (`#feed`, `viewer/index.html`), collapsed until RUN,
+  ANALYSE, WALK or AGENT opens; empty with its filters; ids are the contract for the engine.
+
+Checked in the browser: the overlays draw, the feed plays, a trace click marks the plan and
+highlights the feed item; the main page opens the feed on RUN; no new console errors.
+Screenshots 91–94.
+
+### 2026-11-07, night: MODEL and LOG dropped from the command list
+
+Owner's notes: the model check is not for the user; where something overlaps with the feed, keep
+the feed. The command list is now 1 VIEW · 2 DAY / SITUATION · 3 RUN · 4 ANALYSE · 5 WALK and
+AGENT. LOG is gone: the FEED window is the log (its filters, plus SAVE). MODEL is gone from the
+list: the model-check tools (`#model-tools`: the export summary, LAYERS, ROOMS, CHECKS, SELECTED,
+the stairs-and-lift test piece) stay in the page for main.js, hidden, and show only with `?model`
+in the address, for the builder. AGENT stays as the one extra command and will also open from a
+name in the feed. Files: `viewer/index.html`, `viewer/src/ui/panels.js`.
+
+### 2026-11-07, night: the sample's design brought into step 4
+
+Owner's question: where are the analysis diagrams, the final metrics and the design suggestions
+in the empty interface. The overlay controls, a metric table, the timeline and the Pareto view
+were in step 4; the summary with suggestions and the details fold were only in the sample. Step
+4 ANALYSE now reads, top to bottom: SUMMARY (suggestions with TRACE, empty until a run), OVERLAY
+ON THE PLAN (the seven layers as button choices, hours, a "B minus A" box, a DETAILS fold),
+METRICS AT THIS WEEK as cards (A and B bars, benchmark mark; filled with the core set, no
+values), the B choice, TIMELINE OVER THE HORIZON, PARETO, export. The overlay itself will draw
+on the stage over the floor's plan, in the vector style of `analysis-sample.html`. Files:
+`viewer/index.html`, `viewer/src/ui/panels.js` (cards), `viewer/src/style.css`.
+
+### 2026-11-07, night: the window bars broken by a class clash, fixed
+
+Owner's note: the VIEW and FEED fold arrows and the close marks had left their windows. Cause:
+the metric cards' bar was styled with the class `bar`, the same class as every window's title
+bar, so each title bar became 8 px high and white with its spans absolutely placed. The metric
+bar is now `mbar` in `viewer/src/style.css`, `viewer/src/ui/panels.js` and
+`viewer/analysis-sample.html`. A browser audit then measured every element of every visible
+window against its box in each step (VIEW, DAY, SITUATION with "other", RUN, ANALYSE, WALK,
+AGENT, the FEED): nothing outside, no text past the margin.
+
+### 2026-11-07, night: the engine behind the interface
+
+Built the simulation from the notes and the decisions of the day: `program/parameters.json`
+(every number under its registry ID with a status code), `program/QUESTIONS.md` (what the build
+was unsure of, and suggestions), and under `viewer/src/sim/`: rng, calendar, population (traits
+only), world (spots, desks by zone, resources, washrooms by sex, the 24/7 door, a path cache),
+term (plans and the slow state, weekly snapshots), engine (the day run), events and remarks,
+stats, metrics, rules. Under `viewer/src/ui/`: run (RUN, AGENT, WALK), feed, analyse, diagram.
+Headless runners in `viewer/test/`: world-check, term-check, run-day.
+
+Things found and fixed on the way: chairs and bins blocked the walk grid so whole bays were
+cut off (they are now walked past); the tile files' furniture coordinates are local to the
+level's origin, so the cohort zones were read in the wrong frame; a piece's standing tile must be
+on the floor proper and in its own room (the plotters' was in office 2); desk neighbours side by
+side counted as face-to-face all day (now co-presence; encounters need two people stationary
+within 3 m outside crits, lectures and washrooms, and conversations with a working neighbour are
+rare); water trips swamped the kitchen (a bottle at the desk 70% of the time); long lift waits
+(a stairs fallback after 150 s). Calibration of the term layer: hours per week about 42–50
+(E1 median 40), high stress 22% in a normal week and 45–55% in review weeks (H1: 20% and
+33–46%), all-nighters 12% before the midterm (E4: 14%); the day run's focus blocks are still
+short (median 16 min against 52) because breaks, needs, crits and conversations all cut them.
+
+Checked in the browser: PLAY builds and runs; a day computes in about 27 s when stepped flat
+out; the feed fills with remarks, events and suggestions; ANALYSE shows four suggestions with
+traces, the metric cards, and the paths and encounters overlays on the stage; the plan view draws
+the agents; the avatar enters, walks and talks; the inspector fills from a name in the feed.
+No console errors from the new modules. Screenshots 100–103.
+
+### 2026-11-08: the owner's answers applied; agents rearrange; voices; test cases
+
+The owner answered the 21 questions of `program/QUESTIONS.md` and gave three general instructions
+(the feed must express the agents' heterogeneity; keep the notes current; write test cases). Applied
+with dated scripts (`parameters.json` meta 2026-11-08):
+
+- World: washrooms by floor and role (Q1); room 30 used from its floor tiles (Q16); the four boxed-in
+  desks at the north-west bay reached by rolling a table aside, 4 tiles, logged in `world.gaps` (Q18);
+  instructors' offices only for those with an office here, Level 4 first (Q2); `movePiece` for the
+  layout manager.
+- People: sessional / permanent / office-here flags and a crit mode per instructor (Q2, Q6);
+  office-hour propensity per student (Q10).
+- Term: a per-seed timetable (Q8, Q9, Q19): the year's lecture in the smallest classroom that seats
+  it (year 1 room 13, years 2 and 3 rooms 15 and 12 in seed 2026), each section's seminar on a
+  non-studio weekday clear of lunch in a crit room, Level 3 first; office visits planned; crit place
+  by the instructor's mode.
+- Engine: lectures and seminars to the booked rooms; crit spots (the free side table nearest the
+  section, else a free crit room on the floor) with a crowding switch; office visits; the layout
+  manager (`sim/layout.js`) under AGENTS REARRANGE and FREE (Q12: the owner's reading is that the
+  agents enact the suggestions live): triggers, moves, veto, budget, cooldown, connectivity, effect
+  measured, moves traced into the suggestions (`rules.js`); situation specs from INTERPRET applied
+  (`applySpec`); the keyword matcher kept for the headless runner only.
+- Metrics: F1 benchmark 11 min (Mark 2005), deep-block share (Q20).
+- Remarks: registers from traits, one colouring per line, year flavour, instructors' lines; the
+  register in the feed and the AGENT window.
+- Interface: AGENTS REARRANGE replaces BY GROUPS; a key field in SITUATION, OTHER greyed out without
+  a key (Q14: the user's key, never the owner's); INTERPRET calls Claude through the SDK in the
+  browser and shows the reading; the plan view draws moved pieces; DRIFT shows moves and gaps.
+- Notes: checklist rows, registry (new AT16), data sources (MARK05, GONZ04, layout rearrangement),
+  agent-variables, summary-metrics, HANDOVER, methodology log 2026-11-08; `program/QUESTIONS.md`
+  rewritten with the answers and open items 22–28; `program/TEST-CASES.md` new.
+
+Headless, 2026-10-15 under AGENTS REARRANGE, seed 2026: 145 present, 107 plotter jobs, paper out
+after 17:00 (45 gave up), three moves (a board screening an exposed desk at 13:30 and another at
+17:00, a side table to the plotter corner at 17:00: 646 queue-minutes spent at it), no veto; F1
+16 min against 11; the suggestions F2 HIGH and F8 QUEUE carry "The agents tried this live". Known
+artefact (open item 25): the screen takes the passers at that desk to zero. Checked in the browser (2026-10-15, AGENTS REARRANGE): the page loads without errors, OTHER is greyed out with the key field shown, the movement buttons read EVERYDAY USE / AGENTS REARRANGE / FREE, the run completes (2976 events, 1403 remarks), the feed shows the register after each name (chatty, precise, blunt, loose, vivid and their combinations), the AGENT window shows the voice line, one move happened in this run (the side table to the plotter corner, 433 queue-minutes at it) and F8 QUEUE carries the live attempt. The browser run made one move where the headless run made three; the runs should be deterministic across both, so this is a check to make (the level list the browser loads may differ from the headless loader's).
+
+Tooling note: long quoted heredocs fail to parse in the Bash tool here; scripts are written with the
+Write tool and run with `python -I`.
+
+### 2026-11-08, later: open item 25 (the screen's effect) resolved
+
+The exposure count read tile-steps within one tile of the desk's standing tile, so a board rolled onto
+that tile took the count to zero. Now `engine.passing` counts one per walker per pass within two
+tiles, weighted 1 in the near ring, 0.5 in the next, and half again when a board, table or wall sits
+between the desk and the walker (`metrics.exposure_count` [A]); `stats.passer` takes the weight. F4's
+benchmark is 6 passes an hour (rescaled from 15 tile-steps so the normal Tuesday keeps its ratio, 8.3
+against 6) and the exposure trigger 20 passes an hour. The layout manager's budget is checked per
+attempt (`tryMove`), where before four signals in one half-hour check could pass it (five moves on a
+budget of four). Headless 2026-10-15 under AGENTS REARRANGE: four moves, screens 33 → 4, 40 → 0,
+66 → 4 passes an hour, the plotter table 893 queue-minutes, one veto; 2026-10-13: four screens,
+41 → 0, 51 → 5, 51 → 1, 114 → 18. The near-zero cases are the route moving one bay over, which the
+F2 suggestion also asks for. Notes: summary-metrics, assumption-data-sources, methodology log,
+QUESTIONS (25 resolved, 27 reworded), TEST-CASES case 2, README §11a.
+
+### 2026-11-11: open items 22, 23 applied from data; 24, 26, 27 reworded; 28 kept
+
+The owner answered the second round (`program/QUESTIONS.md`). Item 22 asked for data: the 2024 APR
+(re-read with pypdf from the HANDOVER link) gives 17 full-time architecture faculty and 15 adjuncts
+in 2024/25, seven adjunct names on the three fall studios; the sala.ubc.ca profiles give offices for
+12 of 18 architecture faculty, nine in Lasserre on Levels 2, 3 and 4 and three in CIRS. Applied:
+`population.instructors` sessional_share 0.6 [D*], office_in_building_share 0.75 [D], new
+office_level_order Level 2 / 4 / 3 (`world.assignDesks`); seed 2026 gives 4 sessional and 4 offices
+on Level 2 among the 11 instructors. Item 23: a 15 min **section intro** at the instructor's spot
+opens every session (`studio.sessions.intro_min`; `term` item `intro`, engine case, `intro` event
+and remarks for students and instructors, shown in the FEED); the lecture follows on the week's
+first session. Item 24 was a misreading (desks are never moved) and is reworded; 26 answered (room
+30 is on Level 2) with a question back (is it the APR's room 202, which seats 60); 27 explained in
+plain words; 28 kept.
+
+Headless, 2026-10-13 everyday, seed 2026: 165 present, 11 intro events, F1 16.5 min, F2 1.47, F4
+8.5 passes an hour, C6 0.28; headcounts unchanged within two or three people. Headless 2026-10-15 under AGENTS REARRANGE: 142 present (three fewer: the sessional draw changed), 3 intro events (the Thursday session is year 1's), four moves (three screens 33 → 2, 40 → 0, 34 → 2 passes an hour; the plotter table 685 queue-minutes), three vetoes; F1 16.6, F2 1.33, F4 7.5.
+
+### 2026-11-11, later: room 22 as the APR's 202; the rooms reviewed against the APR; seat tiles
+
+The owner: if room 30 is the largest classroom with seats it is probably 202; review the other rooms
+with the accreditation report. Room 30 has no seats; the largest classroom with seats on Level 2 is
+room 22, the owner's large classroom and pin-up space, which is what the APR says of 202. Applied with
+`scripts/apply_chat_2026-11-11a.py`: O28 seats four a table (64 chairs in four rows; the APR's 60 is a
+capacity, recorded on the room), `apr_room` cross-references (inferred) on rooms 1, 4, 5, 12, 13, 15,
+22, 74, 75; 70 and 77 flagged as candidates for Room 9 (the Materials Lab); 34 and 55 noted against
+the main office 402. Tiles rebuilt (`rasterise.py`), enclosure check clean, TODO regenerated.
+
+Found on the way: `world.piecesIn` only counted pieces with a standing tile, and a chair in a row of
+tables has none, so room 22 read 25 of its chairs and rooms 12 / 13 read 56 / 64 of 96; year 1's
+lecture was going to Level 1 on that count. Chairs in class and crit rooms are now seat tiles
+(walkable, `buildRooms`), so each chair stands on its own tile and counts; the crit rooms' chair sets
+count in full too. Headless after the fix: the classrooms seat 64 (room 22), 84 (15) and 96 (12 and 13), all their chairs; 26 tiles opened as aisles between table rows (10 strips on Level 1, 1 on Level 2) beside the studio's table gap, logged in world.gaps and drawn in the DRIFT overlay; seed 2026 now books year 1's lecture in room 22 on Level 2, year 2 in room 12 and year 3 in room 15. 2026-10-13: 165 present, F1 16.5 min, F2 1.45, F4 8.8, headcounts unchanged; 2026-10-15 under AGENTS REARRANGE: 142 present, four moves, two vetoes. The page loads in the browser without errors.
+
+### 2026-11-11, evening: the list of rooms to confirm
+
+At the owner's request `program/ROOMS-TO-CONFIRM.md` keeps the fourteen rooms the tool uses on an
+inference (the APR cross-references, room 30, the flagged basement rooms, rooms 34 and 55, the
+north-west bay table, the instructors' offices), each with what to check and the source; answered rows
+move to its Confirmed table. A one-time reminder is scheduled in the desktop app for 2026-11-12 09:00
+(it runs when the app is open, or on the next launch).
+
+### 2026-11-11, night: the twelve test cases run; four engine fixes
+
+The owner asked whether the test cases could be run in a verifiable way. `viewer/test/run-cases.mjs`
+runs cases 1 to 10 headless (deterministic per seed; `program/test-results/<date>/cases.json` plus
+`program/TEST-RESULTS-<date>.md` with the expectation, the command, the observed block and a
+verdict); cases 11 and 12 were driven in the browser with screenshots. Results: 1, 5, 7, 10, 11, 12
+pass; 2, 4, 6 pass with the expectation corrected; 3 passes once F8 is read as a mean wait; 8 fails on
+the evening (the weekend rule empties the floor by 20:00, no printing: open item 32); 9 is a check
+(hours fit E1, the high-stress share runs at 48% against 20%: open item 33; between-year ties collapse
+in a week without sessions).
+
+Found and fixed while testing: (1) every World mutated the building's shared floor grids, so a second
+run in the same page or process started from the first run's floor and gave a different day for the
+same seed; `FloorGrid.clone` and the engine walking on the World's grids; the headless runner, a fresh
+process and the browser now make the same moves at the same minutes. (2) The timetable shuffled with a
+random comparator, which Node and Chrome order differently; Fisher-Yates on the keyed stream (this
+changes the seed's lecture rooms: year 1 now in 15, year 2 in 22, year 3 in 12). (3) The plan view
+crashed on Level 1 during a day run (`scene.js` lift label called the old diagnostic's levelName).
+(4) The event remark pool mixed Waffle Wednesday into Good Times (`waffle_join`). Open on the engine
+side: TA ties decay to nothing in a reading week (F5 / ST8); F8 as a mean wait hides the giving-up.
+
+### 2026-11-11, late: items 32 and 33 applied (the stress rule rebuilt; the weekend before a review)
+
+Item 33: the owner asked for the logic, said a normal week should depend on personality and that 55%
+before reviews was near the target. Found: a constant daily push of 0.015 lifted everyone 0.10 above
+their baseline, and the review rise went through the capped urgency sum, which reads 4.7 in a normal
+September week and 6.3 the day before the midterm, so reviews barely showed. Rebuilt (`term.js`): no
+drift; baseline 0.40 + 0.15 N; the rise from the days to the year's next review (nearness, zero two
+weeks out) x 0.03 x exp(0.5 N); urgency 0.002; all dials in `parameters.wellbeing.stress`. Probed
+with `test/_stress.mjs` over five seeds: 18% high in a normal week (15-24), 42% the week before the
+midterm, 36% in the review week, 43% before the final; low-N third never high, high-N third almost
+always.
+
+Item 32: within seven days of a review a weekend is a working day (presence 0.7 x ramp, a full day,
+arrivals from 10:00, late workers late, the all-nighter hurdle on the eve), and the organised print
+early (print day 1 + 2 x C days before, catch-up when absent, 30% reprint on the eve, a `print_early`
+remark). The `weekend` situation defers to the term plan on a real weekend. Two engine changes with
+it: `planFor` no longer mutates state (the printed-for flag moves to `advance`), and the term layer
+plans the picked day but does not advance it, so a day run starts from that morning's state (it used
+to start from the evening's). Saturday 2026-12-05: 133 of 165 in, 63 on the floor at 20:00, 21 at
+midnight, 8 print jobs. Browser check clean. Test cases rerun; TEST-RESULTS updated.
+
+### 2026-11-11, night: the sweep, the walkthrough plan, and three more fixes
+
+The owner asked for more thorough testing and a walkthrough the next day. `viewer/test/run-sweep.mjs`
+runs three seeds on six days (a normal Tuesday, the midterm eve, the review day, a Monday without a
+session, a Friday, the Saturday before the final) under every movement level, every listed situation
+on its day with its intended effect checked against the plain day, the two policies, a determinism
+check (the same seed twice in one process) and the term for five seeds, each run against the engine
+invariants: nothing thrown, nobody standing still while walking for ten minutes, the studio floor
+connected, metrics finite and in range, the move budget kept, the lift sane, the section intros
+matching the sections in session. Output `program/TEST-SWEEP-2026-11-11.md` and `sweep.json`.
+Final pass (after the move fixes): 39 runs, 0 failures; two runs of one seed identical; the term over five seeds 18% high stress in a normal week, 43% before the midterm and before the final, 45 and 61 hours a week.
+
+Fixed from the sweep's passes: (1) the layout manager checked connectivity against the floor before
+each move, so several moves could cut it cumulatively; it now checks against the floor as the day
+began. (2) `world.movePiece` cleared a piece's whole footprint when it left, including tiles shared with
+a desk, a printer or another board, which opened them to walking; every blocking piece is now counted
+per tile (`initCover`, `cover` and `walk0` on the grid) and a leaving piece uncovers only what it alone
+covered. (3) The table the engine rolls aside for the four boxed-in desks was itself movable: the
+agents moved it and put it back, which closed the gap and cut the pocket off (seed 2028, 2.4% of the
+floor); rolled-open gap tiles now stay open whatever covers them and a gapped piece is left alone by the
+layout manager. A move and its revert now leave the grid bit-identical. Three of the first pass's failures
+were the sweep's own checks (a review day has no section intro; the paper situation on a day where
+the stock runs out anyway; a mean leave after midnight compared as text), corrected. In the browser:
+the TERM horizon with five seeds builds (14 weekly snapshots, bands over five seeds) and the ANALYSE
+timeline and week slider read the values; INTERPRET with a placeholder key returns a clear 401 message
+in a second (the success path still needs a real key). `program/TEST-WALKTHROUGH.md` is the plan for
+the walkthrough (ten stops, about ninety minutes); the 09:00 reminder now points at it as well.
+
+### 2026-11-12, morning: walkthrough stop 1, item 28 (late nights on an ordinary day)
+
+The walkthrough started with case 1 in the viewer (Level 3, plan view, 2026-10-13, everyday use,
+600x). The owner's answer to the headcounts: on a normal Tuesday with no deadline coming up there
+would not be that many night owls, they prefer to work from home; the other numbers seem fine.
+Found with `test/_late.mjs` (a probe of who is planned past 20:00, 22:00, midnight and 01:30):
+(1) the late-worker rule fired when urgencyNorm > 1.3, and the median student sits at 4 to 6
+whenever any deadline is within a couple of weeks (0.98 on 2026-11-03), so all 39 late workers
+stayed to 22:30-01:00 most nights; (2) 2026-10-13, the default day, is three days before the midterm,
+so case 1's evening was a crunch evening. Rebuilt in `term.js` with `parameters.effort.late_nights`
+[A]: within 7 days of a review a late worker stays late every night, otherwise with p 0.25; everyone
+else is capped at 19:00 plus up to 1.5 h on a day with no review in that window (E3: others leave by
+18:00-20:00 outside crunch; the rest of the planned hours at home, E9). Plain Tuesday 2026-11-03:
+planned past 22:00 41 -> 10, past midnight 16 -> 2; the day run 51 on the floor at 19:00, 16 at 20:00,
+10 at 22:00, 2 at midnight, F1 16.8, F2 1.40, F4 8.4, C6 0.27. Days within a week of a review are
+untouched: case 1 rerun bit-identical to 2026-11-11 (`test-results/2026-11-12/cases.json`).
+Notes: QUESTIONS (28 answered), TEST-CASES (case 1 note), TEST-WALKTHROUGH, checklist E3, registry
+AT10, assumption-data-sources (Model 2), agent-variables, README.
+
+### 2026-11-12, morning: walkthrough stop 3, item 27 (the screens capped; the other moves freed)
+
+The owner asked what a screen is (a pin-up board rolled to the aisle side of an exposed desk) and
+chose to cap them: they want to see what else the agents do to the space, which could have long-term
+implications. `per_trigger_cap.exposure` 2 in `tryMove`. Under the cap nothing else moved on four
+dates, so `test/_layout.mjs` was written to say why each table move does or does not fire: the
+kitchen's nearest side table is 21 tiles off against a reach of 20 (6+ in the kitchen was seen 13
+times that day); the plotter queue peaks at 3 on the eve against a trigger of 4; and `findSpot`
+returned the first static fit only, which for the plotter table cuts off the north offices, so the
+move was always reverted. Changed: `kitchen_reach_tiles` 30, `queue_len` 3, and `findSpot` tries each
+candidate with a trial move (connectivity and standing tiles) before choosing it, all [A]. Seed 2026:
+2026-10-15 two screens and the kitchen table at 13:00; 2026-10-13 a screen, the kitchen table at
+12:30, a screen at 15:30; 2026-10-23 a screen, the kitchen table, a screen. The plotter table then
+still did not fire on the eve, where the queue peaks at 8: no spot within 3 m of the plotters keeps the
+north offices connected, so the search ring widened to 5 m and the table now goes over at 17:30 (517
+queue-minutes spent at the table instead of standing). The shared board never fires because
+between-year contact is above its trigger. Open: the kitchen table's reported effect
+(kitchen peak before and after) is not a measure of the table. TEST-RESULTS-2026-11-11 cases 2 and 4
+predate this; the cases and the sweep are to be rerun after the walkthrough.
+
+### 2026-11-12, morning: the moves as design suggestions (item 27, continued)
+
+The owner has not seen these moves made in the studio but wants the tool to have the opportunity to
+make design suggestions through the agents' moves, in addition to the suggestions at the end. In
+`rules.js` the single LAYOUT line for unmatched moves is replaced by one suggestion per kind of move
+that stood at the end of the day, tag MOVES: the move as the agents made it, its measured effect, and
+the permanent version of it (screens: bay-end boards fixed to face the aisle or a low screen along the
+exposed bays; the kitchen table: a counter or shelf in the lounge by the kitchen door; the plotter
+table: a fixed layout table at the plotters; the shared board: a shared pin-up wall between the
+years), each traced to the move's event, the movers' remarks and the spot. The metric rules keep
+their "the agents tried this live" line, so a move appears twice when it answers a metric: once as
+evidence, once as a proposal. The vetoes line stays under LAYOUT. Eve of the midterm, seed 2026:
+three MOVES suggestions. Wording is rule-based, like the rest.
+
+### 2026-11-12, morning: walkthrough stop 4, F8 and the abandoned jobs
+
+Stop 4 in the viewer (paper at all hours against the plain eve, both with the agents rearranging):
+no outages and the same jobs, but the mean wait at the plotters did not fall (7.1 min without the
+policy, 8.5 with it, headless case 3 of 2026-11-12), because without the policy the 42 who gave up
+stopped waiting, and the A vs B line called the comparison "a trade on the Pareto front" on contact
+and focus alone. This was the open engine item from the test cases (F8 as a mean wait hides the
+giving-up). Fixed: `stats.abandoned` counts the paper_out events; `metrics.F8.abandoned` carries it
+and the card's unit line reads "; N jobs abandoned for paper"; the A vs B rule compares the two
+counts and says that the mean wait cannot show it. Browser: the second run's ANALYSE shows the line.
+Also: the cards showed B only after "A SAVED RUN" was pressed, while the A vs B line already compared
+against the previous run; the selector now defaults to the saved run when there is one.
+
+### 2026-11-12, morning: walkthrough stop 5, Good Times and Fridays
+
+Stop 5 ran lift out (0 boarded, 335 washroom trips by the stairs), fifteen more (15 visitors, 455
+kitchen-crowded remarks, focus unchanged) and Good Times, which showed 95 at the event. The owner:
+too many; people grab something and leave quickly; on Fridays people leave early once the desk crit
+is done if they have other plans. Found with `test/_event.mjs`: the situation override in `engine.js`
+added half of everyone present for 150 minutes on top of the calendar's own Friday rule, which alone
+gave 73 attenders and a peak of 53. Rebuilt: the situation adds nothing on a day that has the event
+and uses the plan's rule (p x sociability) on any other day; `TermLayer.eventStay` gives a grab-and-go
+share (`social.events.good_times.grab_share` 0.4, 10-20 min; waffle 0.6, 8-15 min) and the rest 40 to
+100% of the event, and the plan's leave is extended only to the end of the stay (it used to be the end
+of the event for everyone); at crit end on a Friday `effort.friday.plans_p` 0.4 of students leave 20-60
+min later and drop the evening item, with a `friday_plans` remark. All [A]. Friday 2026-10-23: 57
+attend over the evening (30 a quick grab), 27 at the event at the peak, 25 early leaves, the floor 112
+at 18:00 and 35 at 20:00. The sweep's event situations now sit on days without the event (Tuesday
+2026-10-20 for Good Times, Thursday 2026-10-15 for waffles) with thresholds 10 and 5 at the event.
+The owner: the 50-60 come through, at the start of Good Times; arrivals now fall within 25 minutes of
+the start (`social.events.good_times.arrive_within_min`): 57 through the evening, 33 at the peak.
+
+### 2026-11-12, morning: walkthrough stops 6 and 7
+
+Stop 6 (the Saturday before the final): 133 of 165 in from 10:15, 72 on the floor at 19:00, 49 at
+22:00, 8 at 02:00, 8 print jobs; the owner confirms 80% in as about right (checklist E6). Stop 7 (the
+term, five seeds, in the browser): hours 36 to 51 a week in studio weeks and 62 before the midterm;
+high stress 6% in week 1, 19% by week 3, 42% the week before the midterm (band 39-50), 38% in the
+review week, 10 to 18% through November, 30% and 44% in the two weeks to the final. The normal-week
+share now sits under the 20% target in the early and late weeks since the late-night cap (fewer hours,
+less sleep debt); the first weeks start low because stress relaxes from a cold start. Open engine
+items: the last term snapshot is duplicated (week 13 twice, the second with 0 hours); between-year ties
+still collapse in weeks 9 and 13.
+
+### 2026-11-12, morning: walkthrough stop 8, the voices and the lift
+
+Stop 8 compared Ruth Park (terse, precise, blunt) with Iris Ivanova (chatty) in the AGENT window on
+the Saturday run. Fixed: a chatty opener ending in a comma left the next word capitalised ("Listen,
+Washroom means..."); the line now continues in lower case unless it starts with "I" (checked over
+sixteen such lines headless). The owner, on Ruth's plain washroom line "back in 8 minutes if the lift
+comes": Owner 2026-11-12 (walkthrough stop 8): unless tired or with a mobility need, it is unlikely anyone takes the lift for one floor to the washroom; carrying a model is different. Engine (`engine.travelTo`, `parameters.walking` [A]): one floor is the stairs with a 5% exception, the lift with p 0.7 when the trip is to or from the plotters, the printers, the 3D printer, the shop, a review or a pin-up (a load), p 0.5 after 22:00 or with a sleep debt of 9 h or more (the median student carries 6 to 7 h in a review week, so the threshold had to sit above it), and always with a mobility need; two floors or more keep 70% lift. `population.mobility_need_share` 0.03 is a PLACEHOLDER with no data, drawn on its own random stream so the population is unchanged. Tuesday 2026-10-13 (seed 2026): one-floor trips 999 by the stairs and 56 by the lift for no reason, 38 with a need, 7 with a load, 60 of 112 tired; two-floor trips (the lectures on Level 1) 455 lift, 281 stairs; lift boarded 610 -> 580. `stats.liftChoice` keeps the count by reason. The washroom line no longer says 'if the lift comes'.
+The owner's main concern is that the voices stay distinct. Engine note: the register's own line is
+used 70% of the time when the register has one for the topic, the plain pool otherwise, coloured by an opener or
+tail; so a register without a line for a topic sounds plain there.
+
+### 2026-11-12, late morning: walkthrough stops 9 and 10
+
+Stop 9: the avatar (south door, Level 1, W A S D, E: nobody within four metres at 17:00) and OTHER (greyed
+without a key, on after SAVE, greyed after CLEAR, the storage empty) as in the test. Found: with the 3D
+building view on screen a day run crawls at about a simulated minute a second, while plan view runs
+at full speed (engine note, not fixed). Stop 10: the sweep rerun. Rerun 2026-11-12 after the walkthrough's changes (late nights, move caps and reach, moves as suggestions, F8 abandoned count, events and Fridays, the lift rule): 39 runs, 0 failures; two runs of one seed identical; the term over five seeds 18% high stress in a normal week, 43% before the midterm and before the final, 45.5 and 61.5 hours a week. `program/TEST-SWEEP-2026-11-12.md`.
+The twelve cases were rerun headless the same morning and `program/TEST-RESULTS-2026-11-12.md` carries
+the observed values and verdicts: all PASS; cases 2, 3, 4 and 7 differ from the day before as the
+file explains (the moves under the cap, F8 under the policy, Good Times after the rebuild), cases 5 and
+9 are unchanged. Case 7 now samples 18:15 and 18:30, where the Good Times peak is, and counts the
+attenders from the plans. Open from the rerun: C1 rose to 38 m on the eve once the overflow table
+counted as a kitchen spot; whether that reads "desk-to-amenity routes" rightly is to check.
+
+### 2026-11-12, midday: the VIEW panel (owner's interface notes)
+
+The owner, after the walkthrough: FIT FLOOR does nothing visible and is not needed; the view should
+go to the third-floor studio by itself when step 2 opens; the VIEW panel should stay available
+through the other steps, like a modeller's view tabs; the greyed DRAWING section and the placeholder
+people slider should leave the interface but stay in the code. Done: the FIT FLOOR button is gone (F
+still fits the floor from the keyboard); a row of view tabs sits under the VIEW bar and stays in sight
+when the panel folds (BUILDING, L4, L3, L2, L1, BASEMENT, then ISO and PLAN, mirroring the panel's
+buttons, `renderTabs` in `main.js`); opening step 2 fires an `npc:step` event and the view goes to
+Level 3 in plan unless it is there already; the DRAWING block is hidden in `index.html` (the scene
+still reads the controls at their defaults) and placeholder people default to 0, since a run draws
+the real people. Checked in the browser: no console errors, the tabs switch floor and view from inside
+step 2, and the folded panel keeps the tabs. README's interface paragraph updated.
+
+### 2026-11-12, midday: VIEW a constant, the steps start at DAY; OTHER without a key
+
+The owner: VIEW should not be a step but a constant, with DAY / SITUATION as step 1; and the tool
+should run from GitHub for testing on one default seed without using the owner's API credits. Done:
+the menu is 1 DAY / SITUATION, 2 RUN, 3 ANALYSE, 4 WALK, AGENT; the VIEW window keeps its tabs in
+sight and folds its full panel, which the arrow reopens (`panels.js`: MAIN without 'view', the tool
+opens on 'day', which also takes the view to the Level 3 plan); the DAY panel's BACK to VIEW is gone.
+Two faults from opening on the floor at load: a stale menu reference (guarded) and `setLabels` called
+before the pixel scene had built its labels (guarded, the flag kept). OTHER: the tool has never held a
+key (whoever saves one in their browser is billed, nobody else); without one the option is no longer
+greyed but runs the one saved example in `program/other-example.json`, a description and its
+reading written by hand to the schema and labelled a saved example in the interface; the text box is
+prefilled with it when OTHER is picked without a key, and the button reads USE THE SAVED EXAMPLE. The
+seed stays 2026 by default, the seed of every dated result, so a GitHub run reproduces them.
+
+### 2026-11-12, afternoon: the DAY panel (owner's notes)
+
+The owner: a legend for the calendar colours, or only weekday, weekend and the suggested test cases;
+the test-case buttons more intuitive, above the calendar or with a short title; the day's text
+description removed; ON THIS DAY should say whether a midterm or final is near and whether stress is
+higher. Done in `index.html`, `panels.js` and `style.css`: SUGGESTED TEST CASES above the calendar,
+seven rows (NORMAL WEEK now Tue 3 Nov, a plain Tuesday, since Tue 13 Oct is the midterm week; LAST
+CRIT; MIDTERM EVE; MIDTERM; GOOD TIMES; FINAL EVE; FINAL), each a button with its date and a line, the
+days outlined on the calendar; the calendar in three tones (weekday white, weekend shaded, outside the
+term greyed) with a legend; the day's note line hidden (its text still goes to the tooltip); ON THIS
+DAY from `onThisDay()`: the next review and the days to it, the stress it brings in the engine's own
+calibration words (one in five, two in five within a week, one in three on the review day), studio
+day or weekend or closed, then the events. The default day stays Tue 13 Oct, which now reads
+"Midterm review in 3 days · stress high". Checked in the browser on four days.
+
+### 2026-11-12, afternoon: unavailable days take no click
+
+The owner: prevent clicking the greyed-out days (holidays, before and after the term). The calendar's
+day buttons outside the term, on a closure and in the exam period are now disabled (`renderCalendar`),
+drawn at 60% with a plain cursor and a tooltip "not a day the tool runs". The days after the last day
+of classes up to the last review (8 to 10 Dec) stay available, since the engine runs to the final review
+and FINAL is one of the suggested cases. Checked: 26 days disabled, every suggested case clickable.
+
+### 2026-11-12, afternoon: the steps as an accordion, the movement groups, no policy toggles
+
+The owner: the other steps should keep a compressed panel while the user moves on, for an intuitive
+way back; movement should separate everyday use from the agents' two scales of freedom, with related
+names; the policy toggles make no sense (24/7 access is a fact, the shop keeps its hours, the plotters
+run while they have paper). Done: the four main steps stay in sight as bars with their choice on the
+bar and the open one unfolded (`panels.js` open/close, `.step.main`), a click on a bar reopens the
+step and NEXT/BACK still walk them; movement reads EVERYDAY USE apart and, under "agents rearrange",
+WITHIN LIMITS ('agents') and WITHOUT LIMITS ('free'), with the notes rewritten; the policy row is
+hidden (the inputs stay for `run.js` and the headless runner; test case 3 is headless only now). A
+`[hidden]` rule was needed, since the rows' flex display beat the attribute. The owner also asked what
+"horizon" means and proposed a one-day against a-period choice; answered in the session, not built.
+
+### 2026-11-12, afternoon: A PERIOD in step 1, no horizon in RUN
+
+The owner asked what "horizon" meant and why a day is picked if a horizon follows; the answer was
+that a period run ignored the picked day except as the day played at the end. Rebuilt: step 1 offers A
+DAY, A SITUATION or A PERIOD (THE TERM, THE YEAR, N TERMS); choosing a period sets the run's hidden
+horizon inputs, moves the day to the last review (the span's last day, which the floor plays once the
+span is built) and shows "Ends on"; back on A DAY the horizon is a day again. The RUN step's horizon
+row and note are hidden; its bar summary reads the hidden input. STEP_HELP and README updated.
+
+### 2026-11-12, afternoon: the period as a span on the calendar
+
+The owner: a period should be a span inside the semester picked on the calendar shown under A DAY;
+the year and N terms are not options. Done: A PERIOD keeps the calendar, hides the suggested cases,
+and takes two clicks (first day, then last; a click before the first swaps them) or a preset (WHOLE
+TERM, TO THE MIDTERM, MIDTERM TO FINAL); the span is shaded on the calendar with its ends outlined;
+the run's hidden inputs carry horizon 'span' with from and to, the day becomes the span's last day,
+and `run.js` builds the term from its start as always and keeps the snapshots from the span's first
+day. ANALYSE's empty-timeline line now says to pick a period in step 1. The year and N terms buttons
+are gone from the interface (the code paths stay).
+
+### 2026-11-12, afternoon: WHEN, the span colour, the metric notes, the overlays over the pixel art
+
+The owner: the span's colour was too close to the weekend fill; step 1 should be named for the time
+parameter; the metrics need units or an explanation of what, how, why and the reference; the overlays
+should sit on the pixel art, faded or in black and white. Done: step 1 is WHEN (menu, bar, BACK);
+the span is light blue with dark-blue ends (`--span`, `--span-end`) and the legend has a swatch; each
+metric card carries a ? that folds open WHAT, HOW, WHY and REFERENCE (`METRIC_NOTES` in `analyse.js`,
+written from `research/summary-metrics.md`, the engine's own choices marked [A]); and when the pixel
+plan is up an overlay is drawn over it with the pixel canvas at 85% grey and 50% opacity
+(`#game.dim`), the SVG aligned to the plan's camera every frame (`LevelScene.planRect`,
+`Diagram.setOver` and `track`), its own line drawing hidden; in the isometric or the 3D building the
+vector plan is drawn as before. Checked in the browser: ACTIVITY over the Tuesday run sits on the
+desks; the C1 note opens; the WHEN bar and the blue span show.
+
+### 2026-11-12, afternoon: the metric cards against a goal
+
+The owner: the metrics need a comparison for whether the number is good, the descriptions more
+concise, the units closer to the number; a goal from data and literature against what is simulated.
+Done in `analyse.js` (`METRIC_NOTES` carries unit, direction, goal text and source; `fillCards`
+rebuilt): a card reads name, the simulated value with its unit (and B's when a saved run is B), the
+goal with its source, the bar with the goal's mark, and a verdict (at the goal within 10%, past it,
+short of it, over it; "no goal: a reading" for C7; none for the placeholders). The notes are one
+sentence each. Tuesday 13 Oct: C1 22 m short of 30 m; C3 2.1 /wk, C4 56 min, F1 17 min past their
+goals; C6 0.26 at 0.25; F2 1.5 /h and F4 8.5 /h over their goals; F8 0.1 min past. Goals that are the
+engine's own choice are marked [A] on the card.
+
+### 2026-11-12, evening: the steps gated, ANALYSE regrouped and explained
+
+The owner's notes: later steps should not show until the step before is done, and ANALYSE should
+pop up when the run ends; what is AGENT in the command window; drop the uncomputed metrics and
+remind later; the ? kept moving; "A READING" on C7 was unclear; mark clearly what meets the goal;
+a short description with a fold for the rest; the graphs need explanations; the suggestions as two
+summaries, collaboration and the rest, each traceable to events, agents and metrics. Done:
+`panels.js` gates the steps (`available`, `applyAvailability`; RUN once a day is picked, ANALYSE and
+WALK on `npc:run-done`, which `run.js` fires at the end of a run, and ANALYSE then opens); the menu
+greys the steps not reached. `analyse.js`: CARD_KEYS without C13, F11 and S1 (reminder task
+`uncomputed-metrics-reminder`, 2026-11-13); the ? in a fixed first column of the card grid; a WHAT line
+under the name, HOW, WHY and REFERENCE behind the ?; the card's left edge and tint green or red by the
+verdict; C7 "no goal in the literature: compare two layouts"; the summary in two groups by rule (C
+rules, the MOVES about the kitchen counter or the shared wall, and an A vs B on contact count as
+collaboration), each trace with a metric link that scrolls to the card and flashes it, and the remarks
+row renamed AGENTS. `index.html`: the timeline is "over the period", the Pareto view is "contact
+against focus", each with a one-line hint and a MORE fold (how, why, reference).
+
+### 2026-11-12, evening: names out, folds, WALK off; the furniture test; a first pass on the look
+
+The owner: no names in the suggestion itself (the trace keeps them); only the fold's own arrow; WALK
+off for now; test that moving furniture works; iterate on the plan view's graphic style. Done:
+`rules.js` strips names from every suggestion text (the F2 line says "the three most exposed desks",
+the MOVES line "two exposed desks", a veto "a desk owner vetoes"); the TRACE, DETAILS and MORE folds
+drop the extra arrow; WALK is hidden from the command window and the sequence (`panels.js` MAIN,
+`available`), its window and code stay. The furniture test found that a moved piece was shown as a
+flat coloured rectangle at its new place while its own sprite stayed in the pre-rendered row strip;
+now `drawSim` moves the piece in the level's furniture list (home positions kept) and rebuilds the
+row strips, so the board or table is drawn where it went, with a faint outline where it was; strips
+and homes reset per floor. Checked on the midterm eve within limits: four moves, the strips rebuilt,
+the board beside the aisle desk and the table in the lounge drawn as pieces. The first pass on the
+look (`tileset.js`): a one-pixel outline round each piece's footprint and a shadow along the right
+of its face and under it, a shadow under every person's feet, the chairs a muted red, a second
+lighter speckle on the concrete. The reference sheets in `Graphics/` (warm, outlined pixel interiors)
+are the direction; the next passes are the owner's call.
+
+### 2026-11-13, morning: step 1 in view at the start; walls win over furniture
+
+The owner: step 1 should be expanded to begin with; no desk or other piece may overlap a wall. Found:
+step 1 was open at load but the page had scrolled to it, leaving the command window off the top;
+and in the oblique a piece's plan is drawn a face-height above its footprint, so a piece against a
+wall climbed into the wall's foot, and a piece whose Revit box reached into a wall tile was drawn
+over the cap. Done: `panels.js` opens the page scrolled to the top and later scrolls a step into
+view only when it is out of it; `buildStrips` clears every piece wherever a wall tile's cap and face,
+a narrow wall's cap or a pane's line overlap the piece's drawn rectangle, so the wall shows through
+(pieces fixed to a wall, felt, screens, backdrops, projectors and anything lifted, are left alone).
+Checked in the browser at zoom 2 on the kitchen, the north bay under the lounge and the west bays.
+
+### 2026-11-13, morning: the wall caps as one layer, corners joined
+
+The owner: clean up the walls so the corners join. Cause: a north-south wall is a 10 px cap, an
+east-west wall a full tile, and a corner or junction tile was a full square, so the square stuck out
+3 px past the bar on the side with no wall; and each tile outlined its own edges, so joins showed
+notches. `buildStrips` now rasterises the caps as one mask in tile space, shaping every tile from its
+neighbours (a corner is the union of its two bars; a narrow run stays 10 px; headers over doors and
+columns stay full), and draws the outline per pixel wherever a cap pixel meets open space, so every
+corner and T-junction closes. The faces below are unchanged. Checked at zoom 2 on the north offices,
+the middle core and the south rooms; console clean.
+
+The owner then pointed at the top of the middle core, where the wall over the doorway did not meet the
+bar beside it: the tile next to a door's header counted as having no wall beside it and so was drawn
+as a 10 px bar with a 3 px gap to the header. `narrow` now counts a header as a wall beside the tile,
+so the corner over a doorway is shaped to join it.
+
+### 2026-11-13, morning: two panes
+
+The owner asked for tiled views as in a modeller, two panes for a laptop. Done: a second
+`PixelFloorView` on a second container (`#pane-b`, `#game-b`) sharing the tiles, the program, the
+context and the run with pane A (`run.js` hands the run to both); the VIEW tabs end with PANES ONE |
+TWO, and with TWO a second tab row for pane B (the floors, ISO and PLAN); in `#stage.two` pane A's
+canvas, labels, floor view and overlay sit in the left half of the stage beyond the command column
+(`--panel-w`), pane B in the right half with a rule between; the three.js scene and both Phaser games
+are resized and refitted on the switch and on a window resize. The building stays pane A only;
+overlays and moved furniture draw in pane A. Checked at 1400 px: pane A Level 3 plan beside pane B's
+Level 3 isometric, pane B on Level 1 in plan, pane A on the building, and a run drawing its agents in
+both panes; console clean.
+Also checked: the ACTIVITY overlay stays aligned on pane A in two-pane mode (the diagram shares pane
+A's left offset). Seen on the way, open: the pixel isometric of a floor draws no agents during a run
+(the plan does), so a pane on ISO shows the empty floor while the run plays.
+
+### 2026-11-13, morning: pane titles, the default panes, the site's edge and the zoom floor
+
+The owner: a view title in each pane's corner that switches the view, as in Rhino, besides the VIEW
+window; two panes by default with the building isometric and the third floor; the WHEN step keeping
+the third floor in a pane; no black beyond the site; a limit on zooming out so the building never
+becomes a speck and not too much site is drawn in plan. Done: a `.pane-title` select in each pane's
+top-left corner (`renderPaneTitles` in `main.js`, kept in step with the tabs); `paneB.on` true by
+default with Level 3 in plan while pane A opens on the building; the `npc:step` handler leaves pane A
+alone when pane B holds the Level 3 plan; in `game/scene.js` the camera background turns to the site's
+ground colour once the context is drawn, the fit zoom becomes the floor's minimum zoom and the camera
+is bounded to the floor plus its 60-tile context margin; in `scene.js` the three.js background is the
+same ground colour and the orthographic zoom floor is 0.7 of the framed view. Checked at 1400 px:
+the defaults, the titles switching pane A to Level 1 plan and pane B to the Level 3 isometric and back,
+zooming out stopped at the fit, console clean.
+
+
+### 2026-11-13, morning: three columns, the pane divider, a cream ground
+
+The owner: the edge between the panes dragged to give one view more room; the feed a panel of its own
+on the right instead of a window over the model; the ground behind the command windows nearer the
+windows' cream than black. Done: the page is three columns. The command windows sit on a cream ground
+(`html, body` background), the stage runs between `--panel-w` and `--feed-w`, and the feed fills the
+right column (320 px, 260 px below 1440 px wide, a 30 px upright bar when folded; a
+`MutationObserver` on the feed's fold sets `body.feed-folded` and refreshes the views). The panes
+split the stage at `--split`; a `#divider` on the seam is dragged with pointer events, kept between 25%
+and 75%, and on release the three.js view resizes and both floor views refresh and refit
+(`refreshViews` in `main.js`). Checked at 1400 and 1366 px: the divider moved to 70% with both canvases
+resized, the feed opening pushed the stage in rather than covering it, the message bar stays within
+the stage, console clean.
+
+### 2026-11-13, morning: the feed floats again, a third of the window at most
+
+The owner: the feed column took too much room; let it overlap the model but never grow past a third of
+the window, scrolling after a few messages. Done: `--feed-w` is 0, so the stage runs from the command
+column to the right edge; `#feed` floats at the top right (300 px wide, `max-height: 33vh`), its body a
+flex column whose list takes the remaining height and scrolls; the fold observer that refitted the
+views is removed. Checked at 1366 x 768 with 30 test lines: the feed stopped at 253 px of a 256 px cap
+and its list scrolled; the pane divider and the cream ground are unchanged.
+
+### 2026-11-13, morning: the feed's handle, a loading bar, a pane alone
+
+The owner: the feed resizable from its bottom edge; a retro loading bar centred on the model views
+while the building and the people load; a double click on a pane's title giving that view the whole
+stage, as in Rhino. Done:
+- The feed ends in a striped grip; dragging it sets the feed's height (90 px up to the window's foot)
+  and lifts the third-of-the-window cap; a double click on the grip returns the default.
+- `src/ui/loader.js`: one bar of 24 cells in a cream window, centred on the stage, the last cell
+  blinking, a percentage and a line saying what loads. On page load it follows `loadModel` (the model,
+  the meshes by bytes, the elements, the geometry, the views) and hides once pane B's floor is drawn.
+  On RUN it follows the floors and the program, the people, the term walk day by day, and the day.
+  To let it move during the term walk, `TermLayer.runSteps` is a generator of the same walk (yielding
+  after each day) and `run()` drains it, so results are unchanged; `RunController.build` is async and
+  hands control back every ~40 ms (`walkTerm`). `play()` is split into `play` and `play2` so a failure
+  hides the bar.
+- The pane titles are now a name button with a menu (the hidden selects keep the change handlers).
+  One click waits 240 ms for a second; a double click toggles `max-a` / `max-b` on the stage: pane A
+  widens to the whole stage with pane B hidden at its size, or pane B is laid over the whole stage with
+  pane A hidden at its size, so no view is ever resized to zero. The title reads "· ALONE" while
+  maximised. With one pane on, a double click brings the second back; PANES ONE/TWO clears it.
+Checked at 1366 x 768: the bar at page load and on a Tue 13 Oct run (2% to 100% through the term's
+days, hidden as the run started), the menu on one click, both panes maximised and restored, the feed
+dragged to 505 px, console clean; `test/run-day.mjs` runs as before.
+
+### 2026-11-13, midday: people drawn in the references' style, animated, with bubbles
+
+The owner shared three references (a sheet of chibi characters, a top-down shop and a clinic) and
+asked for the people to be studied and replicated and for animation that brings the run to life.
+The study is `research/pixel-people-and-animation.md`. The figures are original, drawn by code in
+that style; no reference character is copied. Done:
+- `src/game/people.js`: a 16 x 24 chibi per person, from the person's id and the run's seed (visual
+  only): a round 12-pixel head, two-pixel eyes, eight hair styles with a crown highlight and a shaded
+  side, seven skin tones, natural, grey and rare dyed hair, shirts with a shaded side (a share in
+  black), short or long sleeves, open jackets for most instructors, glasses, blush, beards, and an
+  outline pass that inks every empty pixel beside the figure, then a shadow under the feet. Eight
+  frames by four facings (left mirrors right): stand, two steps, breath, blink, seated, seated typing,
+  seated blink.
+- Animations: walk (step, stand, step, stand at 8 fps), idle (a one-pixel breath and a 110 ms blink
+  every few seconds), type (hands alternating in bursts with a pause and a blink) for desk work, and
+  sit (still, blinking) for eating, lectures and seminars. Each person starts at its own frame and
+  runs at 0.85 to 1.15 of the pace, so a crowd never moves in step. `scene.js` switches animation only
+  when the state changes.
+- Bubbles: a 14 x 14 sheet of ten icon bubbles; the plan scene listens to the run's event bus and
+  shows a heart for a between-year conversation, talk dots, ?, !, a page, a check, a note, a cup, Z
+  and a sweat drop by event and remark topic (table in the study). One bubble per person every 3.5 s,
+  ten on screen (sixteen for the important ones), a pop with overshoot, a hold, then a rise and a
+  fade. `EventBus.off` is new; the scene unhooks on shutdown and when the run changes.
+Checked at 1366 x 768: a contact sheet of twelve looks in three facings and of the frames, then a Tue
+13 Oct run on Level 3 with people typing at desks, idling in the lounge and walking, and talk and
+heart bubbles at 11:48; switching floors keeps the bus at two listeners; console clean;
+`test/run-day.mjs` unchanged. Not built: ambient object animation (screens, the plotters' busy light,
+the kettle), the next step in the study.
+
+### 2026-11-13, afternoon: an excited bubble, objects that move, a jump in time, a reset on new settings
+
+The owner: an excited bubble instead of the heart; animate the objects; let the user drag the run to a time or type one;
+reset the run's bar when the kind of run changes. Done:
+- The between-year bubble is an orange "!!" (`EMOTE.excited`), the heart is gone.
+- `src/game/objects.js` (`ObjectFx`, made by the plan scene, redrawn ten times a second): plotters, small printers, 3D printers,
+  kettle and coffee machine, microwaves, lab computers, the crit room's screen and projector, the beer taps and a laptop on
+  every desk in use. Every effect reads the run (the plotter queue and paper, `printDone`, activities within a few tiles),
+  table in `research/pixel-people-and-animation.md`. Overlays sit at their piece's row depth, so people further south stand
+  in front, and follow pieces the agents move.
+- RUN: a GO TO box (14:30, 2:30 pm, 9, 01:15 for after midnight; anything outside 07:00 to 02:00 is refused with a hint) and a
+  draggable progress bar with the time under the pointer. `RunController.seekTo` plays forward without drawing (the feed
+  quiet, redrawn once at the end; skipped bubbles dropped) with the loading bar; going back rebuilds the day from the same
+  settings and plays forward. Paused stays paused. `adopt(run)` gathers what a run on show needs.
+- Going back needs the world as the model has it, and it was not: the layout manager's moves, the kitchen spot it adds,
+  the `shared` and `screened` marks and desk owners stayed in the shared `World` from one run to the next, so a second run
+  after a rearranging run started from moved furniture (a bug before today too). `World.restoreLayout` keeps the loaded
+  layout before the first run and puts it back at the start of every build. `test/_rewind.mjs` checks it: a run rebuilt
+  after a whole day of moves and played to 15:00 (WITHOUT LIMITS) or 18:00 (WITHIN LIMITS) reaches the straight run's state
+  exactly (events, encounters, moves, every agent's place and activity); EVERYDAY to 11:00 too.
+- A run belongs to its settings: any click, change or typing in the steps that changes the date, seed, movement, period,
+  seeds or situation resets the run (bar back to 07:00, furniture back in the views via `restoreFurniture`).
+Checked at 1366 x 768: GO TO 14:00 from no run in 8.2 s (build included), back to 9:30 in 3.9 s, a bad time refused, the bar
+dragged to 60% landing at 18:24, WITHIN LIMITS resetting the run, the kitchen at 12:40 with a lit microwave and steam, a busy
+plotter blinking and feeding at 12:50, 55 laptops glowing; console clean; `test/run-day.mjs` unchanged (3833 events).
+
+### 2026-11-13, afternoon: the agents' moves marked; the bar as a scrubber
+
+The owner: a way to see what the agents moved even after fast-forwarding; dragging the run like a video player. Done:
+- `LevelScene.drawMoveMarks` draws every move on the floor for the rest of the run: the old place as a dashed cyan outline,
+  a dashed arrow, the new place with a pulsing outline and a light tint, and a numbered tag. A move flashes an expanding ring
+  when it first shows, live or after a jump, so a jump over the morning ends with the morning's moves flashing. Cyan is used
+  for nothing else on the plan. `restoreFurniture` clears the marks.
+- RUN lists the moves (MOVED BY THE AGENTS, number, time, floor, what, the signal tag); a click centres whichever pane shows
+  that floor in plan and flashes the move (`findMove`, `showMove`); the message says which floor to show if none does.
+- The progress bar: a knob at the playhead, a taller bar in use, the time and a lighter fill under the pointer on hover
+  ("back" or "start" when that applies). Pressing pauses the run (`scrubStart`); dragging ahead plays the run toward the
+  pointer 22 ms a frame (`scrubTo`), so people move under it; dragging back waits for the release and rebuilds
+  (`scrubEnd` to `seekTo(t, resume)`); the run then goes on as it was. Keys on the bar: arrows skip 10 minutes, Home, End,
+  space plays and pauses.
+Checked at 1366 x 768: WITHOUT LIMITS to 16:00 listed three moves (two boards rolled to the aisle as screens, a side table
+outside the kitchen); a click centred the plan on move 3 with its ring, tag and arrow; a scrub ahead in 30-minute steps kept
+up within 200 ms each; back to 08:54 rebuilt and resumed; a real drag to 16:30 and an arrow key to 16:40; console clean.
+
+### 2026-11-13, afternoon: a first methodology graphic
+
+The owner asked for a graphic of the methodology (the inputs, the sources, the agent design) brief enough to read at a
+glance. Draft: `research/methodology-graphic.svg` (1600 x 932), generated by `research/make_methodology_graphic.py`, so
+the text is edited there and the script rerun. Five windows in the tool's style, left to right: THE MODEL (Revit export
+counts, checks, the 0.5 m tiles, the rule that geometry comes only from the model), WHAT I PUT IN (room program, 61 added
+objects, 10 edits, the cohort, the calendar, about 78 checklist answers, 34 questions with 29 settled), WHAT THE DATA
+SAYS (UBC sources and the key papers, each with the one number it supplies; the 105-item ledger: 71 insider, 30 data,
+44 assumed), THE AGENTS (five of the tool's own pixel people, traits, states, decisions, remarks, the term layer over the
+day run, the three rearranging levels), WHAT COMES OUT (the computed metrics, suggestions with traces, the feed and the
+bubbles). Below: the rules held to and the checks (12 of 12 cases, 39-run sweep, stress 18% against 20% and 43% against
+40%). The facts come from the project's notes, gathered by a reading pass over research/ and program/; the footer names
+what is not done yet (on-site observation, sensitivity analysis). Fonts: Silkscreen and Nunito from Google Fonts, so
+the SVG needs a connection to show them; offline it falls back to Courier and Segoe UI.
+
+### 2026-11-13, afternoon: the methodology graphic as a click-through
+
+The owner: remove the CHECKED window; expand the agent parameters by category (personality, needs and so on); show the
+object relations they set up; add a short description of each metric with its source and why it matters; summarise how
+agents make a simulation with many work types and schedules possible; animate it so each step appears on a click and the
+earlier ones fade. Done: `research/methodology.html` replaces the static SVG of this morning (deleted with its script).
+A 1920 x 1080 page that scales to the window, in eight steps: 1 the model, 2 what I put in, 3 how rooms and objects relate
+(use to activities, affordances, the 61 added objects, by-use rules, pieces on pieces, movable pieces, zones, renamed
+pieces), 4 what the data says with the 105-item ledger, 5 the agents in eight cards (personality, rhythm and life, studio
+drive, social, needs through the day, carried day to day, role, traits shape rates) with five of the tool's own people,
+6 why agents, 7 what comes out (eight metrics with what each measures, why it matters and where it comes from, from
+`analyse.js`), 8 the rules held to. Click, space or the right arrow shows the next step, which slides in while the earlier
+ones fade to 38% (hover brings one back); the left arrow goes back, Home starts again, End or A shows all; the squares in
+the top corner jump to a step. Printing shows every step. Checked at 1600 x 900: every window fits its text, and step 3
+shows steps 1 and 2 faded.
+- Fix the same afternoon (owner: text off the window in step 7): the metric table could not wrap and ran 27 px past its
+  window, and steps 1, 4 and 5 ran a few pixels past their bottoms. The table now has fixed columns that wrap; step 7 is
+  wider (668 px) and step 6 narrower with shorter lines; steps 1, 4 and 5 are tighter and row B is 10 px taller. A check
+  of every window's scroll size against its box finds no overflow, with the web fonts or with the fallback fonts
+  (Segoe UI and Courier New).
+
+### 2026-11-13, afternoon: a guided tour in the tool
+
+The owner asked for a tutorial in the tool that walks through the steps and can be skipped. `src/ui/tour.js`: twelve stops
+(welcome; the steps; the two views, their titles and divider; VIEW; WHEN's test cases; the calendar, situations and
+periods; RUN's movement levels; PLAY, the scrubber and GO TO; the feed; ANALYSE; the message box; ready). Each stop dims the
+page but for the part it is about, outlined in a pulsing accent border, with a note in the tool's window style beside it
+(right, left, below or above, whichever fits; inside the corner of a large target). NEXT, BACK, SKIP TOUR and a close box;
+Enter or the right arrow steps, the left arrow goes back, Esc skips; while the tour is open its keys do not reach the views.
+The tour opens steps by clicking their names, as a user would, and ends on WHEN. It opens by itself on a first visit, once
+the views are drawn, and remembers being finished or skipped in this browser (`localStorage` key `npc-tour-v1`; storage
+off means it can show again); `?notour` in the address keeps it closed; a TOUR button in the NPC V2 window replays it.
+Checked at 1366 x 768: it opened on a first visit, every stop lit its part with the note beside it, FINISH stored "done"
+and left WHEN open, a reload kept it closed, TOUR reopened it and Esc skipped it; console clean.

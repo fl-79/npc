@@ -1,0 +1,14 @@
+import { loadAll } from './_load.mjs';
+import { World } from '../src/sim/world.js';
+import { buildPopulation } from '../src/sim/population.js';
+const { building, program, P } = loadAll();
+const w = new World(building, program, P);
+console.log('gaps', JSON.stringify(w.gaps));
+console.log('desks with stand', w.studioDesks.length, 'crit 30 spots', w.critRooms.find((c) => c.room.number === '30').spots.length, 'class order', w.classRooms.map((c) => c.room.number + ':' + c.chairs.length).join(' '));
+const pop = buildPopulation(program.cohort, P, 2026);
+w.assignDesks(pop.agents);
+const inst = pop.agents.filter((a) => a.role === 'instructor');
+console.log('instructors', inst.map((a) => `${a.name}:${a.sessional ? 'sess' : 'perm'}/${a.officeHere ? 'office ' + a.office : 'no office here'}/${a.critMode}`).join(' | '));
+const st = pop.agents[0];
+console.log('washroom student from L3', w.washroomFor(st, 3)?.room.number, 'from L1', w.washroomFor(st, 1)?.room.number, 'instructor from L3', w.washroomFor(inst[0], 3)?.room.number);
+console.log('office visit p', pop.agents.filter((a) => a.role === 'student').map((a) => a.officeVisitP).sort((a, b) => a - b).filter((_, i) => i % 40 === 0).map((v) => v.toFixed(2)).join(' '));

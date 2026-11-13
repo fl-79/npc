@@ -1,0 +1,43 @@
+{
+ "skipped_or_failed": 32, 
+ "model": "260630 - Lasserre", 
+ "not_considered": [], 
+ "seconds": 4.5, 
+ "joined": 128, 
+ "planned": 395, 
+ "saved": false, 
+ "when": "2026-11-02 21:23:55", 
+ "slabs": [
+  {
+   "id": 1305069, 
+   "top_m": -617.69500000000005, 
+   "underside_m": -618.0, 
+   "level": "Basement"
+  }, 
+  {
+   "id": 1274809, 
+   "top_m": -614.0, 
+   "underside_m": -614.30499999999995, 
+   "level": "Level 1"
+  }, 
+  {
+   "id": 1214740, 
+   "top_m": -609.99000000000001, 
+   "underside_m": -610.85400000000004, 
+   "level": "Level 2"
+  }, 
+  {
+   "id": 1215105, 
+   "top_m": -606.44600000000003, 
+   "underside_m": -606.75, 
+   "level": "Level 3"
+  }, 
+  {
+   "id": 1216109, 
+   "top_m": -602.34199999999998, 
+   "underside_m": -603.20600000000002, 
+   "level": "Level 4"
+  }
+ ], 
+ "set": 235
+}

@@ -1,0 +1,14 @@
+import { loadAll } from './_load.mjs';
+import { World } from '../src/sim/world.js';
+import { WALK } from '../src/sim/grid.js';
+const { building, program, P } = loadAll();
+const w = new World(building, program, P);
+const ys = w.studioDesks.map(d => d.y), xs = w.studioDesks.map(d => d.x);
+console.log('desk y range', Math.min(...ys).toFixed(1), Math.max(...ys).toFixed(1), 'x range', Math.min(...xs).toFixed(1), Math.max(...xs).toFixed(1));
+console.log('zones', JSON.stringify(program.objects.zones[String(w.studio.id)].zones));
+const g = w.levels[2].grid;
+const p0 = w.plotters[0], d0 = w.studioDesks[0];
+console.log('plotter stand', p0.stand, 'walk', p0.stand && g.at(...p0.stand), 'comp', p0.stand && g.comp[g.idx(...p0.stand)], 'main', g.main, 'footprint', p0.c0, p0.r0, p0.c1, p0.r1);
+console.log('desk stand', d0.stand, 'walk', g.at(...d0.stand), 'comp', g.comp[g.idx(...d0.stand)]);
+console.log('component sizes', g.componentSizes.slice(0, 10), 'main floor tiles', g.mainFloorTiles().length);
+const r30 = w.rooms.get('30'); console.log('room 30 pieces', r30.pieces.map(p => p.kind).join(','), 'tiles', r30.tiles.length);

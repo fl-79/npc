@@ -1,0 +1,2629 @@
+{
+  "meta": {
+    "schema": 2,
+    "note": "Objects the building has and the Revit model does not, added by the owner per room (objects) or per use for every room of that use in program/rooms.json (by_use, e.g. a desk in every office); the owner's kinds for modelled pieces the family name misnames (rekind, by Revit element id); and the owner's rules for how a room's modelled pieces are used. Keyed by object id; each object names its room (Revit room id), its kind (program/affordances.json), a placement rule, its source and whether its position is inferred. scripts/rasterise.py places them when it builds the tiles (flagged inferred: true there) and the pixel views draw them with an amber mark; exports/ is never changed.",
+    "placement": {
+      "on: opaque_walls": "along every wall of the room that is wall or column (not glass, not a door), as a thin surface on the inside face; runs shorter than min_run_m are skipped",
+      "wall: <side>, mount: high | shelf | floor, width_m, depth_m, bottom_m, top_m": "centred on the longest opaque run of that side of the room, width_m wide and depth_m deep against the wall, between bottom_m and top_m",
+      "on: object, object: <id>, count, size_m": "count pieces spread evenly along the top of that added object",
+      "ceiling: true, faces: <side>, distance_m": "hung from the ceiling on the centre line of that side's screen, distance_m into the room",
+      "corner: north_east | north_west | south_east | south_west, size_m": "tucked into the room's open floor at that corner",
+      "on: counter, which: west | east | north | south, at: 0..1, size_m": "on top of that modelled counter of the room, at a fraction along it",
+      "box_m: [x0, y0, x1, y1], height_m, z_m": "a box in model metres (project base point, +Y project north), the owner's own placement",
+      "row_along_wall: <side>, desk_size_m, gap_m, chair_size_m": "as many desks as fill the longest run of that side, against the wall, each with a chair on the room side",
+      "cluster: n, desk_size_m, chair_size_m": "n desks in facing pairs at the centre of the room's main floor, each with a chair",
+      "table_set: pairs, table_size_m, chair_size_m": "pairs of the Level 3 crit rooms' 60x90 in tables pushed together at the centre of the room's main floor, chairs round each pair (4 a long side, 1 an end), pairs 1.5 m apart",
+      "table_rows: rows_wanted, table_size_m, chair_size_m, chairs_per_table, front_clear_m, row_gap_m, aisle_m, table_gap_m": "rows of tables across the room facing the room's screen (else the south wall), chairs behind each table, as many rows and tables per row as fit",
+      "wall ... along": "the along fraction (0 to 1) places a wall piece at that point of the run instead of its middle",
+      "ceiling ... screen_object": "the projector faces that screen (an object id) when a room has more than one",
+      "table_rows ... front": "the side the rows face when the room has no screen rule",
+      "wc_set: stalls, stall_size_m, sinks, counter_depth_m, sink_pitch_m": "stalls along the longest opaque wall without a door, a counter with sinks along another wall",
+      "boxes: [{kind, box_m, height_m, ...}]": "a set of pieces of several kinds, each a box in model metres: a hand-laid placeholder"
+    },
+    "updated": "2026-11-11 20:36:24"
+  },
+  "objects": [
+    {
+      "id": "O1",
+      "level": "Level 3",
+      "room": 1364433,
+      "room_number": "1",
+      "kind": "pinup_wall",
+      "placement": {
+        "on": "opaque_walls",
+        "min_run_m": 1.5,
+        "bottom_m": 0.9,
+        "top_m": 2.1
+      },
+      "reason": "The owner: in both crit rooms the pin-up boards are on all the opaque walls, a felt or fabric surface attached directly to the wall.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The walls are the owner's; the height band (0.9 to 2.1 m) is assumed."
+    },
+    {
+      "id": "O2",
+      "level": "Level 3",
+      "room": 1364433,
+      "room_number": "1",
+      "kind": "screen",
+      "placement": {
+        "wall": "west",
+        "mount": "high",
+        "width_m": 2.4,
+        "top_m": 2.5,
+        "bottom_m": 1.0
+      },
+      "reason": "The owner: the projecting surface descends from a container mounted high on the wall, on the short wall on the same side as the door. In room 1 the door to the studio is in the west wall.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The wall is the owner's; the screen is centred on it and its width and heights are assumed."
+    },
+    {
+      "id": "O3",
+      "level": "Level 3",
+      "room": 1364433,
+      "room_number": "1",
+      "kind": "projector",
+      "placement": {
+        "ceiling": true,
+        "faces": "west",
+        "distance_m": 3.5,
+        "size_m": [
+          0.4,
+          0.3,
+          0.15
+        ],
+        "bottom_m": 2.4
+      },
+      "reason": "The owner: there is a projector in both rooms.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Only its presence is the owner's. Placed ceiling-mounted on the screen's centre line, 3.5 m from the west wall."
+    },
+    {
+      "id": "O4",
+      "level": "Level 3",
+      "room": 1364442,
+      "room_number": "4",
+      "kind": "pinup_wall",
+      "placement": {
+        "on": "opaque_walls",
+        "min_run_m": 1.5,
+        "bottom_m": 0.9,
+        "top_m": 2.1
+      },
+      "reason": "The owner: in both crit rooms the pin-up boards are on all the opaque walls, a felt or fabric surface attached directly to the wall.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The walls are the owner's; the height band (0.9 to 2.1 m) is assumed."
+    },
+    {
+      "id": "O5",
+      "level": "Level 3",
+      "room": 1364442,
+      "room_number": "4",
+      "kind": "screen",
+      "placement": {
+        "wall": "west",
+        "mount": "high",
+        "width_m": 2.4,
+        "top_m": 2.5,
+        "bottom_m": 1.0
+      },
+      "reason": "The owner: the projecting surface descends from a container mounted high on the wall, on the short wall on the same side as the door. In room 4 the door to the studio is in the west wall.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The wall is the owner's; the screen is centred on it and its width and heights are assumed."
+    },
+    {
+      "id": "O6",
+      "level": "Level 3",
+      "room": 1364442,
+      "room_number": "4",
+      "kind": "projector",
+      "placement": {
+        "ceiling": true,
+        "faces": "west",
+        "distance_m": 3.5,
+        "size_m": [
+          0.4,
+          0.3,
+          0.15
+        ],
+        "bottom_m": 2.4
+      },
+      "reason": "The owner: there is a projector in both rooms.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Only its presence is the owner's. Placed ceiling-mounted on the screen's centre line, 3.5 m from the west wall."
+    },
+    {
+      "id": "O7",
+      "level": "Level 3",
+      "room": 1364793,
+      "room_number": "9",
+      "kind": "fridge",
+      "placement": {
+        "corner": "north_east",
+        "size_m": [
+          0.75,
+          0.75,
+          1.8
+        ]
+      },
+      "reason": "The owner: in the kitchen's north-east corner there is a fridge.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The corner is the owner's; the size is assumed. The north-east corner of the kitchen's open floor is just south of the pass-through wall, beside the east counter."
+    },
+    {
+      "id": "O8",
+      "level": "Level 3",
+      "room": 1364793,
+      "room_number": "9",
+      "kind": "microwave",
+      "placement": {
+        "on": "counter",
+        "which": "west",
+        "at": 0.15,
+        "size_m": [
+          0.5,
+          0.4,
+          0.3
+        ]
+      },
+      "reason": "The owner: two microwaves, one on each counter.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "On the west counter near its north end; the owner gave the counter, not the place on it."
+    },
+    {
+      "id": "O9",
+      "level": "Level 3",
+      "room": 1364793,
+      "room_number": "9",
+      "kind": "microwave",
+      "placement": {
+        "on": "counter",
+        "which": "east",
+        "at": 0.15,
+        "size_m": [
+          0.5,
+          0.4,
+          0.3
+        ]
+      },
+      "reason": "The owner: two microwaves, one on each counter.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "On the east counter near its north end; the owner gave the counter, not the place on it."
+    },
+    {
+      "id": "O10",
+      "level": "Level 3",
+      "room": 1364793,
+      "room_number": "9",
+      "kind": "kettle",
+      "placement": {
+        "on": "counter",
+        "which": "west",
+        "at": 0.85,
+        "size_m": [
+          0.25,
+          0.25,
+          0.3
+        ]
+      },
+      "reason": "The owner: kettles and other tabletop appliances on the counters.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "One kettle stands for 'kettles'; on the west counter near its south end. Count and place assumed."
+    },
+    {
+      "id": "O11",
+      "level": "Level 3",
+      "room": 1364793,
+      "room_number": "9",
+      "kind": "coffee_machine",
+      "placement": {
+        "on": "counter",
+        "which": "east",
+        "at": 0.6,
+        "size_m": [
+          0.3,
+          0.4,
+          0.4
+        ]
+      },
+      "reason": "The owner: a coffee machine among the tabletop appliances.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "On the east counter, its place assumed."
+    },
+    {
+      "id": "O12",
+      "level": "Level 3",
+      "room": 1364796,
+      "room_number": "10",
+      "kind": "fridge",
+      "placement": {
+        "corner": "north_east",
+        "size_m": [
+          0.75,
+          0.75,
+          1.8
+        ]
+      },
+      "reason": "The owner: the top right (north-east) corner of the lounge has a fridge (also in the owner's plan screenshot, beside the kitchen doorway).",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The corner is the owner's; the size is assumed."
+    },
+    {
+      "id": "O13",
+      "withdrawn": true,
+      "reason": "Was an added pew bench along the lounge's south edge. The model has the pews: four 'Family7' pieces (1359757 to 1359760, 1.2 m long, 1.75 m tall) in that exact row, confirmed by the owner on 2026-11-06 and rekinded pew_bench. Nothing placed.",
+      "source": "owner, chat 2026-11-06"
+    },
+    {
+      "id": "O24",
+      "level": "Level 3",
+      "room": 1364799,
+      "room_number": "11",
+      "kind": "printer",
+      "placement": {
+        "box_m": [
+          14.1,
+          11.7,
+          14.7,
+          12.3
+        ],
+        "height_m": 1.1
+      },
+      "reason": "The owner: along with the big plotters on the north side there are three large printers for 8.5 by 11 and 11 by 17, used by all students; printing is concentrated in that one area for the whole floor.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The first of three, placed in a row west of the plotters (1359941, 1359942) on the studio side of the partition; size and places assumed."
+    },
+    {
+      "id": "O25",
+      "level": "Level 3",
+      "room": 1364799,
+      "room_number": "11",
+      "kind": "printer",
+      "placement": {
+        "box_m": [
+          14.1,
+          10.7,
+          14.7,
+          11.3
+        ],
+        "height_m": 1.1
+      },
+      "reason": "The owner: three large printers beside the plotters, used by all students.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The second of three; size and place assumed."
+    },
+    {
+      "id": "O26",
+      "level": "Level 3",
+      "room": 1364799,
+      "room_number": "11",
+      "kind": "printer",
+      "placement": {
+        "box_m": [
+          14.1,
+          9.7,
+          14.7,
+          10.3
+        ],
+        "height_m": 1.1
+      },
+      "reason": "The owner: three large printers beside the plotters, used by all students.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The third of three; size and place assumed."
+    },
+    {
+      "id": "O14",
+      "level": "Level 3",
+      "room": 1364796,
+      "room_number": "10",
+      "kind": "bar",
+      "placement": {
+        "box_m": [
+          21.48,
+          -5.0,
+          22.2,
+          -4.54
+        ],
+        "height_m": 1.12
+      },
+      "reason": "The owner: the bar counter extends to match the shaft wall, still leaving a pass-through to get behind the bar. The modelled counter (1359220) stops 0.46 m short of the wall's south end, over the keg fridge; this piece carries it to the wall.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Read as: the counter runs south to the shaft wall's end (y -5.0) over the keg fridge, and the pass-through is the existing 0.67 m gap at the north end between the counter and the bench (1360372). If the counter runs north instead, and the gap is elsewhere, this piece moves."
+    },
+    {
+      "id": "O15",
+      "level": "Level 3",
+      "room": 1364448,
+      "room_number": "6",
+      "kind": "shelf",
+      "placement": {
+        "wall": "west",
+        "mount": "shelf",
+        "width_m": 2.3,
+        "depth_m": 0.4,
+        "bottom_m": 0.9,
+        "top_m": 1.0
+      },
+      "reason": "The owner: on the wall opposite the window (the west wall; the east wall covers the window) there is a shelf with multiple small 3D printers.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The wall is the owner's; the shelf's length, depth and height are assumed."
+    },
+    {
+      "id": "O16",
+      "level": "Level 3",
+      "room": 1364448,
+      "room_number": "6",
+      "kind": "printer3d",
+      "placement": {
+        "on": "object",
+        "object": "O15",
+        "count": 6,
+        "size_m": [
+          0.3,
+          0.3,
+          0.35
+        ]
+      },
+      "reason": "The owner: at least six small 3D printers on the shelf.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Six stands for 'at least six', spread evenly along the shelf; their size assumed."
+    },
+    {
+      "id": "O17",
+      "level": "Level 3",
+      "room": 1364445,
+      "room_number": "5",
+      "kind": "backdrop",
+      "placement": {
+        "wall": "south",
+        "mount": "high",
+        "width_m": 2.0,
+        "depth_m": 0.1,
+        "bottom_m": 0.0,
+        "top_m": 2.3
+      },
+      "reason": "The owner: the photography room has a backdrop that drops down.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The owner gave the backdrop, not its wall: placed on the south wall, opposite the door from room 6, drawn down to the floor; its width assumed."
+    },
+    {
+      "id": "O18",
+      "level": "Level 3",
+      "room": 1364445,
+      "room_number": "5",
+      "kind": "table",
+      "placement": {
+        "wall": "south",
+        "mount": "floor",
+        "width_m": 1.2,
+        "depth_m": 0.6,
+        "bottom_m": 0.0,
+        "top_m": 0.75
+      },
+      "reason": "The owner: a table in the photography room, for the model being photographed.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Placed against the south wall in front of the backdrop, centred; its size assumed."
+    },
+    {
+      "id": "O19",
+      "level": "Level 3",
+      "room": 1364445,
+      "room_number": "5",
+      "kind": "light_stand",
+      "placement": {
+        "box_m": [
+          25.15,
+          -28.05,
+          25.45,
+          -27.75
+        ],
+        "height_m": 1.8
+      },
+      "reason": "The owner: some lights in the photography room.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "One of two lights on stands assumed either side of the table, 1 m off the south wall; count and places assumed."
+    },
+    {
+      "id": "O20",
+      "level": "Level 3",
+      "room": 1364445,
+      "room_number": "5",
+      "kind": "light_stand",
+      "placement": {
+        "box_m": [
+          27.05,
+          -28.05,
+          27.35,
+          -27.75
+        ],
+        "height_m": 1.8
+      },
+      "reason": "The owner: some lights in the photography room.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The second of two lights on stands assumed either side of the table; count and places assumed."
+    },
+    {
+      "id": "O21",
+      "level": "Level 2",
+      "room": 1365029,
+      "room_number": "30",
+      "kind": "counter",
+      "placement": {
+        "wall": "west",
+        "mount": "floor",
+        "width_m": 1.8,
+        "depth_m": 0.6,
+        "bottom_m": 0.0,
+        "top_m": 0.9
+      },
+      "reason": "The owner: the wall dividing rooms 31 and 30 (edit E3) has a small kitchenette on room 30's side.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "A 1.8 m counter centred on the new wall; its length and what is on it (a sink, a kettle) are assumed."
+    },
+    {
+      "id": "O22",
+      "level": "Level 2",
+      "room": 1365035,
+      "room_number": "32",
+      "kind": "desk",
+      "placement": {
+        "row_along_wall": "north",
+        "desk_size_m": [
+          1.6,
+          0.8,
+          0.73
+        ],
+        "gap_m": 0.2,
+        "chair_size_m": [
+          0.6,
+          0.6,
+          0.45
+        ]
+      },
+      "reason": "The owner: room 32 has desks along the wall on one side, the north wall of the model in game view. Shared desks, number unknown.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "As many 1.6 m desks as fill the north wall, each with a chair on the room side; the count is unknown and stands in for the real one."
+    },
+    {
+      "id": "O23",
+      "level": "Level 2",
+      "room": 1365038,
+      "room_number": "33",
+      "kind": "desk",
+      "placement": {
+        "cluster": 4,
+        "desk_size_m": [
+          1.6,
+          0.8,
+          0.73
+        ],
+        "chair_size_m": [
+          0.6,
+          0.6,
+          0.45
+        ]
+      },
+      "reason": "The owner: for room 33 just have some desks to show the program. Shared desks, number unknown.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Four desks in two facing pairs at the room's centre, each with a chair; the count and the arrangement stand in for the real ones."
+    },
+    {
+      "id": "O27",
+      "level": "Level 2",
+      "room": 1365002,
+      "room_number": "21",
+      "kind": "table",
+      "placement": {
+        "table_set": true,
+        "pairs": 1,
+        "table_size_m": [
+          2.29,
+          1.57,
+          0.73
+        ],
+        "chair_size_m": [
+          0.66,
+          0.68,
+          0.45
+        ]
+      },
+      "reason": "The owner: rooms 21, 22, 72 and 73 have the same tables as the third floor crit rooms (SALA 60x90 in tables on casters, pushed together in pairs, chairs round them; stackable top to top).",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "1 pair with ten chairs each at the room's centre stands in for the real number and arrangement; the tables roll about in use."
+    },
+    {
+      "id": "O28",
+      "level": "Level 2",
+      "room": 1365005,
+      "room_number": "22",
+      "kind": "table",
+      "placement": {
+        "table_rows": true,
+        "rows_wanted": 4,
+        "table_size_m": [
+          2.29,
+          0.78,
+          0.73
+        ],
+        "chair_size_m": [
+          0.55,
+          0.68,
+          0.45
+        ],
+        "chairs_per_table": 4,
+        "front_clear_m": 0.85,
+        "row_gap_m": 0.3,
+        "aisle_m": 0.45,
+        "table_gap_m": 0.3
+      },
+      "reason": "The owner: room 22 has rows of tables half the depth of the Level 3 crit tables (2.29 by 0.78 m), on casters, with more chairs; the drop-down screen is on the wall opposite the window, so the rows are long ones running north to south facing the east wall. 2026-11-11: APR24 gives room 202's class capacity as 60 students; the owner takes the largest classroom with seats on Level 2 to be 202, so four chairs a table (0.55 m wide, lecture-dense) on the four rows of four tables: 64 chairs, within four of the APR's capacity. Five rows would leave no room to walk behind a row (the earlier note), so the rows stay four.",
+      "source": "owner, chat 2026-11-06 and 2026-11-11; APR24 (capacity 60)",
+      "inferred_position": true,
+      "inferred_note": "Rows face the screen on the east wall; four tables a row along the 11.5 m depth with 0.45 m aisles at the ends, three chairs on the west side of each. Across the 8.5 m width a row needs 1.56 m plus a gap: with 0.85 m clear in front of the screen and 0.3 m behind each chair row four rows fit; five would leave no space to walk behind a row. Set to four; the counts follow from the room."
+    },
+    {
+      "id": "O29",
+      "level": "Basement",
+      "room": 1365258,
+      "room_number": "72",
+      "kind": "table",
+      "placement": {
+        "table_set": true,
+        "pairs": 1,
+        "table_size_m": [
+          2.29,
+          1.57,
+          0.73
+        ],
+        "chair_size_m": [
+          0.66,
+          0.68,
+          0.45
+        ]
+      },
+      "reason": "The owner: rooms 21, 22, 72 and 73 have the same tables as the third floor crit rooms (SALA 60x90 in tables on casters, pushed together in pairs, chairs round them; stackable top to top).",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "1 pair with ten chairs each at the room's centre stands in for the real number and arrangement; the tables roll about in use."
+    },
+    {
+      "id": "O30",
+      "level": "Basement",
+      "room": 1365261,
+      "room_number": "73",
+      "kind": "table",
+      "placement": {
+        "table_set": true,
+        "pairs": 1,
+        "table_size_m": [
+          2.29,
+          1.57,
+          0.73
+        ],
+        "chair_size_m": [
+          0.66,
+          0.68,
+          0.45
+        ]
+      },
+      "reason": "The owner: rooms 21, 22, 72 and 73 have the same tables as the third floor crit rooms (SALA 60x90 in tables on casters, pushed together in pairs, chairs round them; stackable top to top).",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "1 pair with ten chairs each at the room's centre stands in for the real number and arrangement; the tables roll about in use."
+    },
+    {
+      "id": "O31",
+      "level": "Level 2",
+      "room": 1364995,
+      "room_number": "19",
+      "kind": "table",
+      "placement": {
+        "table_set": true,
+        "pairs": 1,
+        "table_size_m": [
+          2.29,
+          1.57,
+          0.73
+        ],
+        "chair_size_m": [
+          0.66,
+          0.68,
+          0.45
+        ]
+      },
+      "reason": "The owner: room 19 should match rooms 21, 72 and 73: the same tables as the third floor crit rooms.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "One pair with ten chairs at the room's centre stands in for the real number and arrangement."
+    },
+    {
+      "id": "O32",
+      "level": "Level 1",
+      "room": 1364841,
+      "room_number": "15",
+      "kind": "screen",
+      "placement": {
+        "wall": "east",
+        "mount": "high",
+        "along": 0.3,
+        "width_m": 2.4,
+        "depth_m": 0.12,
+        "bottom_m": 1.0,
+        "top_m": 2.5
+      },
+      "reason": "The owner: room 15 is a lecture set-up: two projection screens on the long wall opposite the doors (the east wall), a speaker's laptop in the middle between them, and rows of tables and chairs facing them, like room 22.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The first of two screens, at three tenths along the east wall; width and heights assumed."
+    },
+    {
+      "id": "O33",
+      "level": "Level 1",
+      "room": 1364841,
+      "room_number": "15",
+      "kind": "screen",
+      "placement": {
+        "wall": "east",
+        "mount": "high",
+        "along": 0.7,
+        "width_m": 2.4,
+        "depth_m": 0.12,
+        "bottom_m": 1.0,
+        "top_m": 2.5
+      },
+      "reason": "The owner: room 15 is a lecture set-up: two projection screens on the long wall opposite the doors (the east wall), a speaker's laptop in the middle between them, and rows of tables and chairs facing them, like room 22.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The second of two screens, at seven tenths along the east wall; width and heights assumed."
+    },
+    {
+      "id": "O34",
+      "level": "Level 1",
+      "room": 1364841,
+      "room_number": "15",
+      "kind": "table",
+      "placement": {
+        "wall": "east",
+        "mount": "floor",
+        "along": 0.5,
+        "width_m": 1.2,
+        "depth_m": 0.6,
+        "bottom_m": 0.0,
+        "top_m": 0.75
+      },
+      "reason": "The owner: room 15 is a lecture set-up: two projection screens on the long wall opposite the doors (the east wall), a speaker's laptop in the middle between them, and rows of tables and chairs facing them, like room 22.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The speaker's table, centred between the two screens against the east wall; its size assumed."
+    },
+    {
+      "id": "O35",
+      "level": "Level 1",
+      "room": 1364841,
+      "room_number": "15",
+      "kind": "computers",
+      "placement": {
+        "on": "object",
+        "object": "O34",
+        "count": 1,
+        "size_m": [
+          0.35,
+          0.25,
+          0.03
+        ]
+      },
+      "reason": "The owner: room 15 is a lecture set-up: two projection screens on the long wall opposite the doors (the east wall), a speaker's laptop in the middle between them, and rows of tables and chairs facing them, like room 22.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The speaker's laptop on the table."
+    },
+    {
+      "id": "O36",
+      "level": "Level 1",
+      "room": 1364841,
+      "room_number": "15",
+      "kind": "projector",
+      "placement": {
+        "ceiling": true,
+        "faces": "east",
+        "screen_object": "O32",
+        "distance_m": 3.5,
+        "size_m": [
+          0.4,
+          0.3,
+          0.15
+        ],
+        "bottom_m": 2.4
+      },
+      "reason": "The owner: room 15 is a lecture set-up: two projection screens on the long wall opposite the doors (the east wall), a speaker's laptop in the middle between them, and rows of tables and chairs facing them, like room 22.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Ceiling-mounted on the first screen's centre line, 3.5 m from the wall; assumed."
+    },
+    {
+      "id": "O37",
+      "level": "Level 1",
+      "room": 1364841,
+      "room_number": "15",
+      "kind": "projector",
+      "placement": {
+        "ceiling": true,
+        "faces": "east",
+        "screen_object": "O33",
+        "distance_m": 3.5,
+        "size_m": [
+          0.4,
+          0.3,
+          0.15
+        ],
+        "bottom_m": 2.4
+      },
+      "reason": "The owner: room 15 is a lecture set-up: two projection screens on the long wall opposite the doors (the east wall), a speaker's laptop in the middle between them, and rows of tables and chairs facing them, like room 22.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Ceiling-mounted on the second screen's centre line, 3.5 m from the wall; assumed."
+    },
+    {
+      "id": "O38",
+      "level": "Level 1",
+      "room": 1364841,
+      "room_number": "15",
+      "kind": "table",
+      "placement": {
+        "table_rows": true,
+        "front": "east",
+        "rows_wanted": 10,
+        "table_size_m": [
+          1.8,
+          0.6,
+          0.73
+        ],
+        "chair_size_m": [
+          0.6,
+          0.6,
+          0.45
+        ],
+        "chairs_per_table": 3,
+        "front_clear_m": 1.3,
+        "row_gap_m": 0.25,
+        "aisle_m": 0.3,
+        "table_gap_m": 0.15
+      },
+      "reason": "The owner: room 15 is a lecture set-up like room 22 but condensed: less space between the rows, or smaller tables, so the rows fit with room to spare. Tables 1.8 by 0.6 m, 0.15 m between tables, 0.25 m behind each chair row.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Rows facing the screens on the east wall; the tables' size and the gaps are assumed from the owner's 'smaller tables, less space'; as many rows and tables as the room allows with 1.3 m clear in front for the speaker; a table on a column is left out. Counts follow from the room."
+    },
+    {
+      "id": "O39a",
+      "level": "Level 1",
+      "room": 1364831,
+      "room_number": "12",
+      "kind": "screen",
+      "placement": {
+        "wall": "north",
+        "mount": "high",
+        "along": 0.3,
+        "width_m": 2.4,
+        "depth_m": 0.12,
+        "bottom_m": 1.0,
+        "top_m": 2.5
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The first of two screens on the short wall opposite the door; width and heights assumed."
+    },
+    {
+      "id": "O39b",
+      "level": "Level 1",
+      "room": 1364831,
+      "room_number": "12",
+      "kind": "screen",
+      "placement": {
+        "wall": "north",
+        "mount": "high",
+        "along": 0.7,
+        "width_m": 2.4,
+        "depth_m": 0.12,
+        "bottom_m": 1.0,
+        "top_m": 2.5
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The second of two screens; width and heights assumed."
+    },
+    {
+      "id": "O39c",
+      "level": "Level 1",
+      "room": 1364831,
+      "room_number": "12",
+      "kind": "table",
+      "placement": {
+        "wall": "north",
+        "mount": "floor",
+        "along": 0.5,
+        "width_m": 1.2,
+        "depth_m": 0.6,
+        "bottom_m": 0.0,
+        "top_m": 0.75
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "A speaker's table between the screens, assumed as in room 15; the owner did not mention one."
+    },
+    {
+      "id": "O39d",
+      "level": "Level 1",
+      "room": 1364831,
+      "room_number": "12",
+      "kind": "computers",
+      "placement": {
+        "on": "object",
+        "object": "O39c",
+        "count": 1,
+        "size_m": [
+          0.35,
+          0.25,
+          0.03
+        ]
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "A laptop on the speaker's table, assumed as in room 15."
+    },
+    {
+      "id": "O39e",
+      "level": "Level 1",
+      "room": 1364831,
+      "room_number": "12",
+      "kind": "projector",
+      "placement": {
+        "ceiling": true,
+        "faces": "north",
+        "screen_object": "O39a",
+        "distance_m": 3.5,
+        "size_m": [
+          0.4,
+          0.3,
+          0.15
+        ],
+        "bottom_m": 2.4
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Ceiling-mounted facing the first screen; assumed."
+    },
+    {
+      "id": "O39f",
+      "level": "Level 1",
+      "room": 1364831,
+      "room_number": "12",
+      "kind": "projector",
+      "placement": {
+        "ceiling": true,
+        "faces": "north",
+        "screen_object": "O39b",
+        "distance_m": 3.5,
+        "size_m": [
+          0.4,
+          0.3,
+          0.15
+        ],
+        "bottom_m": 2.4
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Ceiling-mounted facing the second screen; assumed."
+    },
+    {
+      "id": "O39g",
+      "level": "Level 1",
+      "room": 1364831,
+      "room_number": "12",
+      "kind": "table",
+      "placement": {
+        "table_rows": true,
+        "rows_wanted": 10,
+        "table_size_m": [
+          1.8,
+          0.45,
+          0.73
+        ],
+        "chair_size_m": [
+          0.6,
+          0.6,
+          0.45
+        ],
+        "chairs_per_table": 3,
+        "front_clear_m": 1.3,
+        "row_gap_m": 0.4,
+        "aisle_m": 0.3,
+        "table_gap_m": 0.15,
+        "front": "north"
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Rows of shallow lecture tables (1.8 by 0.45 m: 'less deep, similar to room 15', the owner) with three chairs each facing the screens, 0.4 m of floor behind each chair row so the floor shows; as many as the room allows with 1.3 m clear in front; the count is the owner's estimate by size, made by the rule."
+    },
+    {
+      "id": "O40a",
+      "level": "Level 1",
+      "room": 1364835,
+      "room_number": "13",
+      "kind": "screen",
+      "placement": {
+        "wall": "south",
+        "mount": "high",
+        "along": 0.3,
+        "width_m": 2.4,
+        "depth_m": 0.12,
+        "bottom_m": 1.0,
+        "top_m": 2.5
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The first of two screens on the short wall opposite the door; width and heights assumed."
+    },
+    {
+      "id": "O40b",
+      "level": "Level 1",
+      "room": 1364835,
+      "room_number": "13",
+      "kind": "screen",
+      "placement": {
+        "wall": "south",
+        "mount": "high",
+        "along": 0.7,
+        "width_m": 2.4,
+        "depth_m": 0.12,
+        "bottom_m": 1.0,
+        "top_m": 2.5
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The second of two screens; width and heights assumed."
+    },
+    {
+      "id": "O40c",
+      "level": "Level 1",
+      "room": 1364835,
+      "room_number": "13",
+      "kind": "table",
+      "placement": {
+        "wall": "south",
+        "mount": "floor",
+        "along": 0.5,
+        "width_m": 1.2,
+        "depth_m": 0.6,
+        "bottom_m": 0.0,
+        "top_m": 0.75
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "A speaker's table between the screens, assumed as in room 15; the owner did not mention one."
+    },
+    {
+      "id": "O40d",
+      "level": "Level 1",
+      "room": 1364835,
+      "room_number": "13",
+      "kind": "computers",
+      "placement": {
+        "on": "object",
+        "object": "O40c",
+        "count": 1,
+        "size_m": [
+          0.35,
+          0.25,
+          0.03
+        ]
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "A laptop on the speaker's table, assumed as in room 15."
+    },
+    {
+      "id": "O40e",
+      "level": "Level 1",
+      "room": 1364835,
+      "room_number": "13",
+      "kind": "projector",
+      "placement": {
+        "ceiling": true,
+        "faces": "south",
+        "screen_object": "O40a",
+        "distance_m": 3.5,
+        "size_m": [
+          0.4,
+          0.3,
+          0.15
+        ],
+        "bottom_m": 2.4
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Ceiling-mounted facing the first screen; assumed."
+    },
+    {
+      "id": "O40f",
+      "level": "Level 1",
+      "room": 1364835,
+      "room_number": "13",
+      "kind": "projector",
+      "placement": {
+        "ceiling": true,
+        "faces": "south",
+        "screen_object": "O40b",
+        "distance_m": 3.5,
+        "size_m": [
+          0.4,
+          0.3,
+          0.15
+        ],
+        "bottom_m": 2.4
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Ceiling-mounted facing the second screen; assumed."
+    },
+    {
+      "id": "O40g",
+      "level": "Level 1",
+      "room": 1364835,
+      "room_number": "13",
+      "kind": "table",
+      "placement": {
+        "table_rows": true,
+        "rows_wanted": 10,
+        "table_size_m": [
+          1.8,
+          0.45,
+          0.73
+        ],
+        "chair_size_m": [
+          0.6,
+          0.6,
+          0.45
+        ],
+        "chairs_per_table": 3,
+        "front_clear_m": 1.3,
+        "row_gap_m": 0.4,
+        "aisle_m": 0.3,
+        "table_gap_m": 0.15,
+        "front": "south"
+      },
+      "reason": "The owner: rooms 12 and 13 both have two projection screens on the short wall opposite the door, with several rows of lecture seating with tables not as deep as a typical desk; the count is not known and is estimated from the room's size.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Rows of shallow lecture tables (1.8 by 0.45 m: 'less deep, similar to room 15', the owner) with three chairs each facing the screens, 0.4 m of floor behind each chair row so the floor shows; as many as the room allows with 1.3 m clear in front; the count is the owner's estimate by size, made by the rule."
+    },
+    {
+      "id": "O41",
+      "level": "Level 2",
+      "room": 1365053,
+      "room_number": "38",
+      "kind": "stall",
+      "placement": {
+        "box_m": [
+          20.0,
+          -0.2,
+          20.75,
+          1.0
+        ],
+        "height_m": 2.0
+      },
+      "reason": "The owner: 38 looked wrong, the sink blocking circulation; make the stalls smaller so they fit against the wall, or replace with a urinal according to the code. Two smaller stalls side by side in the U-shaped pocket, two urinals on the west wall of the main space, one sink on the east wall south of the east door, so the path from the west door lobby across the main space to the east door stays clear.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "A 0.75 by 1.2 m stall in the pocket, facing south; size assumed."
+    },
+    {
+      "id": "O42",
+      "level": "Level 2",
+      "room": 1365053,
+      "room_number": "38",
+      "kind": "stall",
+      "placement": {
+        "box_m": [
+          20.75,
+          -0.2,
+          21.5,
+          1.0
+        ],
+        "height_m": 2.0
+      },
+      "reason": "The owner: 38 looked wrong, the sink blocking circulation; make the stalls smaller so they fit against the wall, or replace with a urinal according to the code. Two smaller stalls side by side in the U-shaped pocket, two urinals on the west wall of the main space, one sink on the east wall south of the east door, so the path from the west door lobby across the main space to the east door stays clear.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The second stall in the pocket; size assumed."
+    },
+    {
+      "id": "O43",
+      "level": "Level 2",
+      "room": 1365053,
+      "room_number": "38",
+      "kind": "urinal",
+      "placement": {
+        "box_m": [
+          19.5,
+          -2.45,
+          19.85,
+          -2.0
+        ],
+        "height_m": 0.6,
+        "z_m": 0.6
+      },
+      "reason": "The owner: 38 looked wrong, the sink blocking circulation; make the stalls smaller so they fit against the wall, or replace with a urinal according to the code. Two smaller stalls side by side in the U-shaped pocket, two urinals on the west wall of the main space, one sink on the east wall south of the east door, so the path from the west door lobby across the main space to the east door stays clear.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "A urinal on the west wall of the main space; the code's count not checked here."
+    },
+    {
+      "id": "O44",
+      "level": "Level 2",
+      "room": 1365053,
+      "room_number": "38",
+      "kind": "urinal",
+      "placement": {
+        "box_m": [
+          19.5,
+          -2.95,
+          19.85,
+          -2.5
+        ],
+        "height_m": 0.6,
+        "z_m": 0.6
+      },
+      "reason": "The owner: 38 looked wrong, the sink blocking circulation; make the stalls smaller so they fit against the wall, or replace with a urinal according to the code. Two smaller stalls side by side in the U-shaped pocket, two urinals on the west wall of the main space, one sink on the east wall south of the east door, so the path from the west door lobby across the main space to the east door stays clear.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "A second urinal south of the first."
+    },
+    {
+      "id": "O45",
+      "level": "Level 2",
+      "room": 1365053,
+      "room_number": "38",
+      "kind": "counter",
+      "placement": {
+        "box_m": [
+          21.95,
+          -2.9,
+          22.5,
+          -2.0
+        ],
+        "height_m": 0.85,
+        "plain": true
+      },
+      "reason": "The owner: 38 looked wrong, the sink blocking circulation; make the stalls smaller so they fit against the wall, or replace with a urinal according to the code. Two smaller stalls side by side in the U-shaped pocket, two urinals on the west wall of the main space, one sink on the east wall south of the east door, so the path from the west door lobby across the main space to the east door stays clear.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "A sink counter against the east wall south of the east door, out of the way."
+    },
+    {
+      "id": "O46",
+      "level": "Level 2",
+      "room": 1365053,
+      "room_number": "38",
+      "kind": "sink",
+      "placement": {
+        "on": "object",
+        "object": "O45",
+        "count": 1,
+        "size_m": [
+          0.45,
+          0.4,
+          0.15
+        ]
+      },
+      "reason": "The owner: 38 looked wrong, the sink blocking circulation; make the stalls smaller so they fit against the wall, or replace with a urinal according to the code. Two smaller stalls side by side in the U-shaped pocket, two urinals on the west wall of the main space, one sink on the east wall south of the east door, so the path from the west door lobby across the main space to the east door stays clear.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "One sink on the counter."
+    },
+    {
+      "id": "O47",
+      "level": "Level 2",
+      "room": 1365041,
+      "room_number": "34",
+      "kind": "set",
+      "placement": {
+        "boxes": [
+          {
+            "kind": "counter",
+            "box_m": [
+              12.4,
+              -2.4,
+              14.8,
+              -1.6
+            ],
+            "height_m": 1.05,
+            "role": "reception",
+            "plain": true
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              13.3,
+              -1.5,
+              13.9,
+              -0.9
+            ],
+            "height_m": 0.45,
+            "facing": "south",
+            "seat": "receptionist"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              12.6,
+              -3.5,
+              13.2,
+              -2.9
+            ],
+            "height_m": 0.45,
+            "facing": "north",
+            "seat": "visitor"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              13.5,
+              -3.5,
+              14.1,
+              -2.9
+            ],
+            "height_m": 0.45,
+            "facing": "north",
+            "seat": "visitor"
+          },
+          {
+            "kind": "desk",
+            "box_m": [
+              8.0,
+              4.199999999999999,
+              9.6,
+              5.0
+            ],
+            "height_m": 0.73,
+            "facing": "west",
+            "station": 0
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              7.3,
+              4.3,
+              7.9,
+              4.8999999999999995
+            ],
+            "height_m": 0.45,
+            "facing": "east"
+          },
+          {
+            "kind": "desk",
+            "box_m": [
+              9.7,
+              4.199999999999999,
+              11.3,
+              5.0
+            ],
+            "height_m": 0.73,
+            "facing": "east",
+            "station": 1
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              11.4,
+              4.3,
+              12.0,
+              4.8999999999999995
+            ],
+            "height_m": 0.45,
+            "facing": "west"
+          },
+          {
+            "kind": "desk",
+            "box_m": [
+              8.0,
+              1.4,
+              9.6,
+              2.2
+            ],
+            "height_m": 0.73,
+            "facing": "west",
+            "station": 2
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              7.3,
+              1.5,
+              7.9,
+              2.1
+            ],
+            "height_m": 0.45,
+            "facing": "east"
+          },
+          {
+            "kind": "desk",
+            "box_m": [
+              9.7,
+              1.4,
+              11.3,
+              2.2
+            ],
+            "height_m": 0.73,
+            "facing": "east",
+            "station": 3
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              11.4,
+              1.5,
+              12.0,
+              2.1
+            ],
+            "height_m": 0.45,
+            "facing": "west"
+          },
+          {
+            "kind": "desk",
+            "box_m": [
+              8.0,
+              -1.4,
+              9.6,
+              -0.6
+            ],
+            "height_m": 0.73,
+            "facing": "west",
+            "station": 4
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              7.3,
+              -1.3,
+              7.9,
+              -0.7
+            ],
+            "height_m": 0.45,
+            "facing": "east"
+          },
+          {
+            "kind": "desk",
+            "box_m": [
+              9.7,
+              -1.4,
+              11.3,
+              -0.6
+            ],
+            "height_m": 0.73,
+            "facing": "east",
+            "station": 5
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              11.4,
+              -1.3,
+              12.0,
+              -0.7
+            ],
+            "height_m": 0.45,
+            "facing": "west"
+          },
+          {
+            "kind": "table",
+            "box_m": [
+              12.3,
+              2.6,
+              14.7,
+              3.8
+            ],
+            "height_m": 0.73,
+            "role": "meeting"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              12.5,
+              3.9,
+              13.1,
+              4.5
+            ],
+            "height_m": 0.45,
+            "facing": "south"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              12.5,
+              1.9,
+              13.1,
+              2.5
+            ],
+            "height_m": 0.45,
+            "facing": "north"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              13.3,
+              3.9,
+              13.9,
+              4.5
+            ],
+            "height_m": 0.45,
+            "facing": "south"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              13.3,
+              1.9,
+              13.9,
+              2.5
+            ],
+            "height_m": 0.45,
+            "facing": "north"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              14.1,
+              3.9,
+              14.7,
+              4.5
+            ],
+            "height_m": 0.45,
+            "facing": "south"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              14.1,
+              1.9,
+              14.7,
+              2.5
+            ],
+            "height_m": 0.45,
+            "facing": "north"
+          },
+          {
+            "kind": "shelf",
+            "box_m": [
+              8.0,
+              6.55,
+              8.9,
+              6.95
+            ],
+            "height_m": 1.8
+          },
+          {
+            "kind": "shelf",
+            "box_m": [
+              9.2,
+              6.55,
+              10.1,
+              6.95
+            ],
+            "height_m": 1.8
+          },
+          {
+            "kind": "shelf",
+            "box_m": [
+              10.4,
+              6.55,
+              11.3,
+              6.95
+            ],
+            "height_m": 1.8
+          },
+          {
+            "kind": "printer",
+            "box_m": [
+              14.6,
+              6.2,
+              15.3,
+              6.9
+            ],
+            "height_m": 1.1
+          },
+          {
+            "kind": "seating",
+            "box_m": [
+              10.0,
+              -6.2,
+              12.0,
+              -5.6
+            ],
+            "height_m": 0.45,
+            "role": "waiting"
+          },
+          {
+            "kind": "desk",
+            "box_m": [
+              8.0,
+              -9.9,
+              9.6,
+              -9.1
+            ],
+            "height_m": 0.73,
+            "facing": "south"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              8.5,
+              -9.0,
+              9.1,
+              -8.4
+            ],
+            "height_m": 0.45,
+            "facing": "south"
+          },
+          {
+            "kind": "desk",
+            "box_m": [
+              8.0,
+              -12.2,
+              9.6,
+              -11.4
+            ],
+            "height_m": 0.73,
+            "facing": "north"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              8.5,
+              -13.0,
+              9.1,
+              -12.4
+            ],
+            "height_m": 0.45,
+            "facing": "north"
+          }
+        ]
+      },
+      "reason": "The owner: populate room 34 like an academic administrative office, as a placeholder. A reception counter inside the east door, six workstations in facing pairs, a meeting table, shelving along the north wall, a printer, a waiting bench in the middle part, and two desks in the south part. Every piece and its place is a placeholder, not the owner's knowledge of the room.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "placeholder": true,
+      "inferred_note": "A placeholder layout: 32 pieces in model metres, assumed throughout."
+    },
+    {
+      "id": "O48",
+      "level": "Basement",
+      "room": 1365264,
+      "room_number": "74",
+      "kind": "set",
+      "placement": {
+        "boxes": [
+          {
+            "kind": "table",
+            "box_m": [
+              7.5,
+              -2.9,
+              9.9,
+              -2.1
+            ],
+            "height_m": 0.9,
+            "role": "workbench"
+          },
+          {
+            "kind": "table",
+            "box_m": [
+              10.5,
+              -2.9,
+              12.9,
+              -2.1
+            ],
+            "height_m": 0.9,
+            "role": "workbench"
+          },
+          {
+            "kind": "table",
+            "box_m": [
+              13.5,
+              -2.9,
+              15.9,
+              -2.1
+            ],
+            "height_m": 0.9,
+            "role": "workbench"
+          },
+          {
+            "kind": "machine",
+            "box_m": [
+              9.5,
+              -7.0,
+              11.0,
+              -6.0
+            ],
+            "height_m": 0.9,
+            "tool": "table saw"
+          },
+          {
+            "kind": "machine",
+            "box_m": [
+              13.0,
+              -7.0,
+              13.8,
+              -6.4
+            ],
+            "height_m": 1.5,
+            "tool": "band saw"
+          },
+          {
+            "kind": "machine",
+            "box_m": [
+              14.0,
+              -8.5,
+              14.6,
+              -8.0
+            ],
+            "height_m": 1.6,
+            "tool": "drill press"
+          },
+          {
+            "kind": "machine",
+            "box_m": [
+              14.0,
+              -10.0,
+              14.8,
+              -9.4
+            ],
+            "height_m": 1.2,
+            "tool": "belt and disc sander"
+          },
+          {
+            "kind": "table",
+            "box_m": [
+              8.0,
+              -13.0,
+              10.4,
+              -12.2
+            ],
+            "height_m": 0.9,
+            "role": "workbench"
+          },
+          {
+            "kind": "table",
+            "box_m": [
+              11.0,
+              -13.0,
+              13.4,
+              -12.2
+            ],
+            "height_m": 0.9,
+            "role": "workbench"
+          },
+          {
+            "kind": "machine",
+            "box_m": [
+              8.0,
+              -16.9,
+              9.4,
+              -16.3
+            ],
+            "height_m": 1.1,
+            "tool": "metal brake (bending)"
+          },
+          {
+            "kind": "machine",
+            "box_m": [
+              15.1,
+              -16.9,
+              15.9,
+              -16.1
+            ],
+            "height_m": 1.8,
+            "tool": "dust collector"
+          },
+          {
+            "kind": "shelf",
+            "box_m": [
+              15.5,
+              -5.0,
+              16.0,
+              -3.0
+            ],
+            "height_m": 2.0,
+            "role": "material rack"
+          },
+          {
+            "kind": "shelf",
+            "box_m": [
+              15.5,
+              -13.0,
+              16.0,
+              -11.0
+            ],
+            "height_m": 2.0,
+            "role": "material rack"
+          }
+        ]
+      },
+      "reason": "The owner: room 74 is the workshop, more wood tools and one metal bending tool; supervised, so it has hours. The tools' kinds are the owner's; which tools, how many and where are assumed: workbenches along the north wall and mid-room, the table saw with room round it, band saw, drill press and sander towards the east wall, the metal brake and the dust collector on the south wall, material racks on the east wall.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "13 pieces; the tool list beyond 'wood tools and one metal bending tool' and every place are assumed."
+    },
+    {
+      "id": "O49",
+      "level": "Basement",
+      "room": 1365267,
+      "room_number": "75",
+      "kind": "set",
+      "placement": {
+        "boxes": [
+          {
+            "kind": "table",
+            "box_m": [
+              20.5,
+              -13.5,
+              22.9,
+              -12.3
+            ],
+            "height_m": 0.9,
+            "role": "assembly table"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              21.4,
+              -12.15,
+              22.0,
+              -11.55
+            ],
+            "height_m": 0.7,
+            "facing": "south",
+            "seat": "stool"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              21.4,
+              -14.25,
+              22.0,
+              -13.65
+            ],
+            "height_m": 0.7,
+            "facing": "north",
+            "seat": "stool"
+          },
+          {
+            "kind": "table",
+            "box_m": [
+              24.1,
+              -13.5,
+              26.5,
+              -12.3
+            ],
+            "height_m": 0.9,
+            "role": "assembly table"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              25.0,
+              -12.15,
+              25.6,
+              -11.55
+            ],
+            "height_m": 0.7,
+            "facing": "south",
+            "seat": "stool"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              25.0,
+              -14.25,
+              25.6,
+              -13.65
+            ],
+            "height_m": 0.7,
+            "facing": "north",
+            "seat": "stool"
+          },
+          {
+            "kind": "table",
+            "box_m": [
+              20.5,
+              -17.0,
+              22.9,
+              -15.799999999999999
+            ],
+            "height_m": 0.9,
+            "role": "assembly table"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              21.4,
+              -15.649999999999999,
+              22.0,
+              -15.049999999999999
+            ],
+            "height_m": 0.7,
+            "facing": "south",
+            "seat": "stool"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              21.4,
+              -17.75,
+              22.0,
+              -17.15
+            ],
+            "height_m": 0.7,
+            "facing": "north",
+            "seat": "stool"
+          },
+          {
+            "kind": "table",
+            "box_m": [
+              24.1,
+              -17.0,
+              26.5,
+              -15.799999999999999
+            ],
+            "height_m": 0.9,
+            "role": "assembly table"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              25.0,
+              -15.649999999999999,
+              25.6,
+              -15.049999999999999
+            ],
+            "height_m": 0.7,
+            "facing": "south",
+            "seat": "stool"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              25.0,
+              -17.75,
+              25.6,
+              -17.15
+            ],
+            "height_m": 0.7,
+            "facing": "north",
+            "seat": "stool"
+          },
+          {
+            "kind": "table",
+            "box_m": [
+              20.5,
+              -20.5,
+              22.9,
+              -19.299999999999997
+            ],
+            "height_m": 0.9,
+            "role": "assembly table"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              21.4,
+              -19.15,
+              22.0,
+              -18.549999999999997
+            ],
+            "height_m": 0.7,
+            "facing": "south",
+            "seat": "stool"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              21.4,
+              -21.25,
+              22.0,
+              -20.65
+            ],
+            "height_m": 0.7,
+            "facing": "north",
+            "seat": "stool"
+          },
+          {
+            "kind": "table",
+            "box_m": [
+              24.1,
+              -20.5,
+              26.5,
+              -19.299999999999997
+            ],
+            "height_m": 0.9,
+            "role": "assembly table"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              25.0,
+              -19.15,
+              25.6,
+              -18.549999999999997
+            ],
+            "height_m": 0.7,
+            "facing": "south",
+            "seat": "stool"
+          },
+          {
+            "kind": "chair",
+            "box_m": [
+              25.0,
+              -21.25,
+              25.6,
+              -20.65
+            ],
+            "height_m": 0.7,
+            "facing": "north",
+            "seat": "stool"
+          },
+          {
+            "kind": "shelf",
+            "box_m": [
+              20.0,
+              -11.5,
+              20.9,
+              -11.1
+            ],
+            "height_m": 2.0,
+            "role": "material shelving"
+          },
+          {
+            "kind": "shelf",
+            "box_m": [
+              21.2,
+              -11.5,
+              22.099999999999998,
+              -11.1
+            ],
+            "height_m": 2.0,
+            "role": "material shelving"
+          },
+          {
+            "kind": "shelf",
+            "box_m": [
+              22.4,
+              -11.5,
+              23.299999999999997,
+              -11.1
+            ],
+            "height_m": 2.0,
+            "role": "material shelving"
+          },
+          {
+            "kind": "cutting",
+            "box_m": [
+              26.4,
+              -16.0,
+              27.6,
+              -14.2
+            ],
+            "height_m": 0.93
+          }
+        ]
+      },
+      "reason": "The owner: room 75 is the assembly room for models; supervised, so it has hours. Large assembly tables with stools, shelving for materials and a cutting table are assumed.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "22 pieces; the tables, stools, shelving and cutting table and their places are assumed."
+    }
+  ],
+  "by_use": {
+    "crit": {
+      "placement": {
+        "crit_set": true,
+        "felt": {
+          "min_run_m": 1.5,
+          "bottom_m": 0.9,
+          "top_m": 2.1
+        },
+        "screen": {
+          "width_m": 2.4,
+          "depth_m": 0.12,
+          "bottom_m": 1.0,
+          "top_m": 2.5
+        },
+        "projector": {
+          "distance_m": 3.5,
+          "size_m": [
+            0.4,
+            0.3,
+            0.15
+          ],
+          "bottom_m": 2.4
+        }
+      },
+      "skip_rooms_with_objects": true,
+      "reason": "The owner: the smaller crit rooms in the basement and on the second floor are similar to the ones on the third floor; the same interactions are enough for now. So every crit room gets what Level 3's got: pin-up felt on every opaque wall, a screen high on the short wall on the door's side (or the short opaque wall when the model has no door), and a projector facing it. Rooms that already have their own objects (Level 3's 1 and 4) are left as they are. Tables and chairs are not placed: their number is not known. Room 22 (Level 2, the large classroom that also serves as crit and pin-up space) is in the rule too (also_rooms). In room 22 the drop-down screen is on the wall opposite the window, the east wall (owner, 2026-11-06): screen_wall.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The walls follow the rule; the screen's wall is a guess where the model has no door; all sizes assumed.",
+      "also_rooms": [
+        1365005
+      ],
+      "screen_wall": {
+        "1365005": "east"
+      },
+      "places": [
+        "pinup_wall",
+        "screen",
+        "projector"
+      ]
+    },
+    "office": {
+      "max_area_m2": 25,
+      "placement": {
+        "office_set": true,
+        "face_door": true,
+        "desk_by_area": [
+          [
+            12,
+            [
+              1.4,
+              0.7
+            ]
+          ],
+          [
+            18,
+            [
+              1.6,
+              0.8
+            ]
+          ],
+          [
+            25,
+            [
+              1.8,
+              0.8
+            ]
+          ]
+        ],
+        "desk_height_m": 0.73,
+        "chair_size_m": [
+          0.6,
+          0.6,
+          0.45
+        ],
+        "visitor_chair_size_m": [
+          0.55,
+          0.55,
+          0.45
+        ],
+        "shelving_size_m": [
+          0.9,
+          0.35,
+          1.8
+        ],
+        "window_counter": {
+          "levels": [
+            "Level 4"
+          ],
+          "depth_m": 0.5,
+          "height_m": 0.75
+        }
+      },
+      "reason": "The owner: the offices on all floors are likely individual offices; put a desk in each based on the size of the room. Desks usually face the door, so the desk stands along the side opposite the door (window or wall), pulled off it by the chair, the occupant facing the door; a visitor chair across the desk; some shelving in each, as an assumption; and on the fourth floor in particular there may be another counter along the window. Offices above max_area_m2 have shared desks, number unknown, and get nothing yet.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The desk, its facing, the visitor chair and the window counter (Level 4) are the owner's; the shelving is an assumption the owner asked for; all sizes and exact places are assumed. The window counter is placed on Level 4 only ('in particular')."
+    },
+    "wc": {
+      "placement": {
+        "wc_set": true,
+        "stalls": 4,
+        "stall_size_m": [
+          0.9,
+          1.5
+        ],
+        "sinks": 3,
+        "counter_depth_m": 0.55,
+        "sink_pitch_m": 0.7,
+        "sink_size_m": [
+          0.45,
+          0.4,
+          0.15
+        ],
+        "counter_height_m": 0.85,
+        "stall_wall": "farthest_from_door",
+        "align": "far_corner",
+        "single_stall_size_m": [
+          0.8,
+          1.2
+        ]
+      },
+      "reason": "The owner: design the washrooms with approximately four stalls and three sinks. Every washroom gets stalls along the longest opaque wall without a door, each 0.9 by 1.5 m with its toilet against the wall, and a counter with three sinks along another wall, opposite the stalls where it can be. Fewer stalls where the wall is shorter. Second pass (owner): stalls along the wall farthest from the door, aligned to the corner farthest from it; room 31's sinks on the small partition facing the stalls; room 14 like 31; room 16's stalls in the corner; rooms 66 and 67 single washrooms; room 38 laid by hand in its U-shaped pocket (O41 to O45). Third pass (owner): a sink counter never stands over a stall (it moves along its wall or to another wall); the single washrooms 66 and 67 get a smaller toilet space; and since the plan view hides what stands against a south wall, the sinks avoid the south wall when another wall will do, so the owner can see them.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Counts approximate by the owner's word; walls chosen by rule; sizes assumed.",
+      "places": [
+        "stall",
+        "counter",
+        "sink",
+        "urinal"
+      ],
+      "rooms": {
+        "1365032": {
+          "room_number": "31",
+          "stall_side": "south",
+          "sink_side": "north",
+          "sink_run": "inner",
+          "note": "owner: stalls along the wall farthest from the door (the south wall); the sinks on the small partition facing the stalls"
+        },
+        "1364838": {
+          "room_number": "14",
+          "stall_side": "east",
+          "sink_side": "west",
+          "sink_run": "inner",
+          "note": "owner: stalls against the back wall (the east wall, farthest from the west door) like room 31; sinks on the partition facing them"
+        },
+        "1364844": {
+          "room_number": "16",
+          "stall_side": "north",
+          "align": "far_corner",
+          "note": "owner: stalls at the corner: along the north wall at its east end, farthest from the west door"
+        },
+        "1365236": {
+          "room_number": "66",
+          "stalls": 1,
+          "sinks": 1,
+          "single": true,
+          "note": "owner: probably a single washroom, by its size (8 m2)"
+        },
+        "1365239": {
+          "room_number": "67",
+          "stalls": 1,
+          "sinks": 1,
+          "single": true,
+          "note": "owner: probably a single washroom, by its size (8 m2)"
+        }
+      }
+    }
+  },
+  "rekind": {
+    "1360412": {
+      "kind": "coffee_table",
+      "reason": "The owner: a couch with a coffee table in front. This piece (family 'Bench2') stands in front of the couch.",
+      "source": "owner, chat 2026-11-06"
+    },
+    "1359220": {
+      "kind": "bar",
+      "reason": "The owner: the bar on the west side against the service shaft. This piece's type is 'Ray's Bar'.",
+      "source": "owner, chat 2026-11-06"
+    },
+    "1360331": {
+      "kind": "beer_tap",
+      "reason": "The owner: the taps are the two squares with a small faucet behind the bar (the UOKR124 pieces beside the keg fridge).",
+      "source": "owner, chat 2026-11-06"
+    },
+    "1360332": {
+      "kind": "beer_tap",
+      "reason": "The owner: the taps are the two squares with a small faucet behind the bar (the UOKR124 pieces beside the keg fridge).",
+      "source": "owner, chat 2026-11-06"
+    },
+    "1359756": {
+      "kind": "serving_table",
+      "reason": "The owner: the long piece along the kitchen wall (family 'Family5', 4.9 m, 1 m high) is a kitchen- or bar-height serving table.",
+      "source": "owner, chat 2026-11-06"
+    },
+    "1359762": {
+      "kind": "seating",
+      "reason": "The owner: the 2.3 m piece along the east glass between the fridge and the couch (family 'Family9') is another couch or bench.",
+      "source": "owner, chat 2026-11-06"
+    },
+    "1359757": {
+      "kind": "pew_bench",
+      "reason": "The owner confirms: the four tall 'Family7' pieces along the lounge's south edge are the church-pew benches with a high back against the studio desks.",
+      "source": "owner, chat 2026-11-06"
+    },
+    "1359758": {
+      "kind": "pew_bench",
+      "reason": "As 1359757.",
+      "source": "owner, chat 2026-11-06"
+    },
+    "1359759": {
+      "kind": "pew_bench",
+      "reason": "As 1359757.",
+      "source": "owner, chat 2026-11-06"
+    },
+    "1359760": {
+      "kind": "pew_bench",
+      "reason": "As 1359757.",
+      "source": "owner, chat 2026-11-06"
+    }
+  },
+  "toggles": {
+    "movable_furniture": {
+      "default": false,
+      "description": "When on, the simulation may move the pieces whose rule says movable: toggle (the studio's desks and pin-up boards, on casters). Off by default: they are not typically moved during the semester.",
+      "source": "owner, chat 2026-11-06"
+    }
+  },
+  "global_rules": {
+    "service_areas": {
+      "rule": "Service shafts, closets and any similar service area are not occupiable: no agent stands or wanders there. The rasteriser marks them no_go in the tiles (rooms whose use is service, and enclosed floor cavities without a door, such as the shaft behind the lounge bar). The elevator is not one of them: see elevator.",
+      "source": "owner, chat 2026-11-06"
+    },
+    "elevator": {
+      "rule": "People should be allowed to use the southern elevator: the car in the south stair core on every level (edits N1) is a usable object that connects the floors; its tiles are walkable and it is never no-go.",
+      "source": "owner, chat 2026-11-06"
+    }
+  },
+  "zones": {
+    "1364799": {
+      "room_number": "11",
+      "level": "Level 3",
+      "note": "Which cohort sits where in the studio (owner, 2026-11-06): the eastern desks are third years; the southernmost area third years; the middle area first years; the northernmost second years, generally. The exact ratios come with the handover note. The boundary lines below are assumed: thirds of the studio's length, and the east groups east of x 18.5 m.",
+      "zones": [
+        {
+          "cohort": "year3",
+          "where": "east",
+          "x_min_m": 18.5,
+          "source": "owner, chat 2026-11-06",
+          "boundary_inferred": true
+        },
+        {
+          "cohort": "year2",
+          "where": "north",
+          "y_min_m": -3.0,
+          "source": "owner, chat 2026-11-06",
+          "boundary_inferred": true
+        },
+        {
+          "cohort": "year1",
+          "where": "middle",
+          "y_min_m": -19.0,
+          "y_max_m": -3.0,
+          "source": "owner, chat 2026-11-06",
+          "boundary_inferred": true
+        },
+        {
+          "cohort": "year3",
+          "where": "south",
+          "y_max_m": -19.0,
+          "source": "owner, chat 2026-11-06",
+          "boundary_inferred": true
+        }
+      ]
+    }
+  },
+  "rules": {
+    "1364433": {
+      "room_number": "1",
+      "level": "Level 3",
+      "table": {
+        "movable": true,
+        "casters": true,
+        "stackable": "top to top",
+        "note": "moved to the side, or stacked, to make space during presentations"
+      },
+      "chair": {
+        "movable": true,
+        "note": "turned and shifted as the presentations move from wall to wall"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1364442": {
+      "room_number": "4",
+      "level": "Level 3",
+      "table": {
+        "movable": true,
+        "casters": true,
+        "stackable": "top to top",
+        "note": "moved to the side, or stacked, to make space during presentations"
+      },
+      "chair": {
+        "movable": true,
+        "note": "turned and shifted as the presentations move from wall to wall"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1364793": {
+      "room_number": "9",
+      "level": "Level 3",
+      "microwave": {
+        "communal": true,
+        "note": "not everyone uses the communal appliances; many prefer a personal one. Share pending."
+      },
+      "kettle": {
+        "communal": true
+      },
+      "coffee_machine": {
+        "communal": true
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1364796": {
+      "room_number": "10",
+      "level": "Level 3",
+      "bar": {
+        "note": "the counter runs the length of the shaft wall, with a pass-through to get behind it (object O14 carries the modelled piece to the wall)"
+      },
+      "seating": {
+        "movable": false,
+        "note": "couch by the east glass, coffee table in front; a second couch or bench north of it along the glass"
+      },
+      "edges": {
+        "note": "the lounge is open to the studio on the south and the west half; nothing marks the edge but the back of the pew bench and the backs of the studio desks"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1364799": {
+      "room_number": "11",
+      "level": "Level 3",
+      "desk": {
+        "casters": true,
+        "movable": "toggle",
+        "moved_in_semester": false,
+        "note": "on casters, not typically moved during the semester; movable when the movable_furniture toggle is on"
+      },
+      "pinup": {
+        "casters": true,
+        "movable": "toggle",
+        "moved_in_semester": false,
+        "role": "divider",
+        "note": "the board at the end of each bay is more a divider than a pin-up; on casters, movable with the toggle"
+      },
+      "computers": {
+        "note": "the desktop computers in the middle of the floor are primarily used for printing to the big plotters; used by all students"
+      },
+      "printer": {
+        "note": "the plotters and the three printers are used by all students; printing is concentrated in this one area for the entire floor"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1365035": {
+      "room_number": "32",
+      "level": "Level 2",
+      "desk": {
+        "shared": true,
+        "count": null,
+        "note": "a large office: shared desks, number unknown (owner, 2026-11-06); nothing placed yet"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1365038": {
+      "room_number": "33",
+      "level": "Level 2",
+      "desk": {
+        "shared": true,
+        "count": null,
+        "note": "a large office: shared desks, number unknown (owner, 2026-11-06); nothing placed yet"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1365041": {
+      "room_number": "34",
+      "level": "Level 2",
+      "placeholder": true,
+      "note": "an academic administrative office as a placeholder (owner, 2026-11-06); the real room is not described",
+      "source": "owner, chat 2026-11-06"
+    },
+    "1365044": {
+      "room_number": "35",
+      "level": "Level 2",
+      "desk": {
+        "shared": true,
+        "count": null,
+        "note": "a large office: shared desks, number unknown (owner, 2026-11-06); nothing placed yet"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1365203": {
+      "room_number": "55",
+      "level": "Level 4",
+      "desk": {
+        "shared": true,
+        "count": null,
+        "note": "a large office: shared desks, number unknown (owner, 2026-11-06); nothing placed yet"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1364448": {
+      "room_number": "6",
+      "level": "Level 3",
+      "printer3d": {
+        "communal": true,
+        "own_filament": true,
+        "note": "any architecture student; people come back to collect once the print ends; unforeseen failures stop prints; when the printers are very busy a student moves another's work aside"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1365002": {
+      "room_number": "21",
+      "level": "Level 2",
+      "table": {
+        "movable": true,
+        "casters": true,
+        "stackable": "top to top",
+        "note": "as the Level 3 crit rooms: moved to the side, or stacked, to make space during presentations"
+      },
+      "chair": {
+        "movable": true,
+        "note": "turned and shifted as the presentations move from wall to wall"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1365005": {
+      "room_number": "22",
+      "level": "Level 2",
+      "table": {
+        "movable": true,
+        "casters": true,
+        "depth_m": 0.78,
+        "note": "half the depth of the Level 3 crit tables, on casters (owner, 2026-11-06)"
+      },
+      "chair": {
+        "movable": true,
+        "note": "turned and shifted as the presentations move from wall to wall"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1365258": {
+      "room_number": "72",
+      "level": "Basement",
+      "table": {
+        "movable": true,
+        "casters": true,
+        "stackable": "top to top",
+        "note": "as the Level 3 crit rooms: moved to the side, or stacked, to make space during presentations"
+      },
+      "chair": {
+        "movable": true,
+        "note": "turned and shifted as the presentations move from wall to wall"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1365261": {
+      "room_number": "73",
+      "level": "Basement",
+      "table": {
+        "movable": true,
+        "casters": true,
+        "stackable": "top to top",
+        "note": "as the Level 3 crit rooms: moved to the side, or stacked, to make space during presentations"
+      },
+      "chair": {
+        "movable": true,
+        "note": "turned and shifted as the presentations move from wall to wall"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1364995": {
+      "room_number": "19",
+      "level": "Level 2",
+      "table": {
+        "movable": true,
+        "casters": true,
+        "stackable": "top to top",
+        "note": "as the Level 3 crit rooms"
+      },
+      "chair": {
+        "movable": true,
+        "note": "turned and shifted as the presentations move from wall to wall"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1364841": {
+      "room_number": "15",
+      "level": "Level 1",
+      "table": {
+        "movable": true,
+        "casters": true,
+        "size_m": [
+          1.8,
+          0.6,
+          0.73
+        ],
+        "note": "smaller than room 22's, condensed rows (owner, 2026-11-06)"
+      },
+      "chair": {
+        "movable": true
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1364831": {
+      "room_number": "12",
+      "level": "Level 1",
+      "table": {
+        "movable": true,
+        "size_m": [
+          1.8,
+          0.45,
+          0.73
+        ],
+        "note": "lecture tables, not as deep as a typical desk (owner, 2026-11-06); count estimated by size"
+      },
+      "chair": {
+        "movable": true
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1364835": {
+      "room_number": "13",
+      "level": "Level 1",
+      "table": {
+        "movable": true,
+        "size_m": [
+          1.8,
+          0.45,
+          0.73
+        ],
+        "note": "lecture tables, not as deep as a typical desk (owner, 2026-11-06); count estimated by size"
+      },
+      "chair": {
+        "movable": true
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1365264": {
+      "room_number": "74",
+      "level": "Basement",
+      "machine": {
+        "supervised": true,
+        "note": "used under supervision in business hours (owner, 2026-11-06)"
+      },
+      "source": "owner, chat 2026-11-06"
+    },
+    "1365267": {
+      "room_number": "75",
+      "level": "Basement",
+      "table": {
+        "movable": true,
+        "note": "assembly tables; used under supervision in business hours (owner, 2026-11-06)"
+      },
+      "source": "owner, chat 2026-11-06"
+    }
+  }
+}

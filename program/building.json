@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "schema": 1,
+    "note": "The building as a whole, from the owner: its entrances and how they are locked. Keyed by Revit element id where the model has the element. The simulation reads it for where agents enter and leave and when.",
+    "updated": "2026-11-06"
+  },
+  "entrances": {
+    "rule": "The door into stair 18 from the outside is the one with 24/7 key-card access. The other doors lock and have no card scanner: they open only in business hours (owner, chat 2026-11-06).",
+    "source": "owner, chat 2026-11-06",
+    "ground_note": "Level 1's south end (and, mirrored, its north end) is a covered area under the floors above: slab with a row of columns and no walls, outside the envelope. The stair lobbies open onto it through glazed double doors in their end glazing.",
+    "doors": [
+      { "id": 1290443, "level": "Level 1", "kind": "glass double door in the curtain wall", "where": "the south glazing of stair 18's lobby, onto the covered area at the south end", "at_m": [17.4, -29.0], "access": "card_24_7", "note": "The owner: the door to 18 stair from the outside. Confirmed.", "inferred": false, "source": "owner, chat 2026-11-06" },
+      { "id": 1289480, "level": "Level 1", "kind": "glass double door in the curtain wall", "where": "the north glazing of stair 17's lobby, onto the covered area at the north end", "at_m": [17.4, 7.5], "access": "business_hours", "note": "Locked outside business hours, no scanner. Its place mirrors the south door's; that it opens to the outside is read from the tiles (slab and columns beyond, no walls)." , "inferred": true },
+      { "id": 1294006, "level": "Level 1", "kind": "glass double door in the curtain wall", "where": "the west side, at lecture room 12", "at_m": [7.45, -7.0], "access": "business_hours", "note": "In the model. The owner said the west side of rooms 12 and 13 is a solid wall, so whether this door exists is to confirm.", "inferred": true },
+      { "id": 1293956, "level": "Level 1", "kind": "glass double door in the curtain wall", "where": "the west side, at lecture room 13", "at_m": [7.45, -13.0], "access": "business_hours", "note": "In the model. The owner said the west side of rooms 12 and 13 is a solid wall, so whether this door exists is to confirm.", "inferred": true }
+    ],
+    "interior_glass_doors": [
+      { "id": 1290803, "level": "Level 1", "where": "between stair 18's lobby and the corridor north of it (the lobby's north glazing)", "at_m": [17.4, -23.0] },
+      { "id": 1290602, "level": "Level 1", "where": "between stair 17's lobby and the corridor south of it (the lobby's south glazing)", "at_m": [17.4, 1.5] }
+    ],
+    "doors_note": "Level 1's glazed double doors are curtain panels in the export (family Doors_Dbl_Glass_1), not doors; the rasteriser opens the curtain wall over each so the walkable grid has ways in. Four of the six are on the stair lobbies' glazing: two to the outside, two to the corridor."
+  }
+}

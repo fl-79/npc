@@ -1,3 +1,14 @@
-node_modules
-dist
+# NPC V2 repository (2026-11-13)
+viewer/node_modules/
+viewer/dist/
+.claude/
+__pycache__/
+*.local
 .env
+.env.*
+# over GitHub's 100 MB file limit: the repository keeps exports/meshes.json.gz, which the dev server unpacks
+exports/meshes.json
+# published papers and downloaded reference images: copyrighted, kept on the owner's disk only (listed in research/references.md)
+research/2026-11-03 Collab/
+research/2026-11-03 Practice/
+Graphics/

@@ -1,0 +1,21 @@
+import { loadAll } from './_load.mjs';
+import { World } from '../src/sim/world.js';
+import { buildPopulation, initialTies } from '../src/sim/population.js';
+import { Calendar } from '../src/sim/calendar.js';
+import { TermLayer } from '../src/sim/term.js';
+import { DayRun } from '../src/sim/engine.js';
+const date = process.argv[2] || '2026-10-13';
+const { building, program, P, simParams } = loadAll();
+const w = new World(building, program, P);
+const pop = buildPopulation(program.cohort, P, 2026); w.assignDesks(pop.agents);
+const cal = new Calendar(program.calendar); const { ties } = initialTies(pop.agents, P);
+const term = new TermLayer(w, pop, cal, P, { seed: 2026, ties }); term.run(cal.start, date);
+const run = new DayRun(w, pop, term, cal, P, simParams, { date, seed: 2026 });
+while (!run.done) run.step(1);
+const byRoom = {}; for (const s of run.stats.sites.values()) { const n = w.roomAt(s.k, s.c, s.r); const key = `${run.b.levels[s.k].name}/${n}`; byRoom[key] = (byRoom[key] || 0) + s.n; }
+console.log('encounters by room', Object.entries(byRoom).sort((a, b) => b[1] - a[1]).slice(0, 8));
+const L = run.lift, lw = run.stats.queues.lift; console.log('lift', JSON.stringify({ stops: L.stats.stops, boarded: L.stats.boarded, pickups: L.stats.pickupsOnTheWay, floors: Math.round(L.stats.floorsTravelled), waits: lw.length, mean: Math.round(lw.reduce((s, x) => s + x, 0) / Math.max(1, lw.length)), max: Math.round(Math.max(0, ...lw)) }));
+const blocks = []; let nInt = 0; for (const f of run.stats.focus.values()) { blocks.push(...f.blocks); nInt += f.interruptions; } blocks.sort((a, b) => a - b); const q = (p) => blocks.length ? Math.round(blocks[Math.floor(p * (blocks.length - 1))] / 60) : 0;
+console.log('focus blocks', blocks.length, 'per person', (blocks.length / Math.max(1, run.stats.focus.size)).toFixed(1), 'min p10/50/90', q(0.1), q(0.5), q(0.9), 'interruptions', nInt);
+const acts = {}; for (const e of run.bus.events) if (e.kind === 'remark') acts[e.topic] = (acts[e.topic] || 0) + 1; console.log('remarks by topic', acts);
+const stuck = run.agents.filter((a) => a.inside && !a.gone).length; console.log('still inside at the end', stuck, 'states', Object.entries(run.agents.reduce((m, a) => (m[a.state] = (m[a.state] || 0) + 1, m), {})));

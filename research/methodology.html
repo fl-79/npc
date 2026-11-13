@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NPC V2 Methodology</title>
+<!-- The methodology at a glance (owner 2026-11-13). Click, space or the right arrow shows the next step; the left arrow
+     goes back; A shows everything; Home starts again. Facts from the project's notes: README, program/*.json,
+     research/input-registry.md, assumption-data-sources.md, agent-variables.md, personality-model.md, summary-metrics.md,
+     viewer/src/sim/population.js and viewer/src/ui/analyse.js. -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root { --ink: #1e1a16; --ink2: #5a4d44; --cream: #f3e9d2; --cream2: #e4d7b8; --bg: #e6dcc3; --shadow: #b9ad92; --accent: #c8502c; --cyan: #5ad1e6;
+    --y1: #2a9d6b; --y2: #3b5bdb; --y3: #e4473c; --head: 'Silkscreen', 'Courier New', monospace; --body: 'Nunito', 'Segoe UI', sans-serif; }
+  html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; }
+  body { font-family: var(--body); color: var(--ink); }
+  #stage { position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: 0 0; }
+  h1 { position: absolute; left: 40px; top: 26px; margin: 0; font: 400 34px var(--head); letter-spacing: 1px; }
+  .lede { position: absolute; left: 40px; top: 76px; margin: 0; font-size: 19px; color: var(--ink2); max-width: 1500px; }
+  /* the tool's window */
+  .win { position: absolute; background: var(--cream); border: 6px double var(--ink); box-shadow: 6px 6px 0 var(--shadow); box-sizing: border-box; }
+  .win .bar { display: flex; align-items: center; gap: 10px; height: 34px; padding: 0 12px; background: var(--cream2); border-bottom: 2px solid var(--ink); font: 400 13px var(--head); }
+  .win .bar i { display: inline-grid; place-items: center; width: 22px; height: 22px; background: var(--accent); color: var(--cream); font-style: normal; font-size: 12px; }
+  .win .body { padding: 14px 18px 12px; font-size: 16px; line-height: 1.32; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  .tight li { margin-bottom: 3px; } .tight .sub { margin: 7px 0 4px; } .tight .ledger { margin-top: 7px; padding: 7px 10px; }
+  li { position: relative; padding-left: 16px; margin-bottom: 7px; }
+  li::before { content: ''; position: absolute; left: 0; top: 7px; width: 7px; height: 7px; background: var(--accent); }
+  b { font-weight: 800; }
+  .sub { font: 400 11px var(--head); color: var(--ink2); margin: 10px 0 6px; letter-spacing: 0.5px; }
+  .sub:first-child { margin-top: 0; }
+  .rule { margin-top: 8px; padding: 8px 12px; background: var(--cream2); border: 2px solid var(--ink); font-weight: 800; font-size: 15px; }
+  .rule small { display: block; font: 400 10px var(--head); color: var(--accent); margin-bottom: 4px; }
+  .muted { color: var(--ink2); font-size: 13px; font-style: italic; }
+  /* steps: hidden until reached, then on, then faded once passed */
+  .step { opacity: 0; transform: translateY(14px); visibility: hidden; transition: opacity 0.5s, transform 0.5s, filter 0.5s; }
+  .step.on { opacity: 1; transform: none; visibility: visible; }
+  .step.past { opacity: 0.38; transform: none; visibility: visible; filter: saturate(0.5); }
+  .step.past:hover { opacity: 1; filter: none; }
+  body.all .step { opacity: 1; transform: none; visibility: visible; filter: none; }
+  .arrow { position: absolute; height: 0; border-top: 3px solid var(--ink); }
+  .arrow::after { content: ''; position: absolute; right: -2px; top: -8px; border: 7px solid transparent; border-left: 10px solid var(--ink); }
+  /* inputs */
+  .years { display: flex; gap: 6px; margin-top: 8px; }
+  .years span { flex: 1; text-align: center; color: #fff; font: 400 11px var(--head); padding: 5px 0; }
+  /* relations */
+  .rel { display: grid; grid-template-columns: 118px 18px 1fr; gap: 6px 4px; align-items: start; font-size: 15px; margin-bottom: 8px; }
+  .rel .k { font: 400 10px var(--head); background: var(--cream2); border: 1.5px solid var(--ink); padding: 4px 5px; text-align: center; }
+  .rel .to { font-weight: 800; text-align: center; }
+  /* data */
+  .ledger { margin-top: 10px; padding: 10px 12px; background: var(--cream2); border: 2px solid var(--ink); }
+  .ledger .row { display: flex; align-items: center; gap: 8px; margin-top: 3px; font-size: 14px; font-weight: 800; }
+  .ledger .row i { display: block; height: 14px; }
+  /* agents */
+  .cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+  .cat { border: 2px solid var(--ink); background: #fbf5e6; padding: 7px 9px 5px; font-size: 13.5px; line-height: 1.27; }
+  .cat h3 { margin: 0 0 5px; font: 400 10px var(--head); display: flex; align-items: center; gap: 6px; }
+  .cat h3 i { width: 10px; height: 10px; display: inline-block; }
+  .cat p { margin: 0 0 2px; }
+  .people { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 8px; }
+  .people img { width: 200px; height: 60px; image-rendering: pixelated; }
+  .people p { margin: 0; font-size: 15px; }
+  .layers { display: flex; gap: 10px; align-items: center; margin-top: 10px; font-size: 14px; }
+  .layers div { flex: 1; border: 2px solid var(--ink); padding: 6px 9px; }
+  .layers b { font: 400 10px var(--head); display: block; margin-bottom: 2px; }
+  .layers .sep { flex: none; border: 0; padding: 0; font-weight: 800; font-size: 20px; }
+  /* metrics */
+  table { border-collapse: collapse; width: 100%; table-layout: fixed; font-size: 13.5px; line-height: 1.22; }
+  td { overflow-wrap: anywhere; }
+  col.c1 { width: 25%; } col.c2 { width: 30%; } col.c3 { width: 30%; } col.c4 { width: 15%; }
+  th { font: 400 10px var(--head); text-align: left; color: var(--ink2); padding: 0 6px 5px; border-bottom: 2px solid var(--ink); }
+  td { padding: 5px 6px; vertical-align: top; border-bottom: 1px dotted #b9ad92; }
+  td.code { font-weight: 800; }
+  td.code span { display: inline-block; font: 400 10px var(--head); color: #fff; padding: 2px 4px; margin-right: 6px; }
+  td.src { color: var(--ink2); font-size: 12.5px; }
+  tr.grp td { font: 400 10px var(--head); color: var(--ink2); padding-top: 8px; border-bottom: 0; }
+  .emotes { display: flex; align-items: center; gap: 12px; margin-top: 8px; font-size: 13px; color: var(--ink2); }
+  .emotes img { width: 280px; height: 28px; image-rendering: pixelated; }
+  /* rules */
+  .chips { position: absolute; display: flex; gap: 14px; align-items: center; }
+  .chips .lbl { font: 400 12px var(--head); margin-right: 4px; }
+  .chips span:not(.lbl) { background: var(--cream); border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--shadow); padding: 7px 12px; font-weight: 800; font-size: 15px; }
+  .foot { position: absolute; right: 40px; bottom: 14px; font-size: 12px; color: var(--ink2); font-style: italic; }
+  /* the click-through controls */
+  #ctl { position: fixed; right: 16px; top: 12px; display: flex; gap: 8px; align-items: center; font: 400 10px var(--head); color: var(--ink2); }
+  #ctl .pip { width: 12px; height: 12px; border: 2px solid var(--ink); background: var(--cream); cursor: pointer; }
+  #ctl .pip.on { background: var(--accent); }
+  #ctl .hint { margin-right: 6px; }
+  @media print { #ctl { display: none; } .step { opacity: 1 !important; transform: none !important; visibility: visible !important; filter: none !important; } }
+</style>
+</head>
+<body>
+<div id="stage">
+  <h1>NPC V2 &middot; HOW THE SIMULATION WAS MADE</h1>
+  <p class="lede">An agent-based model of studio life in UBC's Lasserre Building: the Revit model, what I know of the school and published data, as 176 people living a term.</p>
+
+  <!-- ===================== row A ===================== -->
+  <section class="win step" data-step="1" style="left:40px; top:118px; width:360px; height:442px;">
+    <div class="bar"><i>1</i>THE MODEL</div>
+    <div class="body" style="font-size:15px;">
+      <ul>
+        <li><b>Revit 2027</b> model of the building, with a pyRevit tab for checks and export</li>
+        <li><b>Exported:</b> 77 rooms, 403 walls, 124 doors, 581 furniture pieces</li>
+        <li><b>Checked:</b> clashes, slab tops, rooms enclosed</li>
+        <li><b>Tiled:</b> every level into a 0.5 m grid the agents walk on</li>
+        <li><b>Site:</b> OpenStreetMap within 320 m</li>
+      </ul>
+      <svg id="tiles" width="318" height="64" style="margin-top:2px"></svg>
+      <div class="rule"><small>RULE</small>Geometry comes only from the model.</div>
+    </div>
+  </section>
+  <div class="arrow step" data-step="2" style="left:412px; top:138px; width:22px;"></div>
+
+  <section class="win step" data-step="2" style="left:446px; top:118px; width:450px; height:442px;">
+    <div class="bar"><i>2</i>WHAT I PUT IN</div>
+    <div class="body">
+      <ul>
+        <li><b>Room program:</b> all 77 rooms given a use and their activities</li>
+        <li><b>10 model edits:</b> walls, a door, an opening</li>
+        <li><b>Cohort:</b> 165 students in 11 sections, 11 instructors, 172 desks (7 hot desks)</li>
+        <li><b>Calendar:</b> Fall 2026, 3 reviews, 4 pin-ups, 5 deadlines from other courses, 3 events, 3 closures</li>
+        <li><b>Access:</b> the south door on a card 24/7, the others in business hours</li>
+        <li><b>About 78 answers</b> to a studio-culture checklist, over 6 sessions</li>
+        <li><b>34 design questions,</b> 29 settled: washrooms, plotters, crits, lunch, the lift, rearranging</li>
+      </ul>
+      <div class="years"><span style="background:var(--y1)">YEAR 1 &middot; 45</span><span style="background:var(--y2)">YEAR 2 &middot; 60</span><span style="background:var(--y3)">YEAR 3 &middot; 60</span></div>
+    </div>
+  </section>
+  <div class="arrow step" data-step="3" style="left:908px; top:138px; width:22px;"></div>
+
+  <section class="win step" data-step="3" style="left:942px; top:118px; width:480px; height:442px;">
+    <div class="bar"><i>3</i>HOW ROOMS AND OBJECTS RELATE</div>
+    <div class="body">
+      <div class="rel"><span class="k">ROOM</span><span class="to">&rarr;</span><span>its <b>use</b> decides which <b>activities</b> can happen there</span></div>
+      <div class="rel"><span class="k">OBJECT</span><span class="to">&rarr;</span><span>what it <b>affords</b>: a verb, a posture, how many people, how long (32 kinds)</span></div>
+      <div class="rel"><span class="k">ADDED</span><span class="to">&rarr;</span><span><b>61 objects</b> the model lacked, from kettle to plotters; positions marked as inferred</span></div>
+      <div class="rel"><span class="k">BY USE</span><span class="to">&rarr;</span><span>every crit room gets felt on its opaque walls, a screen and a projector</span></div>
+      <div class="rel"><span class="k">ON TOP OF</span><span class="to">&rarr;</span><span>a microwave on a counter, a 3D printer on a shelf</span></div>
+      <div class="rel"><span class="k">MOVABLE</span><span class="to">&rarr;</span><span>crit tables on casters and stackable; studio boards on casters</span></div>
+      <div class="rel"><span class="k">ZONES</span><span class="to">&rarr;</span><span>studio desks grouped by year</span></div>
+      <div class="rel"><span class="k">RENAMED</span><span class="to">&rarr;</span><span>10 model pieces given their real kind, such as the beer taps behind the bar</span></div>
+    </div>
+  </section>
+  <div class="arrow step" data-step="4" style="left:1434px; top:138px; width:22px;"></div>
+
+  <section class="win step" data-step="4" style="left:1468px; top:118px; width:412px; height:442px;">
+    <div class="bar"><i>4</i>WHAT THE DATA SAYS</div>
+    <div class="body tight" style="font-size:14px; line-height:1.22; padding-top:10px;">
+      <div class="sub">UBC</div>
+      <ul>
+        <li><b>SALA Program Report 2024:</b> intake, faculty, rooms</li>
+        <li><b>Academic Calendar:</b> term dates, sessions</li>
+        <li><b>Grad survey (CGPSS 2022):</b> 1 in 5 under strain in a normal week</li>
+      </ul>
+      <div class="sub">RESEARCH</div>
+      <ul>
+        <li><b>Kabo 2014:</b> 30 m more shared path, +20% new collaboration</li>
+        <li><b>Bernstein &amp; Turban 2018:</b> open plan cut face-to-face contact 72%</li>
+        <li><b>Mark et al. 2005:</b> focus lasts about 11 minutes</li>
+        <li><b>Steel 2007:</b> effort rises as a deadline nears</li>
+        <li><b>Borb&eacute;ly 1982:</b> sleep pressure, all-nighters</li>
+        <li><b>Big Five and chronotype norms:</b> how people differ</li>
+      </ul>
+      <div class="ledger"><div class="sub" style="color:var(--accent)">105 INPUTS, EACH LOGGED</div>
+        <div class="row"><i style="width:142px;background:var(--y1)"></i>71 my knowledge</div>
+        <div class="row"><i style="width:60px;background:var(--y2)"></i>30 data</div>
+        <div class="row"><i style="width:88px;background:var(--accent)"></i>44 assumed, flagged [A]</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== row B ===================== -->
+  <section class="win step" data-step="5" style="left:40px; top:578px; width:740px; height:440px;">
+    <div class="bar"><i>5</i>THE AGENTS</div>
+    <div class="body" style="padding-top:10px;">
+      <div class="people"><img id="people" alt="five agents as drawn in the tool" /><p><b>176 people, each different.</b><br>A seed draws them; the same seed gives the same people.</p></div>
+      <div class="cats">
+        <div class="cat"><h3><i style="background:#8f5fa8"></i>PERSONALITY</h3><p>Big Five: openness, conscientiousness, extraversion, agreeableness, neuroticism</p><p>Drawn together, shifted for design students; mood varies day to day</p></div>
+        <div class="cat"><h3><i style="background:var(--y2)"></i>RHYTHM AND LIFE</h3><p>Morning, middle or evening type; sleep need</p><p>Commute and how, a job, caregiving, living off campus</p></div>
+        <div class="cat"><h3><i style="background:var(--y1)"></i>STUDIO DRIVE</h3><p>Keenness, making skill, weekly studio hours</p><p>All-nighter odds, spending on the project</p></div>
+        <div class="cat"><h3><i style="background:#2f8f85"></i>SOCIAL</h3><p>Sociability, curiosity, asking for help</p><p>Headphones habit, office-hour visits</p></div>
+        <div class="cat"><h3><i style="background:var(--accent)"></i>NEEDS, THROUGH THE DAY</h3><p>Hunger, thirst, washroom, sleep, mental and physical fatigue, company</p></div>
+        <div class="cat"><h3><i style="background:#6b5a7a"></i>CARRIED, DAY TO DAY</h3><p>Stress, sleep debt, progress to the review, comfort, friendships</p></div>
+        <div class="cat"><h3><i style="background:#d6b24a"></i>ROLE</h3><p>Year, section, desk; TA, mentor, newcomer</p><p>Instructors: crit style, office, sessional</p></div>
+        <div class="cat" style="background:var(--cream2)"><h3>TRAITS SHAPE RATES</h3><p>Each rate is a base times its trait weights: no fixed personas</p></div>
+      </div>
+    </div>
+  </section>
+  <div class="arrow step" data-step="6" style="left:792px; top:598px; width:22px;"></div>
+
+  <section class="win step" data-step="6" style="left:826px; top:578px; width:340px; height:440px;">
+    <div class="bar"><i>6</i>WHY AGENTS</div>
+    <div class="body" style="font-size:14.5px; line-height:1.26;">
+      <ul>
+        <li><b>Each person keeps their own week:</b> year, section, crits, a job, a commute. 176 different days at once.</li>
+        <li><b>Patterns emerge, not drawn in:</b> a plotter queue, a full kitchen at lunch, a talk on a route.</li>
+        <li><b>One building, many situations:</b> a normal Tuesday, a final's eve, Good Times, a snow day.</li>
+        <li><b>Changes tried first:</b> agents move a table; two runs are compared.</li>
+        <li><b>Every choice keeps its reason,</b> so results trace back.</li>
+      </ul>
+      <div class="layers" style="margin-top:6px"><div><b>TERM LAYER</b>each day of term: plans, stress, sleep</div><span class="sep">&rarr;</span><div><b>DAY RUN</b>1-second steps on the tiles</div></div>
+    </div>
+  </section>
+  <div class="arrow step" data-step="7" style="left:1178px; top:598px; width:22px;"></div>
+
+  <section class="win step" data-step="7" style="left:1212px; top:578px; width:668px; height:440px;">
+    <div class="bar"><i>7</i>WHAT COMES OUT</div>
+    <div class="body" style="padding:8px 12px 6px;">
+      <table>
+        <colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"></colgroup>
+        <tr><th>METRIC</th><th>MEASURES</th><th>WHY IT MATTERS</th><th>FROM</th></tr>
+        <tr class="grp"><td colspan="4">COLLABORATION</td></tr>
+        <tr><td class="code"><span style="background:var(--y1)">C1</span>Path overlap</td><td>shared route per pair</td><td>overlap breeds new ties</td><td class="src">Kabo 2014</td></tr>
+        <tr><td class="code"><span style="background:var(--y1)">C3</span>New ties</td><td>first talks with strangers</td><td>ties are what a studio is for</td><td class="src">Kabo</td></tr>
+        <tr><td class="code"><span style="background:var(--y1)">C4</span>Face to face</td><td>minutes talking a day</td><td>open plans cut it 70%</td><td class="src">Bernstein 2018</td></tr>
+        <tr><td class="code"><span style="background:var(--y1)">C6</span>Between years</td><td>talks across a year</td><td>what a layout can change</td><td class="src">Allen 1977</td></tr>
+        <tr class="grp"><td colspan="4">FOCUS AND RESOURCES</td></tr>
+        <tr><td class="code"><span style="background:var(--y2)">F1</span>Focus block</td><td>a focused stretch at a desk</td><td>longer lets people work</td><td class="src">Mark 2005</td></tr>
+        <tr><td class="code"><span style="background:var(--y2)">F2</span>Interruptions</td><td>by others, per focus hour</td><td>costly on complex work</td><td class="src">Heerwagen</td></tr>
+        <tr><td class="code"><span style="background:var(--y2)">F4</span>Desk exposure</td><td>passers by a desk an hour</td><td>routes should pass, not cross</td><td class="src">Hillier 1996</td></tr>
+        <tr><td class="code"><span style="background:var(--y2)">F8</span>Plotter wait</td><td>queue time, jobs given up</td><td>lost time before a review</td><td class="src">KEYS</td></tr>
+      </table>
+      <div class="emotes"><img id="emotes" alt="the bubbles over the agents" /><span>plus design suggestions, each traced to its events and people</span></div>
+    </div>
+  </section>
+
+  <div class="chips step" data-step="8" style="left:40px; top:1034px;">
+    <span class="lbl">RULES I HELD TO</span><span>Geometry only from the model</span><span>Every number from data, or flagged [A]</span><span>Same seed, same result</span><span>No API credits used</span>
+  </div>
+  <div class="foot step" data-step="8">Not yet: on-site observation, sensitivity analysis.</div>
+</div>
+
+<div id="ctl"><span class="hint" id="hint">CLICK OR &rarr; FOR THE NEXT STEP</span></div>
+
+<script>
+// the tool's own pixel people and bubbles (viewer/src/game/people.js, seed 2026)
+document.getElementById('people').src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAAYCAYAAABtGnqsAAAE+0lEQVR4AeyYbWiWZRTHj9KzMv1QwWCaoAiBCkE+ReUmYlZgLHtHWWIMwzQSMmpgZR8UilGwPqSWUDEC6eWLLyG1KLdCF/sQQsVjpNGUYdZiFmEZS+35Xd7n4rrv+9wvQ8SCjf3uc87//M993c/hGc+2iZL4mjtj2jmVyF9+uHpubqRp1L4VQw/58R8PXtD8WM+3nuliarEF8oLbW5qECOTdB06487UmOsG40Pu0b6+fJ79jUatzhj0nGBc8nEkE8rGczy2ZywNPHnmz9JKzsQVqkwcHaqJCXQYWB3iJCnUZwvM0JxbN8gLbb5kueeDJug+9SuUyyQNPOO8XSEMfck7zElHUTE2OBy95CBqLQps0+WpRqIGaiAcveQga90bjLIUaqIl48JKHoLG4ULNyPHiTPTQWh37X0ntFoQZqIh685OAWiMCDIfCgh/o/FqBWwnr+rCvdj6n2mGcx1Czqr1MnBaiVsN64+fnU/IWez2L0rKL4yOpHU+ezGOZY1Ecf7hagVsL69Og/ft4tUE3EcFFhTq8M4aLCvMwsnvDMMKeXx42rNoiS5SvqMxcuKszpWaQWuObJp70vK/cGI5n8S82rWbk3GMm6F17xalbuDUby1dudhnpeyuudd4z9mlogt2BxYOVoRbA4wEcEzYlFsDjARwTNiReTFdUmySN5trnA6+9/KukTS0uZIsHyWlpkj4XZt7dJHjFzRrFl/2CqY2kpUyRYXkvD7hfIOw4Q88DT1bkpZeFdBqlGQsDTOvuqhCrCuwy+++xd1yOGIFLjeW3bdsoY/HhCTDSKMh5jLFPyCwwd3+x8NSxdbmmuYVwsr6UZo05iUS4JLpYWtGPpugUzYzVFqE38ugcpk9CrJkujZy6QxjjlNuAWWDt6fML8ZR0CRWN4gBn1kqOBalkRDzCjHvKblqwUUC0r4gFm1EPePTAkoFpW7B4Ycj5m1EM+Wv/dTuuieEX9rxVm8LkFkqjAizux73UB9CPHfnL5njc7/YLVS19RjfmF/YMC9Jgnr77TW2qe5WzvHBZg/vDgkMs71n/uF6xn0VdUY4lHG5sF6A3/cdrl1PTQ1EuuoLFEPAfmPCdAj3ny3ZPucYvHg5ce+AXy18TOtbMEaABLnHJkF6mj66GpAnidEFzQKuufEFCZxa0a+ltLObtiuQOvF6MEbfWiLoFIcovb997lWsp91Q4HXi9GCdptdy8TiCTZOjAiH9T+1FLmLbjTgdeLUYJ2Xfs2gUhyS/z+5s1aytSlGx14VfQLVGE8jm0DsQU2LX5cIOsWjbe2CWT1v2ieKZDV3zHvWoGs/poNjQJZ/eWPXSOQ1b8UemyBl+IB/u9nmgtsfWtEkmzqPVP6tZ7aukOSTOjpLz2/S45Jkm+bpkjR14zhfoGenk8EKpWG+v/2GlxOPW3koEDWfVoOvSQw/fAWSXLDaJ9Uf3jDEc77BfLJwicohIYwX/lMlwDeUCdHYxaoLZgFvMk+Gp/AkOxp3bb2WQG8qmlE4xMUVEvGvbVfBfAme2jMQrKnNbOAVzW/QISwQW2R58nr6b3yPHm9/+p8bIH6kPv79oiF9otiw5nfxKJoTvvvv/iAWGi/KFpnoxXNab/3y5pYaD+M5gJDw3iev4HUAn/+/eSDi1sWigW9/NuJOM/ZusvA9eqtvG881tlo9PJm6TmPcbbUNdfDlIPz1L34k7heYvZfAAAA//+s/2otAAAABklEQVQDAAD0M8aCw7LXAAAAAElFTkSuQmCC";
+document.getElementById('emotes').src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIwAAAAOCAYAAAD9uPTtAAACw0lEQVR4AeyWv2oVQRjFx/sM2phCsDIW+gqCwUqQiKCVFja2djYiYmNna2OhlYUYBCux8BW0UCvBImmSd0jmt3CGL7uzd8+Em+KGDXtyvj/nzGZnP2azSPnn6qWLhy6yvFyuB10x5YDcRZaXy/WgK6YckLvI8nK5HnTFlANyF1leLteDrphyQO4iy8vletDJtCD5+fdXcoEeM+x60KGffcN9Xrd96U4YXuSMeQecHVjZwOy+utHdT0wSY/IxXL9yLQljmrH6v+07Y61q/d6zzymiKjKLW28fmsqUXjz4WuCY3jy+1cnEXWL8is+m2LAVyaOdgxLXgpUNTH9xhmXj+Y9+eZAzKHyyBPKBaMWFT6/vJsCybCrcCobl+5MPTbaXH2/b+qfvviWGRewaeS4BDzHsQMMirnkGA6MX1ueaeVnNGRb8DAoMuGfMqZ0WGBR3MxmO+HeQtw6L/M7QMCgAj5i4BS3Px7r9IennaMBgYPTC+ox4GTQg4mXasZ7uOdav1S/vfKmVJ2vusLAQw8GQEMPkxA70KXK0Uxp3eFqHZeq+sT8YmNhsifkEoRcTt4DTZZl+rNf6PwzrsKECuQOGpHVY4rrOySI9nyHFsHIxtTHwXPRggXwK77fPH5P0czVXNjA6WcS6gcsnOV1Yu/WE4WTpg3UcMDSOLmoYFBBrTsxwCI5emv6zkas3xQyJMKbtBmZ/909yERdyPehmX32P121fFr//753bunk/RVzY2ExCrBOj5yFh8gh54FgnRj/7No/t8zruS3fC8DIFXirgfwqgupieoBqsGh5ALUJ9uFbHA2KPGL1ALqiGB6guVh9WDSYHeAC1CHpCrY4HxB6xPDC5QA7wANXF9ATVYNXwAGoR6sO1Oh4Qe8ToBXJBNTxAdbH63cAogRFEAzUHs6++S2dtXwYDw2PzkHArZl99x87SvhwBAAD//yA99lMAAAAGSURBVAMAsY5ZaNAXe2wAAAAASUVORK5CYII=";
+
+// a tiny tile map: walls, desks, floor
+(() => { const s = document.getElementById('tiles'); let h = ''; for (let r = 0; r < 4; r++) for (let c = 0; c < 20; c++) { const wall = r === 0 || r === 3 || c === 0 || c === 19 || (c === 9 && r < 3); const desk = (r === 1 || r === 2) && [2, 3, 5, 6, 12, 13, 15, 16].includes(c); h += `<rect x="${c * 16}" y="${r * 16}" width="15" height="15" fill="${wall ? '#3a3a40' : desk ? '#b8824e' : '#cfc6b2'}"/>`; } s.innerHTML = h; })();
+
+// fit the 1920 x 1080 page to the window
+const stage = document.getElementById('stage');
+function fit() { const k = Math.min(innerWidth / 1920, innerHeight / 1080); stage.style.transform = `scale(${k}) translate(-50%, -50%)`; stage.style.left = '50%'; stage.style.top = '50%'; stage.style.transformOrigin = '0 0'; stage.style.transform = `translate(-${960 * k}px, -${540 * k}px) scale(${k})`; }
+addEventListener('resize', fit); fit();
+
+// the steps: one at a time, the earlier ones faded; past the last, everything at full strength
+const N = 8; let at = 0;
+const ctl = document.getElementById('ctl'), hint = document.getElementById('hint');
+for (let i = 1; i <= N; i++) { const p = document.createElement('span'); p.className = 'pip'; p.title = `step ${i}`; p.addEventListener('click', (e) => { e.stopPropagation(); go(i); }); ctl.appendChild(p); }
+function go(n) {
+  at = Math.max(0, Math.min(N + 1, n));
+  document.body.classList.toggle('all', at > N);
+  for (const el of document.querySelectorAll('.step')) { const s = Number(el.dataset.step); el.classList.toggle('on', s === at); el.classList.toggle('past', s < at && at <= N); }
+  ctl.querySelectorAll('.pip').forEach((p, i) => p.classList.toggle('on', i + 1 <= at));
+  hint.textContent = at === 0 ? 'CLICK OR → TO BEGIN' : at <= N ? `${at} OF ${N} · CLICK FOR THE NEXT` : 'ALL STEPS · HOME STARTS AGAIN';
+}
+addEventListener('click', () => go(at + 1));
+addEventListener('keydown', (e) => {
+  if (['ArrowRight', ' ', 'PageDown', 'Enter'].includes(e.key)) { e.preventDefault(); go(at + 1); }
+  else if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); go(at - 1); }
+  else if (e.key === 'Home') go(0); else if (e.key === 'End' || e.key.toLowerCase() === 'a') go(N + 1);
+});
+go(location.hash === '#all' ? N + 1 : 0);
+</script>
+</body>
+</html>

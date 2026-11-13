@@ -1,0 +1,22 @@
+{
+  "note": "SAVED EXAMPLE for the OTHER situation (owner 2026-11-12): without a Claude key the tool cannot read a description live, so this one description and its reading are kept here, so that anyone running the tool from GitHub with the default seed 2026 can go through the OTHER flow without any key and without billing anyone. The reading was written by hand to the interpreter's schema (viewer/src/ui/interpret.js), not produced by a model, and the interface says so. A saved key reads any description live instead.",
+  "seed": 2026,
+  "description": "A snowstorm. The buses stop at 15:00, so most people leave early; the ones who stay are in for the night. The technician has gone home and the plotter paper runs out at 17:00; the basement shop is closed.",
+  "spec": {
+    "title": "Snow day, buses stop at 15:00",
+    "summary": "Presence stays as planned but everyone leaves two hours earlier; the plotter paper runs out at 17:00 and the basement shop is closed. The engine cannot keep a subset in for the night, so that part is approximated by the ordinary late workers.",
+    "read": null,
+    "untested": true,
+    "changes": {
+      "extra_students": 0,
+      "present_share": 1,
+      "arrive_shift_h": 0,
+      "leave_shift_h": -2,
+      "lift_out": false,
+      "paper_out_at": "17:00",
+      "shop_closed": true,
+      "add_items": []
+    },
+    "source": { "saved_example": true, "model": null, "usage": null }
+  }
+}

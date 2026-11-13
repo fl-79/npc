@@ -1,0 +1,2712 @@
+{
+  "meta": {
+    "schema": 1,
+    "note": "Room program authored by the owner: first in the viewer's PROGRAM window (2026-11-05 to 06), since then by chat, applied with scripts in scripts/ (each entry names its source). Keyed by Revit room id; the export is untouched.",
+    "updated": "2026-11-11 20:36:24"
+  },
+  "rooms": {
+    "1364433": {
+      "level": "Level 3",
+      "number": "1",
+      "area_m2": 49.561,
+      "name": "",
+      "use": "crit",
+      "access": "arch_class",
+      "hours": "",
+      "who": "",
+      "notes": "Crit room at the north end of the studio. Pin-up felt on the north, west and south walls; screen on the west wall (the door's side), projector. The door in the south wall into the kitchen (room 9) is confirmed by the owner; room 9 opens on to the lounge (room 10).",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:19:19",
+      "updated": "2026-11-11 20:36:24",
+      "access_inferred": "crit rooms (those behind the key card, and those on Level 2 and in the Basement) are for architecture students",
+      "source": "owner, chat 2026-11-06 (crit rooms pass)",
+      "activities": [
+        {
+          "kind": "crit",
+          "label": "Crit / review",
+          "layout": "tables rolled to the side or stacked top to top; chairs turned and shifted to face the wall in use; groups cycle wall to wall, one pinning down as the next pins up",
+          "uses": [
+            "pinup_wall",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "group sizes, durations, attendance and frequency come from the studio-culture handover notes, to import later",
+          "source": "owner, chat 2026-11-06 (crit rooms pass)"
+        },
+        {
+          "kind": "seminar",
+          "label": "History seminar / class",
+          "layout": "chairs arranged around the tables",
+          "uses": [
+            "table",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "class sizes and timetable not given yet",
+          "source": "owner, chat 2026-11-06 (crit rooms pass)"
+        },
+        {
+          "kind": "lecture",
+          "label": "Studio lecture / internal slide presentation",
+          "layout": "chairs around the tables, the screen down on the west wall",
+          "uses": [
+            "screen",
+            "projector",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "sizes and frequency not given yet",
+          "source": "owner, chat 2026-11-06 (crit rooms pass)"
+        }
+      ],
+      "objects": "program/objects.json",
+      "floor_access": "Level 3 as a whole is behind key card from the stairwell (owner, chat 2026-11-06).",
+      "apr_room": {
+        "number": "309",
+        "status": "inferred",
+        "source": "UBC SALA Architecture Program Report 2024 (CACB), physical resources and facilities projects 2019-2024",
+        "reason": "See crit room 4: the north crit room is taken as 309 because 303A (the photo room) is beside the south one. To confirm from the door signs.",
+        "added": "2026-11-11 20:36:24"
+      }
+    },
+    "1364436": {
+      "level": "Level 3",
+      "number": "2",
+      "area_m2": 17.119,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:20:08",
+      "updated": "2026-11-06 15:15:54",
+      "floor_access": "Level 3 as a whole is behind key card from the stairwell (owner, chat 2026-11-06).",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1364439": {
+      "level": "Level 3",
+      "number": "3",
+      "area_m2": 17.119,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:20:12",
+      "updated": "2026-11-06 15:15:54",
+      "floor_access": "Level 3 as a whole is behind key card from the stairwell (owner, chat 2026-11-06).",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1364442": {
+      "level": "Level 3",
+      "number": "4",
+      "area_m2": 49.561,
+      "name": "",
+      "use": "crit",
+      "access": "arch_class",
+      "hours": "",
+      "who": "",
+      "notes": "Crit room at the south end of the studio. Pin-up felt on the south, west and north walls; screen on the west wall (the door's side), projector. Reached from the studio only.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:19:25",
+      "updated": "2026-11-11 20:36:24",
+      "access_inferred": "crit rooms (those behind the key card, and those on Level 2 and in the Basement) are for architecture students",
+      "source": "owner, chat 2026-11-06 (crit rooms pass)",
+      "activities": [
+        {
+          "kind": "crit",
+          "label": "Crit / review",
+          "layout": "tables rolled to the side or stacked top to top; chairs turned and shifted to face the wall in use; groups cycle wall to wall, one pinning down as the next pins up",
+          "uses": [
+            "pinup_wall",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "group sizes, durations, attendance and frequency come from the studio-culture handover notes, to import later",
+          "source": "owner, chat 2026-11-06 (crit rooms pass)"
+        },
+        {
+          "kind": "seminar",
+          "label": "History seminar / class",
+          "layout": "chairs arranged around the tables",
+          "uses": [
+            "table",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "class sizes and timetable not given yet",
+          "source": "owner, chat 2026-11-06 (crit rooms pass)"
+        },
+        {
+          "kind": "lecture",
+          "label": "Studio lecture / internal slide presentation",
+          "layout": "chairs around the tables, the screen down on the west wall",
+          "uses": [
+            "screen",
+            "projector",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "sizes and frequency not given yet",
+          "source": "owner, chat 2026-11-06 (crit rooms pass)"
+        }
+      ],
+      "objects": "program/objects.json",
+      "floor_access": "Level 3 as a whole is behind key card from the stairwell (owner, chat 2026-11-06).",
+      "apr_room": {
+        "number": "301",
+        "status": "inferred",
+        "source": "UBC SALA Architecture Program Report 2024 (CACB), physical resources and facilities projects 2019-2024",
+        "reason": "301 and 309 are the APR's two held teaching rooms on the third floor (felt, projectors, screens, Ezo boards): the model's crit rooms 4 (south) and 1 (north). Which is which is inferred: the photo room 303A sits beside crit room 4, so the low numbers are at the south end.",
+        "added": "2026-11-11 20:36:24"
+      }
+    },
+    "1364445": {
+      "level": "Level 3",
+      "number": "5",
+      "area_m2": 9.662,
+      "name": "Photography room",
+      "use": "photo",
+      "access": "arch_all",
+      "hours": "",
+      "who": "",
+      "notes": "Photography room, 2.5 by 2.5 m, windowless, entered only through the 3D-printing room (6). Students photograph their models: a backdrop that drops down, a table, some lights. That is all.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:20:16",
+      "updated": "2026-11-11 20:36:24",
+      "source": "owner, chat 2026-11-06 (photo and 3D-print pass)",
+      "floor_access": "Level 3 as a whole is behind key card from the stairwell (owner, chat 2026-11-06).",
+      "access_inferred": "the whole floor is behind key card from the stairwell and the room is reached through the 3D-printing room, which any architecture student may use",
+      "activities": [
+        {
+          "kind": "photograph",
+          "label": "Photographing a model",
+          "layout": "the model on the table, the backdrop down behind it, the lights on either side; the student stands in front",
+          "uses": [
+            "table",
+            "backdrop",
+            "light_stand"
+          ],
+          "parameters": null,
+          "pending": "session length, how many at once, whether it is booked",
+          "source": "owner, chat 2026-11-06 (photo and 3D-print pass)"
+        }
+      ],
+      "objects": "program/objects.json",
+      "apr_room": {
+        "number": "303A",
+        "status": "inferred",
+        "source": "UBC SALA Architecture Program Report 2024 (CACB), physical resources and facilities projects 2019-2024",
+        "reason": "APR24: 'Created new photo documentation space for ARCH program in room 303A'; the model's only photo room is Level 3 room 5, 2.5 by 2.5 m beside crit room 4.",
+        "added": "2026-11-11 20:36:24"
+      }
+    },
+    "1364448": {
+      "level": "Level 3",
+      "number": "6",
+      "area_m2": 9.662,
+      "name": "3D printing",
+      "use": "shop",
+      "access": "arch_all",
+      "hours": "",
+      "who": "any architecture student; students bring their own filament",
+      "notes": "3D-printing room, 2.5 by 2.5 m, windowless, entered from the studio; the photography room (5) is entered through it. On the west wall (opposite the window, which the east wall covers) a shelf with at least six small 3D printers. Students start a print and come back to collect it once it ends; unforeseen problems stop prints; when the printers are very busy a student moves another's work aside.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:20:35",
+      "updated": "2026-11-06 14:50:49",
+      "source": "owner, chat 2026-11-06 (photo and 3D-print pass)",
+      "floor_access": "Level 3 as a whole is behind key card from the stairwell (owner, chat 2026-11-06).",
+      "activities": [
+        {
+          "kind": "print",
+          "label": "3D printing",
+          "layout": "standing at the shelf; a print runs unattended for hours, the student returns to collect",
+          "uses": [
+            "printer3d",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "how long prints run, how often they fail, how busy the printers are through the term",
+          "source": "owner, chat 2026-11-06 (photo and 3D-print pass)"
+        }
+      ],
+      "objects": "program/objects.json"
+    },
+    "1364451": {
+      "level": "Level 3",
+      "number": "7",
+      "area_m2": 31.314,
+      "name": "",
+      "use": "stair",
+      "access": "",
+      "hours": "",
+      "who": "",
+      "notes": "",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:19:29",
+      "updated": "2026-11-06 17:19:55",
+      "floor_access": "Level 3 as a whole is behind key card from the stairwell (owner, chat 2026-11-06)."
+    },
+    "1364454": {
+      "level": "Level 3",
+      "number": "8",
+      "area_m2": 31.314,
+      "name": "",
+      "use": "stair",
+      "access": "",
+      "hours": "",
+      "who": "",
+      "notes": "",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:19:55",
+      "updated": "2026-11-06 17:20:00",
+      "floor_access": "Level 3 as a whole is behind key card from the stairwell (owner, chat 2026-11-06)."
+    },
+    "1364793": {
+      "level": "Level 3",
+      "number": "9",
+      "area_m2": 18.041,
+      "name": "Kitchen",
+      "use": "kitchen",
+      "access": "arch_all",
+      "hours": "",
+      "who": "",
+      "notes": "Communal kitchen. Counters along both long walls (modelled); fridge in the north-east corner; sink in the middle of the west counter (modelled); a microwave on each counter; kettles, a coffee machine and other tabletop appliances. Communal, so not everyone uses them: many prefer a personal appliance. The door from crit room 1 leads through a pass-through doorway (no panel) in the wall across the kitchen; the doorway to the lounge has no panel either.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:20:00",
+      "updated": "2026-11-06 14:40:26",
+      "activities": [
+        {
+          "kind": "prepare",
+          "label": "Heat food, make a drink",
+          "layout": "standing at the counters; one person per appliance, others wait",
+          "uses": [
+            "microwave",
+            "kettle",
+            "coffee_machine",
+            "fridge",
+            "sink"
+          ],
+          "parameters": null,
+          "pending": "the share of people who use the communal appliances rather than their own, and when (lunch, evenings)",
+          "source": "owner, chat 2026-11-06 (kitchen and lounge pass)"
+        },
+        {
+          "kind": "event_prep",
+          "label": "Preparing Good Times / Waffle Times",
+          "layout": null,
+          "uses": [
+            "counter",
+            "fridge",
+            "sink"
+          ],
+          "parameters": null,
+          "pending": "whether the food for the lounge events is made here, by whom and how long before",
+          "source": "owner, chat 2026-11-06 (kitchen and lounge pass)"
+        }
+      ],
+      "objects": "program/objects.json",
+      "source": "owner, chat 2026-11-06 (lounge answers)",
+      "floor_access": "Level 3 as a whole is behind key card from the stairwell (owner, chat 2026-11-06).",
+      "access_inferred": "the whole floor is behind key card from the stairwell, so the kitchen and lounge are open to the studio's card holders (architecture students, professors, staff)"
+    },
+    "1364796": {
+      "level": "Level 3",
+      "number": "10",
+      "area_m2": 49.971,
+      "name": "Student lounge",
+      "use": "lounge",
+      "access": "arch_all",
+      "hours": "",
+      "who": "",
+      "notes": "Student lounge, a bay of the studio open to it on the south and part of the west. Good Times and Waffle Times happen here. Fridge in the north-east corner. On the west side, against the full-height service shaft, the bar: two beers on tap, a counter longer than the model shows, with the keg fridge at its south end. A couch by the east glass with a coffee table in front (the model's 'Bench2'). Along the studio desks on the south edge, church-pew benches with a high back against the desks. The doorway to the kitchen has no panel (edits E1). Open to the studio on the south and the west half: nothing marks the edge but the back of the pew bench and the backs of the studio desks. The long piece along the kitchen wall is a kitchen- or bar-height serving table; the piece along the glass north of the couch is another couch or bench. Everyday use: lunch, social space, group work. The Good Times and Waffle Times schedule comes with the handover document.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:14:40",
+      "updated": "2026-11-06 14:40:26",
+      "source": "owner, chat 2026-11-06 (lounge answers)",
+      "activities": [
+        {
+          "kind": "good_times",
+          "label": "Good Times",
+          "layout": "food and drink from the bar; people stand, sit on the pews, the couch and the benches, and spill into the studio",
+          "uses": [
+            "bar",
+            "beer_tap",
+            "pew_bench",
+            "seating",
+            "coffee_table",
+            "fridge"
+          ],
+          "parameters": null,
+          "pending": "schedule, numbers and who comes: in the handover document, to import",
+          "source": "owner, chat 2026-11-06 (lounge answers)"
+        },
+        {
+          "kind": "waffle_times",
+          "label": "Waffle Times",
+          "layout": "food served; people eat standing, on the pews, the couch and the benches",
+          "uses": [
+            "pew_bench",
+            "seating",
+            "coffee_table",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "schedule, numbers and who comes: in the handover document, to import",
+          "source": "owner, chat 2026-11-06 (lounge answers)"
+        },
+        {
+          "kind": "lounge",
+          "label": "Everyday use: lunch, social space, group work",
+          "layout": "sit on the couches, the pews and the benches; eat lunch, talk, work in groups at the serving table and the bar",
+          "uses": [
+            "seating",
+            "pew_bench",
+            "coffee_table",
+            "serving_table",
+            "bar",
+            "fridge"
+          ],
+          "parameters": null,
+          "pending": "typical numbers through the day",
+          "source": "owner, chat 2026-11-06 (lounge answers)"
+        }
+      ],
+      "objects": "program/objects.json",
+      "floor_access": "Level 3 as a whole is behind key card from the stairwell (owner, chat 2026-11-06).",
+      "access_inferred": "the whole floor is behind key card from the stairwell, so the kitchen and lounge are open to the studio's card holders (architecture students, professors, staff)"
+    },
+    "1364799": {
+      "level": "Level 3",
+      "number": "11",
+      "area_m2": 724.733,
+      "name": "",
+      "use": "studio",
+      "access": "arch_all",
+      "hours": "",
+      "who": "",
+      "notes": "The studio: sixteen bays of eight desks along the west glass with a board and a side table at the end of each (the board more a divider), smaller groups on the east. Desks and boards are on casters, not typically moved during the semester (movable with the movable_furniture toggle). Cohorts: the eastern desks and the southernmost area third years, the middle first years, the northernmost second years, generally; exact ratios in the handover note. Printing is concentrated at the north end for the whole floor: two plotters, three large printers (8.5x11 and 11x17), and the desktop computers mid-floor that send jobs to the plotters, all used by all students. Presence over time comes with the handover. Service shafts and similar are not occupiable.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:14:14",
+      "updated": "2026-11-06 15:45:39",
+      "floor_access": "Level 3 as a whole is behind key card from the stairwell (owner, chat 2026-11-06).",
+      "activities": [
+        {
+          "kind": "desk_work",
+          "label": "Working at one's desk",
+          "layout": "each student at their own desk in their cohort's zone; neighbours in the bay",
+          "uses": [
+            "desk",
+            "chair",
+            "pinup"
+          ],
+          "parameters": null,
+          "pending": "cohort ratios and presence over time (handover note)",
+          "source": "owner, chat 2026-11-06 (studio rules)"
+        },
+        {
+          "kind": "print",
+          "label": "Printing",
+          "layout": "send a job from a mid-floor computer, walk to the north end, wait at the plotters or printers, collect",
+          "uses": [
+            "computers",
+            "printer"
+          ],
+          "parameters": null,
+          "pending": "how often students print and how long a plot takes",
+          "source": "owner, chat 2026-11-06 (studio rules)"
+        },
+        {
+          "kind": "desk_crit",
+          "label": "Desk crit",
+          "layout": "the professor comes to the student's desk; a few students gather round",
+          "uses": [
+            "desk",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "from the studio-culture handover notes",
+          "source": "owner, chat 2026-11-06 (studio rules)"
+        }
+      ],
+      "objects": "program/objects.json (rules, zones for room 11; O24 to O26)",
+      "source": "owner, chat 2026-11-06 (studio rules)"
+    },
+    "1364831": {
+      "level": "Level 1",
+      "number": "12",
+      "area_m2": 133.274,
+      "name": "",
+      "use": "class",
+      "access": "campus_class",
+      "hours": "business",
+      "who": "",
+      "notes": "Lecture room. Two projection screens on the north wall, the short wall opposite the doors on the south; several rows of shallow lecture tables with chairs facing them, the count estimated from the room's size by rule (owner, 2026-11-06); a speaker's table and laptop between the screens assumed as in room 15.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:08:28",
+      "updated": "2026-11-11 20:36:24",
+      "activities": [
+        {
+          "kind": "lecture",
+          "label": "Lecture",
+          "layout": "the speaker between the screens; the audience in rows at the tables facing the north wall",
+          "uses": [
+            "screen",
+            "projector",
+            "computers",
+            "table",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "class sizes and the timetable; whether the room is booked for other events and locked otherwise; the west side's glazing or wall",
+          "source": "owner, chat 2026-11-06 (rooms 12 and 13 lecture set-up)"
+        }
+      ],
+      "objects": "program/objects.json (O39* / O40*)",
+      "source": "owner, chat 2026-11-06 (rooms 12 and 13 lecture set-up)",
+      "apr_room": {
+        "number": "102 / 104 / 105",
+        "status": "inferred",
+        "source": "UBC SALA Architecture Program Report 2024 (CACB), physical resources and facilities projects 2019-2024",
+        "reason": "APR24: UBC holdings on the first floor, 'a digital teaching space Rm 105 and two lecture spaces', rooms 102, 104 and 105, renovated 2018, bookable by SALA. The model's three Level 1 classrooms; which number is which is not known.",
+        "added": "2026-11-11 20:36:24"
+      }
+    },
+    "1364835": {
+      "level": "Level 1",
+      "number": "13",
+      "area_m2": 133.274,
+      "name": "",
+      "use": "class",
+      "access": "campus_class",
+      "hours": "business",
+      "who": "",
+      "notes": "Lecture room. Two projection screens on the south wall, the short wall opposite the doors on the north; several rows of shallow lecture tables with chairs facing them, the count estimated from the room's size by rule (owner, 2026-11-06); a speaker's table and laptop between the screens assumed as in room 15.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:08:44",
+      "updated": "2026-11-11 20:36:24",
+      "activities": [
+        {
+          "kind": "lecture",
+          "label": "Lecture",
+          "layout": "the speaker between the screens; the audience in rows at the tables facing the south wall",
+          "uses": [
+            "screen",
+            "projector",
+            "computers",
+            "table",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "class sizes and the timetable; whether the room is booked for other events and locked otherwise; the west side's glazing or wall",
+          "source": "owner, chat 2026-11-06 (rooms 12 and 13 lecture set-up)"
+        }
+      ],
+      "objects": "program/objects.json (O39* / O40*)",
+      "source": "owner, chat 2026-11-06 (rooms 12 and 13 lecture set-up)",
+      "apr_room": {
+        "number": "102 / 104 / 105",
+        "status": "inferred",
+        "source": "UBC SALA Architecture Program Report 2024 (CACB), physical resources and facilities projects 2019-2024",
+        "reason": "APR24: UBC holdings on the first floor, 'a digital teaching space Rm 105 and two lecture spaces', rooms 102, 104 and 105, renovated 2018, bookable by SALA. The model's three Level 1 classrooms; which number is which is not known.",
+        "added": "2026-11-11 20:36:24"
+      }
+    },
+    "1364838": {
+      "level": "Level 1",
+      "number": "14",
+      "area_m2": 19.345,
+      "name": "Men's WR",
+      "use": "wc",
+      "access": "",
+      "hours": "always",
+      "who": "",
+      "notes": "Approximately four stalls and three sinks, placed by rule (owner, 2026-11-06).",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:10:35",
+      "updated": "2026-11-06 16:52:17",
+      "source": "owner, chat 2026-11-06 (washrooms: four stalls, three sinks)",
+      "activities": [
+        {
+          "kind": "washroom",
+          "label": "Washroom visit",
+          "layout": "a stall, then a sink; others wait by the door when all stalls are taken",
+          "uses": [
+            "stall",
+            "sink"
+          ],
+          "parameters": null,
+          "pending": "how often people go, and whether the men's rooms also have urinals",
+          "source": "owner, chat 2026-11-06 (washrooms: four stalls, three sinks)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: wc)"
+    },
+    "1364841": {
+      "level": "Level 1",
+      "number": "15",
+      "area_m2": 150.419,
+      "name": "",
+      "use": "class",
+      "access": "campus_class",
+      "hours": "business",
+      "who": "",
+      "notes": "Lecture room. Two projection screens on the east wall, the long wall opposite the four doors, with the speaker's laptop on a table between them; condensed rows of smaller tables (1.8 by 0.6 m) on casters with chairs facing them, as room 22 (owner, 2026-11-06). Placed by rule, counts following from the room; a table that would stand on a column is left out.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06",
+      "updated": "2026-11-11 20:36:24",
+      "activities": [
+        {
+          "kind": "lecture",
+          "label": "Lecture",
+          "layout": "the speaker at the laptop between the screens; the audience in rows at the tables facing east",
+          "uses": [
+            "screen",
+            "projector",
+            "computers",
+            "table",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "class sizes and the timetable; whether the room is booked for other events and locked otherwise",
+          "source": "owner, chat 2026-11-06 (room 15 lecture set-up)"
+        }
+      ],
+      "objects": "program/objects.json (O32 to O38)",
+      "source": "owner, chat 2026-11-06 (room 15 lecture set-up)",
+      "apr_room": {
+        "number": "102 / 104 / 105",
+        "status": "inferred",
+        "source": "UBC SALA Architecture Program Report 2024 (CACB), physical resources and facilities projects 2019-2024",
+        "reason": "APR24: UBC holdings on the first floor, 'a digital teaching space Rm 105 and two lecture spaces', rooms 102, 104 and 105, renovated 2018, bookable by SALA. The model's three Level 1 classrooms; which number is which is not known.",
+        "added": "2026-11-11 20:36:24"
+      }
+    },
+    "1364844": {
+      "level": "Level 1",
+      "number": "16",
+      "area_m2": 22.883,
+      "name": "Women's WR",
+      "use": "wc",
+      "access": "",
+      "hours": "always",
+      "who": "",
+      "notes": "Approximately four stalls and three sinks, placed by rule (owner, 2026-11-06).",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:09:43",
+      "updated": "2026-11-06 16:52:17",
+      "source": "owner, chat 2026-11-06 (washrooms: four stalls, three sinks)",
+      "activities": [
+        {
+          "kind": "washroom",
+          "label": "Washroom visit",
+          "layout": "a stall, then a sink; others wait by the door when all stalls are taken",
+          "uses": [
+            "stall",
+            "sink"
+          ],
+          "parameters": null,
+          "pending": "how often people go, and whether the men's rooms also have urinals",
+          "source": "owner, chat 2026-11-06 (washrooms: four stalls, three sinks)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: wc)"
+    },
+    "1364853": {
+      "level": "Level 1",
+      "number": "17",
+      "area_m2": 49.337,
+      "name": "",
+      "use": "stair",
+      "access": "campus_class",
+      "hours": "",
+      "who": "",
+      "notes": "",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:08:58",
+      "updated": "2026-11-06 17:09:18"
+    },
+    "1364856": {
+      "level": "Level 1",
+      "number": "18",
+      "area_m2": 49.337,
+      "name": "",
+      "use": "stair",
+      "access": "campus_class",
+      "hours": "",
+      "who": "",
+      "notes": "",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:09:18",
+      "updated": "2026-11-06 17:09:43"
+    },
+    "1364995": {
+      "level": "Level 2",
+      "number": "19",
+      "area_m2": 55.545,
+      "name": "",
+      "use": "crit",
+      "access": "bookable",
+      "hours": "",
+      "who": "booked for reviews, class lectures and discussions; also student organizations and clubs",
+      "notes": "Like the Level 3 crit rooms (owner, 2026-11-06): pin-up felt on every opaque wall, a screen high on the short wall on the door's side, a projector; the same crit, seminar and lecture uses. Tables and chairs not placed, number unknown. Matches rooms 21, 72 and 73 (owner, 2026-11-06): the same tables as the Level 3 crit rooms, a stand-in pair placed; booked for reviews, class lectures and discussions, and by student organizations and clubs.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:12:13",
+      "updated": "2026-11-06 16:28:12",
+      "source": "owner, chat 2026-11-06 (room 19 matches; room 22 in rows)",
+      "activities": [
+        {
+          "kind": "crit",
+          "label": "Review / crit",
+          "layout": "tables rolled aside or stacked; chairs turned to the wall in use; groups cycle wall to wall",
+          "uses": [
+            "pinup_wall",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "group sizes, durations and frequency (handover notes)",
+          "source": "owner, chat 2026-11-06 (room 19 matches; room 22 in rows)"
+        },
+        {
+          "kind": "lecture",
+          "label": "Class lecture or discussion",
+          "layout": "chairs round the tables, the screen down",
+          "uses": [
+            "screen",
+            "projector",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "class sizes and timetable",
+          "source": "owner, chat 2026-11-06 (room 19 matches; room 22 in rows)"
+        },
+        {
+          "kind": "club",
+          "label": "Student organization or club meeting",
+          "layout": "chairs round the tables",
+          "uses": [
+            "table",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "which clubs, when, how many",
+          "source": "owner, chat 2026-11-06 (room 19 matches; room 22 in rows)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: crit; table set O31)"
+    },
+    "1364999": {
+      "level": "Level 2",
+      "number": "20",
+      "area_m2": 7.968,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:14:10",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365002": {
+      "level": "Level 2",
+      "number": "21",
+      "area_m2": 55.19,
+      "name": "",
+      "use": "crit",
+      "access": "bookable",
+      "hours": "",
+      "who": "booked for reviews, class lectures and discussions; also student organizations and clubs",
+      "notes": "Like the Level 3 crit rooms (owner, 2026-11-06): pin-up felt on every opaque wall, a screen high on the short wall on the door's side, a projector; the same crit, seminar and lecture uses. Tables and chairs not placed, number unknown. The same tables as the Level 3 crit rooms (owner, 2026-11-06), on casters, a stand-in set placed. Booked for reviews, class lectures and discussions, and by student organizations and clubs.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:12:45",
+      "updated": "2026-11-06 16:20:54",
+      "source": "owner, chat 2026-11-06 (bookable crit and class rooms)",
+      "activities": [
+        {
+          "kind": "crit",
+          "label": "Review / crit",
+          "layout": "tables rolled aside or stacked; chairs turned to the wall in use; groups cycle wall to wall",
+          "uses": [
+            "pinup_wall",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "group sizes, durations and frequency (handover notes)",
+          "source": "owner, chat 2026-11-06 (bookable crit and class rooms)"
+        },
+        {
+          "kind": "lecture",
+          "label": "Class lecture or discussion",
+          "layout": "chairs round the tables, the screen down",
+          "uses": [
+            "screen",
+            "projector",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "class sizes and timetable",
+          "source": "owner, chat 2026-11-06 (bookable crit and class rooms)"
+        },
+        {
+          "kind": "club",
+          "label": "Student organization or club meeting",
+          "layout": "chairs round the tables",
+          "uses": [
+            "table",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "which clubs, when, how many",
+          "source": "owner, chat 2026-11-06 (bookable crit and class rooms)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: crit; table set O27 to O30)"
+    },
+    "1365005": {
+      "level": "Level 2",
+      "number": "22",
+      "area_m2": 111.532,
+      "name": "Large classroom",
+      "use": "class",
+      "access": "bookable",
+      "hours": "",
+      "who": "booked for reviews, class lectures and discussions; also student organizations and clubs",
+      "notes": "A large classroom that also serves as a crit / pin-up space. The same tables as the Level 3 crit rooms (owner, 2026-11-06), on casters, laid in rows facing the screen, as many rows as the room's depth allows (the owner wanted five if possible). Booked for reviews, class lectures and discussions, and by student organizations and clubs. 2026-11-11: taken as the APR's room 202 (capacity 60 students, APR24); the table rows now seat four a table, 64 chairs in four rows (objects O28), the APR's 60 being a capacity rather than a chair count.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:11:20",
+      "updated": "2026-11-11 20:36:24",
+      "source": "owner, chat 2026-11-11 (rooms reviewed against APR24)",
+      "activities": [
+        {
+          "kind": "crit",
+          "label": "Review / crit",
+          "layout": "tables rolled aside or stacked; chairs turned to the wall in use; groups cycle wall to wall",
+          "uses": [
+            "pinup_wall",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "group sizes, durations and frequency (handover notes)",
+          "source": "owner, chat 2026-11-06 (bookable crit and class rooms)"
+        },
+        {
+          "kind": "lecture",
+          "label": "Class lecture or discussion",
+          "layout": "chairs round the tables, the screen down",
+          "uses": [
+            "screen",
+            "projector",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "class sizes and timetable",
+          "source": "owner, chat 2026-11-06 (bookable crit and class rooms)"
+        },
+        {
+          "kind": "club",
+          "label": "Student organization or club meeting",
+          "layout": "chairs round the tables",
+          "uses": [
+            "table",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "which clubs, when, how many",
+          "source": "owner, chat 2026-11-06 (bookable crit and class rooms)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: crit; table rows O28)",
+      "apr_room": {
+        "number": "202",
+        "status": "inferred",
+        "source": "UBC SALA Architecture Program Report 2024 (CACB), physical resources and facilities projects 2019-2024",
+        "reason": "The APR's 202 is a held teaching room with felt pin-up walls, a projector and screen, Ezo boards and a class capacity raised to 60; room 22 is the large classroom that also serves as crit and pin-up space (owner, 2026-11-06), the largest classroom with seats on Level 2. The owner (2026-11-11): the largest classroom with seats is probably 202; adjust the model.",
+        "added": "2026-11-11 20:36:24"
+      },
+      "capacity": 60
+    },
+    "1365008": {
+      "level": "Level 2",
+      "number": "23",
+      "area_m2": 11.451,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:14:01",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365011": {
+      "level": "Level 2",
+      "number": "24",
+      "area_m2": 11.424,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:14:04",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365014": {
+      "level": "Level 2",
+      "number": "25",
+      "area_m2": 17.746,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:13:32",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365017": {
+      "level": "Level 2",
+      "number": "26",
+      "area_m2": 20.715,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:13:14",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365020": {
+      "level": "Level 2",
+      "number": "27",
+      "area_m2": 12.205,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:13:57",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365023": {
+      "level": "Level 2",
+      "number": "28",
+      "area_m2": 11.031,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:14:07",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365026": {
+      "level": "Level 2",
+      "number": "29",
+      "area_m2": 15.463,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:13:49",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365029": {
+      "level": "Level 2",
+      "number": "30",
+      "area_m2": 50.484,
+      "name": "",
+      "use": "crit",
+      "access": "arch_class",
+      "hours": "",
+      "who": "",
+      "notes": "Crit room. A wall divides it from the women's washroom (room 31), missing from the model (edits E3); on this room's side of that wall a small kitchenette (object O21, size assumed). Like the Level 3 crit rooms (owner, 2026-11-06): pin-up felt on every opaque wall, a screen high on the short wall on the door's side, a projector; the same crit, seminar and lecture uses. Tables and chairs not placed, number unknown. 2026-11-11: checked against APR24 for the owner: not the APR's 202 (that is the large classroom 22); the APR names no other Level 2 teaching room, so room 30 stays a crit room used from its floor (owner, Q16).",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:12:48",
+      "updated": "2026-11-11 20:36:24",
+      "source": "owner, chat 2026-11-06 (crit rooms like Level 3's)",
+      "activities": [
+        {
+          "kind": "crit",
+          "label": "Crit / review",
+          "layout": "tables rolled to the side or stacked top to top; chairs turned and shifted to face the wall in use; groups cycle wall to wall, one pinning down as the next pins up",
+          "uses": [
+            "pinup_wall",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "group sizes, durations, attendance and frequency come from the studio-culture handover notes, to import later",
+          "source": "owner, chat 2026-11-06 (crit rooms like Level 3's)"
+        },
+        {
+          "kind": "seminar",
+          "label": "History seminar / class",
+          "layout": "chairs arranged around the tables",
+          "uses": [
+            "table",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "class sizes and timetable not given yet",
+          "source": "owner, chat 2026-11-06 (crit rooms like Level 3's)"
+        },
+        {
+          "kind": "lecture",
+          "label": "Studio lecture / internal slide presentation",
+          "layout": "chairs around the tables, the screen down on the west wall",
+          "uses": [
+            "screen",
+            "projector",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "sizes and frequency not given yet",
+          "source": "owner, chat 2026-11-06 (crit rooms like Level 3's)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: crit)"
+    },
+    "1365032": {
+      "level": "Level 2",
+      "number": "31",
+      "area_m2": 20.075,
+      "name": "Women's WR",
+      "use": "wc",
+      "access": "",
+      "hours": "",
+      "who": "",
+      "notes": "A wall divides this washroom from crit room 30, missing from the model (edits E3). Approximately four stalls and three sinks, placed by rule (owner, 2026-11-06).",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:13:18",
+      "updated": "2026-11-06 16:52:17",
+      "source": "owner, chat 2026-11-06 (washrooms: four stalls, three sinks)",
+      "activities": [
+        {
+          "kind": "washroom",
+          "label": "Washroom visit",
+          "layout": "a stall, then a sink; others wait by the door when all stalls are taken",
+          "uses": [
+            "stall",
+            "sink"
+          ],
+          "parameters": null,
+          "pending": "how often people go, and whether the men's rooms also have urinals",
+          "source": "owner, chat 2026-11-06 (washrooms: four stalls, three sinks)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: wc)"
+    },
+    "1365035": {
+      "level": "Level 2",
+      "number": "32",
+      "area_m2": 28.22,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Shared office: desks along the north wall (owner, 2026-11-06), number unknown; as many 1.6 m desks as fill the wall stand in (objects O22).",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:13:09",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Shared office work",
+          "layout": "several occupants at shared desks",
+          "uses": [
+            "desk",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "the number of desks and occupants, who they are, their hours",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (rules: shared desks, count unknown)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365038": {
+      "level": "Level 2",
+      "number": "33",
+      "area_m2": 55.34,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Shared office: some desks to show the program (owner, 2026-11-06), number unknown; four desks in facing pairs stand in (objects O23).",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:12:41",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Shared office work",
+          "layout": "several occupants at shared desks",
+          "uses": [
+            "desk",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "the number of desks and occupants, who they are, their hours",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (rules: shared desks, count unknown)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365041": {
+      "level": "Level 2",
+      "number": "34",
+      "area_m2": 161.808,
+      "name": "Administrative office",
+      "use": "admin",
+      "access": "staff",
+      "hours": "business",
+      "who": "administrative staff; students and faculty visiting the reception",
+      "notes": "PLACEHOLDER (owner, 2026-11-06): populated like an academic administrative office until the real room is described: a reception counter inside the east door, six workstations, a meeting table, shelving, a printer, a waiting bench in the middle part, two desks in the south part. Nothing here is the owner's knowledge of the room. 2026-11-11: APR24 puts the main office at 402 on the fourth floor, not on this floor; what this 162 m2 room is remains open (a placeholder admin office in the tool). The APR's 202 is the large classroom 22.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:10:52",
+      "updated": "2026-11-11 20:36:24",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Administrative work",
+          "layout": "staff at the workstations",
+          "uses": [
+            "desk",
+            "chair",
+            "printer",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "staff count and hours (placeholder)",
+          "source": "owner, chat 2026-11-06 (room 34 placeholder)"
+        },
+        {
+          "kind": "reception",
+          "label": "A visit to the reception",
+          "layout": "a visitor at the counter, waiting on the bench when the receptionist is busy",
+          "uses": [
+            "counter",
+            "chair",
+            "seating"
+          ],
+          "parameters": null,
+          "pending": "how many visits a day and how long (placeholder)",
+          "source": "owner, chat 2026-11-06 (room 34 placeholder)"
+        },
+        {
+          "kind": "meeting",
+          "label": "Meeting",
+          "layout": "round the meeting table",
+          "uses": [
+            "table",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "frequency and size (placeholder)",
+          "source": "owner, chat 2026-11-06 (room 34 placeholder)"
+        }
+      ],
+      "objects": "program/objects.json (O47, placeholder set)",
+      "source": "owner, chat 2026-11-06 (room 34 placeholder)",
+      "placeholder": true
+    },
+    "1365044": {
+      "level": "Level 2",
+      "number": "35",
+      "area_m2": 55.609,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Shared desks, number unknown (owner, 2026-11-06); nothing placed until the count is known.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:11:38",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Shared office work",
+          "layout": "several occupants at shared desks",
+          "uses": [
+            "desk",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "the number of desks and occupants, who they are, their hours",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (rules: shared desks, count unknown)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365047": {
+      "level": "Level 2",
+      "number": "36",
+      "area_m2": 16.993,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:13:41",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365050": {
+      "level": "Level 2",
+      "number": "37",
+      "area_m2": 13.526,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:13:52",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365053": {
+      "level": "Level 2",
+      "number": "38",
+      "area_m2": 19.384,
+      "name": "Men's WR",
+      "use": "wc",
+      "access": "",
+      "hours": "",
+      "who": "",
+      "notes": "The wall between this washroom and rooms 36, 37 and 35 is missing from the model (edits E4). Approximately four stalls and three sinks, placed by rule (owner, 2026-11-06).",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:13:21",
+      "updated": "2026-11-06 16:52:17",
+      "source": "owner, chat 2026-11-06 (washrooms: four stalls, three sinks)",
+      "activities": [
+        {
+          "kind": "washroom",
+          "label": "Washroom visit",
+          "layout": "a stall, then a sink; others wait by the door when all stalls are taken",
+          "uses": [
+            "stall",
+            "sink"
+          ],
+          "parameters": null,
+          "pending": "how often people go, and whether the men's rooms also have urinals",
+          "source": "owner, chat 2026-11-06 (washrooms: four stalls, three sinks)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: wc)"
+    },
+    "1365056": {
+      "level": "Level 2",
+      "number": "39",
+      "area_m2": 31.248,
+      "name": "",
+      "use": "stair",
+      "access": "",
+      "hours": "",
+      "who": "",
+      "notes": "",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:12:58",
+      "updated": "2026-11-06 17:13:04"
+    },
+    "1365059": {
+      "level": "Level 2",
+      "number": "40",
+      "area_m2": 31.248,
+      "name": "",
+      "use": "stair",
+      "access": "",
+      "hours": "",
+      "who": "",
+      "notes": "",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:13:04",
+      "updated": "2026-11-06 17:13:09"
+    },
+    "1365160": {
+      "level": "Level 4",
+      "number": "41",
+      "area_m2": 19.465,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:20:55",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365164": {
+      "level": "Level 4",
+      "number": "42",
+      "area_m2": 23.694,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:20:45",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365167": {
+      "level": "Level 4",
+      "number": "43",
+      "area_m2": 19.473,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:20:50",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365170": {
+      "level": "Level 4",
+      "number": "44",
+      "area_m2": 14.082,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:55",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365173": {
+      "level": "Level 4",
+      "number": "45",
+      "area_m2": 14.431,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:18",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365176": {
+      "level": "Level 4",
+      "number": "46",
+      "area_m2": 14.431,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:21",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365179": {
+      "level": "Level 4",
+      "number": "47",
+      "area_m2": 14.431,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:23",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365182": {
+      "level": "Level 4",
+      "number": "48",
+      "area_m2": 14.431,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:27",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365185": {
+      "level": "Level 4",
+      "number": "49",
+      "area_m2": 14.431,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:30",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365188": {
+      "level": "Level 4",
+      "number": "50",
+      "area_m2": 14.431,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:33",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365191": {
+      "level": "Level 4",
+      "number": "51",
+      "area_m2": 14.082,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:59",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365194": {
+      "level": "Level 4",
+      "number": "52",
+      "area_m2": 19.473,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:20:52",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365197": {
+      "level": "Level 4",
+      "number": "53",
+      "area_m2": 11.851,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:22:03",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365200": {
+      "level": "Level 4",
+      "number": "54",
+      "area_m2": 19.465,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:20:58",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365203": {
+      "level": "Level 4",
+      "number": "55",
+      "area_m2": 34.182,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Shared desks, number unknown (owner, 2026-11-06); nothing placed until the count is known. 2026-11-11: the school's main office and MArch program office are room 402 on the fourth floor (APR24, sala.ubc.ca); this 34 m2 shared office is the only Level 4 room larger than an individual office, so it is a candidate for 402. Not applied: the owner to confirm.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:20:35",
+      "updated": "2026-11-11 20:36:24",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Shared office work",
+          "layout": "several occupants at shared desks",
+          "uses": [
+            "desk",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "the number of desks and occupants, who they are, their hours",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (rules: shared desks, count unknown)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365206": {
+      "level": "Level 4",
+      "number": "56",
+      "area_m2": 14.431,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:36",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365209": {
+      "level": "Level 4",
+      "number": "57",
+      "area_m2": 19.237,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:01",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365212": {
+      "level": "Level 4",
+      "number": "58",
+      "area_m2": 14.431,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:39",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365215": {
+      "level": "Level 4",
+      "number": "59",
+      "area_m2": 14.431,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:42",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365218": {
+      "level": "Level 4",
+      "number": "60",
+      "area_m2": 14.431,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:46",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365221": {
+      "level": "Level 4",
+      "number": "61",
+      "area_m2": 14.431,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:50",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365224": {
+      "level": "Level 4",
+      "number": "62",
+      "area_m2": 14.431,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:52",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365227": {
+      "level": "Level 4",
+      "number": "63",
+      "area_m2": 19.237,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:04",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365230": {
+      "level": "Level 4",
+      "number": "64",
+      "area_m2": 19.025,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:06",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365233": {
+      "level": "Level 4",
+      "number": "65",
+      "area_m2": 15.296,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:12",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365236": {
+      "level": "Level 4",
+      "number": "66",
+      "area_m2": 8.368,
+      "name": "WR",
+      "use": "wc",
+      "access": "",
+      "hours": "",
+      "who": "",
+      "notes": "Approximately four stalls and three sinks, placed by rule (owner, 2026-11-06).",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:22:06",
+      "updated": "2026-11-06 16:52:17",
+      "source": "owner, chat 2026-11-06 (washrooms: four stalls, three sinks)",
+      "activities": [
+        {
+          "kind": "washroom",
+          "label": "Washroom visit",
+          "layout": "a stall, then a sink; others wait by the door when all stalls are taken",
+          "uses": [
+            "stall",
+            "sink"
+          ],
+          "parameters": null,
+          "pending": "how often people go, and whether the men's rooms also have urinals",
+          "source": "owner, chat 2026-11-06 (washrooms: four stalls, three sinks)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: wc)"
+    },
+    "1365239": {
+      "level": "Level 4",
+      "number": "67",
+      "area_m2": 7.74,
+      "name": "WR",
+      "use": "wc",
+      "access": "",
+      "hours": "",
+      "who": "",
+      "notes": "Approximately four stalls and three sinks, placed by rule (owner, 2026-11-06).",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:22:13",
+      "updated": "2026-11-06 16:52:17",
+      "source": "owner, chat 2026-11-06 (washrooms: four stalls, three sinks)",
+      "activities": [
+        {
+          "kind": "washroom",
+          "label": "Washroom visit",
+          "layout": "a stall, then a sink; others wait by the door when all stalls are taken",
+          "uses": [
+            "stall",
+            "sink"
+          ],
+          "parameters": null,
+          "pending": "how often people go, and whether the men's rooms also have urinals",
+          "source": "owner, chat 2026-11-06 (washrooms: four stalls, three sinks)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: wc)"
+    },
+    "1365242": {
+      "level": "Level 4",
+      "number": "68",
+      "area_m2": 15.72,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:09",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365245": {
+      "level": "Level 4",
+      "number": "69",
+      "area_m2": 15.272,
+      "name": "",
+      "use": "office",
+      "access": "professor",
+      "hours": "business",
+      "who": "the professor and their guests",
+      "notes": "Individual office (owner, 2026-11-06): a desk sized by the room facing the door, the occupant's chair, a visitor chair across the desk, some shelving as an assumption, and a counter along the window as the owner suggested for the fourth floor; all placed by rule, positions inferred.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:21:14",
+      "updated": "2026-11-06 15:15:54",
+      "activities": [
+        {
+          "kind": "office_work",
+          "label": "Office work",
+          "layout": "one occupant at the desk facing the door; a visitor in the chair across the desk; shelving on another wall (assumed); a counter along the window (assumed)",
+          "uses": [
+            "desk",
+            "chair",
+            "shelf",
+            "counter"
+          ],
+          "parameters": null,
+          "pending": "who the occupant is, their hours, whether students come for office hours and how many at a time",
+          "source": "owner, chat 2026-11-06 (offices, second pass)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: office)",
+      "source": "owner, chat 2026-11-06 (offices: professor, business hours)"
+    },
+    "1365251": {
+      "level": "Basement",
+      "number": "70",
+      "area_m2": 104.245,
+      "name": "",
+      "use": "",
+      "access": "",
+      "hours": "",
+      "who": "",
+      "notes": "",
+      "status": "flagged",
+      "flag_reason": "decide later; a candidate for the APR's Room 9, the SALA Materials Lab (the former reading room, 1000+ sq ft, 'capable of hosting lecture and seminar classes, meetings, and reviews'): 70 (104 m2) and 77 (109 m2) are the two basement rooms of that size (APR24, 2026-11-11)",
+      "first_seen": "2026-11-06 17:22:43",
+      "updated": "2026-11-11 20:36:24"
+    },
+    "1365255": {
+      "level": "Basement",
+      "number": "71",
+      "area_m2": 46.664,
+      "name": "",
+      "use": "",
+      "access": "",
+      "hours": "",
+      "who": "",
+      "notes": "",
+      "status": "flagged",
+      "flag_reason": "decide later",
+      "first_seen": "2026-11-06 17:22:57",
+      "updated": "2026-11-06 17:23:00"
+    },
+    "1365258": {
+      "level": "Basement",
+      "number": "72",
+      "area_m2": 63.618,
+      "name": "",
+      "use": "crit",
+      "access": "bookable",
+      "hours": "",
+      "who": "booked for reviews, class lectures and discussions; also student organizations and clubs",
+      "notes": "Like the Level 3 crit rooms (owner, 2026-11-06): pin-up felt on every opaque wall, a screen high on the short wall on the door's side, a projector; the same crit, seminar and lecture uses. Tables and chairs not placed, number unknown. The same tables as the Level 3 crit rooms (owner, 2026-11-06), on casters, a stand-in set placed. Booked for reviews, class lectures and discussions, and by student organizations and clubs.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:22:47",
+      "updated": "2026-11-06 16:20:54",
+      "source": "owner, chat 2026-11-06 (bookable crit and class rooms)",
+      "activities": [
+        {
+          "kind": "crit",
+          "label": "Review / crit",
+          "layout": "tables rolled aside or stacked; chairs turned to the wall in use; groups cycle wall to wall",
+          "uses": [
+            "pinup_wall",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "group sizes, durations and frequency (handover notes)",
+          "source": "owner, chat 2026-11-06 (bookable crit and class rooms)"
+        },
+        {
+          "kind": "lecture",
+          "label": "Class lecture or discussion",
+          "layout": "chairs round the tables, the screen down",
+          "uses": [
+            "screen",
+            "projector",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "class sizes and timetable",
+          "source": "owner, chat 2026-11-06 (bookable crit and class rooms)"
+        },
+        {
+          "kind": "club",
+          "label": "Student organization or club meeting",
+          "layout": "chairs round the tables",
+          "uses": [
+            "table",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "which clubs, when, how many",
+          "source": "owner, chat 2026-11-06 (bookable crit and class rooms)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: crit; table set O27 to O30)"
+    },
+    "1365261": {
+      "level": "Basement",
+      "number": "73",
+      "area_m2": 57.7,
+      "name": "",
+      "use": "crit",
+      "access": "bookable",
+      "hours": "",
+      "who": "booked for reviews, class lectures and discussions; also student organizations and clubs",
+      "notes": "Like the Level 3 crit rooms (owner, 2026-11-06): pin-up felt on every opaque wall, a screen high on the short wall on the door's side, a projector; the same crit, seminar and lecture uses. Tables and chairs not placed, number unknown. The same tables as the Level 3 crit rooms (owner, 2026-11-06), on casters, a stand-in set placed. Booked for reviews, class lectures and discussions, and by student organizations and clubs.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:22:52",
+      "updated": "2026-11-06 16:20:54",
+      "source": "owner, chat 2026-11-06 (bookable crit and class rooms)",
+      "activities": [
+        {
+          "kind": "crit",
+          "label": "Review / crit",
+          "layout": "tables rolled aside or stacked; chairs turned to the wall in use; groups cycle wall to wall",
+          "uses": [
+            "pinup_wall",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "group sizes, durations and frequency (handover notes)",
+          "source": "owner, chat 2026-11-06 (bookable crit and class rooms)"
+        },
+        {
+          "kind": "lecture",
+          "label": "Class lecture or discussion",
+          "layout": "chairs round the tables, the screen down",
+          "uses": [
+            "screen",
+            "projector",
+            "chair",
+            "table"
+          ],
+          "parameters": null,
+          "pending": "class sizes and timetable",
+          "source": "owner, chat 2026-11-06 (bookable crit and class rooms)"
+        },
+        {
+          "kind": "club",
+          "label": "Student organization or club meeting",
+          "layout": "chairs round the tables",
+          "uses": [
+            "table",
+            "chair"
+          ],
+          "parameters": null,
+          "pending": "which clubs, when, how many",
+          "source": "owner, chat 2026-11-06 (bookable crit and class rooms)"
+        }
+      ],
+      "objects": "program/objects.json (by_use: crit; table set O27 to O30)"
+    },
+    "1365264": {
+      "level": "Basement",
+      "number": "74",
+      "area_m2": 146.532,
+      "name": "Workshop",
+      "use": "shop",
+      "access": "arch_all",
+      "hours": "business",
+      "who": "architecture students under supervision, in business hours",
+      "notes": "The workshop: more wood tools and one metal bending tool (owner, 2026-11-06); supervised, so business hours. The tools beyond that and their places are assumed (objects O48). No door in the model; its west side is open to the outside in the tiles: both to confirm.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:22:16",
+      "updated": "2026-11-11 20:36:24",
+      "activities": [
+        {
+          "kind": "make",
+          "label": "Workshop session",
+          "layout": "at a workbench or a machine, a technician present",
+          "uses": [
+            "table",
+            "machine",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "how long students stay, how many at once, the technician's hours",
+          "source": "owner, chat 2026-11-06 (Basement shops)"
+        }
+      ],
+      "objects": "program/objects.json (O48)",
+      "source": "owner, chat 2026-11-06 (Basement shops)",
+      "apr_room": {
+        "number": "2",
+        "status": "inferred",
+        "source": "UBC SALA Architecture Program Report 2024 (CACB), physical resources and facilities projects 2019-2024",
+        "reason": "APR24: the school's shop is 'located across the hall from Room 5 in Room 2'; the model's workshop 74 (146 m2) is the largest basement room and across the corridor from 75.",
+        "added": "2026-11-11 20:36:24"
+      }
+    },
+    "1365267": {
+      "level": "Basement",
+      "number": "75",
+      "area_m2": 115.168,
+      "name": "Model assembly room",
+      "use": "shop",
+      "access": "arch_all",
+      "hours": "business",
+      "who": "architecture students under supervision, in business hours",
+      "notes": "The assembly room for models (owner, 2026-11-06); supervised, so business hours. Assembly tables, stools, shelving and a cutting table are assumed (objects O49). 2026-11-11: the APR's Room 5 (see apr_room) says work-benches, a projector and 24/7 access; the model's hours stay 'business' until the owner says otherwise.",
+      "status": "done",
+      "flag_reason": "",
+      "first_seen": "2026-11-06 17:22:23",
+      "updated": "2026-11-11 20:36:24",
+      "activities": [
+        {
+          "kind": "assemble",
+          "label": "Model assembly",
+          "layout": "at the assembly tables, a technician present",
+          "uses": [
+            "table",
+            "chair",
+            "cutting",
+            "shelf"
+          ],
+          "parameters": null,
+          "pending": "session length, how many at once, the technician's hours",
+          "source": "owner, chat 2026-11-06 (Basement shops)"
+        }
+      ],
+      "objects": "program/objects.json (O49)",
+      "source": "owner, chat 2026-11-06 (Basement shops)",
+      "apr_room": {
+        "number": "5",
+        "status": "inferred",
+        "source": "UBC SALA Architecture Program Report 2024 (CACB), physical resources and facilities projects 2019-2024",
+        "reason": "APR24 Action 2: Room 5, a former thesis studio, is now a shared classroom resource and extension of the shop with work-benches, a ceiling-mounted projector and (in 2024) 3D printers, clamps and brakes, open to students 24/7, across the hall from the shop. The model's model assembly room 75 (115 m2) is across the corridor from the workshop. Room 5C, a workspace for the shop across from it, has no match yet. The owner (2026-11-06): the 3D printers are now on Level 3 in room 6.",
+        "added": "2026-11-11 20:36:24"
+      }
+    },
+    "1365270": {
+      "level": "Basement",
+      "number": "76",
+      "area_m2": 44.682,
+      "name": "",
+      "use": "",
+      "access": "",
+      "hours": "",
+      "who": "",
+      "notes": "",
+      "status": "flagged",
+      "flag_reason": "decide later",
+      "first_seen": "2026-11-06 17:23:00",
+      "updated": "2026-11-06 17:23:08"
+    },
+    "1365273": {
+      "level": "Basement",
+      "number": "77",
+      "area_m2": 109.34,
+      "name": "",
+      "use": "",
+      "access": "",
+      "hours": "",
+      "who": "",
+      "notes": "",
+      "status": "flagged",
+      "flag_reason": "decide later; a candidate for the APR's Room 9, the SALA Materials Lab (the former reading room, 1000+ sq ft, 'capable of hosting lecture and seminar classes, meetings, and reviews'): 70 (104 m2) and 77 (109 m2) are the two basement rooms of that size (APR24, 2026-11-11)",
+      "first_seen": "2026-11-06 17:22:27",
+      "updated": "2026-11-11 20:36:24"
+    }
+  }
+}

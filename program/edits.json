@@ -1,0 +1,168 @@
+{
+  "meta": {
+    "schema": 1,
+    "note": "The owner's corrections to the exported model, keyed by Revit element id, each with a reason. Applied by scripts/rasterise.py when it builds the tiles; exports/ itself is never changed. An edit whose position is inferred says so. Kinds: add_door (a door the model lacks, in host wall), add_opening (a doorway without a leaf, in host wall), add_wall (a wall the model lacks: between rooms, painted on wall_on's side of their shared boundary; or against: outside on a side of the room, where the room is open to the outside), note (a confirmation or a question about elements, no change). A door entry with leaf: false is a doorway without a panel.",
+    "updated": "2026-11-06"
+  },
+  "edits": [
+    {
+      "id": "E1",
+      "kind": "add_door",
+      "leaf": false,
+      "level": "Level 3",
+      "host": 1229097,
+      "between_rooms": [
+        "10",
+        "9"
+      ],
+      "at": [
+        26.3,
+        1.18
+      ],
+      "width_m": 0.9,
+      "reason": "The doorway between the student lounge (room 10) and the kitchen (room 9) exists in the building and is missing from the Revit model. It has no door panel (owner, 2026-11-06, second pass).",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "The owner gave the doorway, not its position; it is placed at the middle of the wall between the two rooms (wall 1229097, x 24.74 to 27.84 at y 1.18) with a 0.9 m width. The owner's plan screenshot shows it near the east end of that wall; move 'at' once measured."
+    },
+    {
+      "id": "E2",
+      "kind": "add_opening",
+      "leaf": false,
+      "level": "Level 3",
+      "host": 1229363,
+      "between_rooms": [
+        "9",
+        "9"
+      ],
+      "at": [
+        26.759,
+        5.746
+      ],
+      "width_m": 0.915,
+      "reason": "The wall across the kitchen (room 9) one metre inside the door from crit room 1 has a pass-through doorway with no door panel, in line with that door; the model shows the wall unbroken, so the door from room 1 led to a dead end.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Placed on the centre line of door 1230417 (x 26.759) at the width of that door; the owner said in line, not the width."
+    },
+    {
+      "id": "E3",
+      "kind": "add_wall",
+      "level": "Level 2",
+      "between_rooms": [
+        1365032,
+        1365029
+      ],
+      "between_numbers": [
+        "31",
+        "30"
+      ],
+      "wall_on": 1365032,
+      "reason": "The owner: there should be a wall dividing the women's washroom (room 31) from crit room 30; the model has the two rooms open to each other along their shared boundary. On room 30's side of that wall there is a small kitchenette (object O21).",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Drawn as a half-metre wall on the washroom's side of the shared room boundary, the full length the two rooms touch; the real wall's thickness and exact line are not given."
+    },
+    {
+      "id": "E4",
+      "kind": "add_wall",
+      "level": "Level 2",
+      "between_rooms": [
+        1365053,
+        1365047,
+        1365050,
+        1365044
+      ],
+      "between_numbers": [
+        "38",
+        "36",
+        "37",
+        "35"
+      ],
+      "wall_on": 1365053,
+      "reason": "The owner: the wall between the men's washroom (room 38) and rooms 36, 37 and 35 is missing from the model.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Drawn as a half-metre wall on the washroom's side wherever it touches those rooms; the real wall's thickness and exact line are not given."
+    },
+    {
+      "id": "E5",
+      "kind": "add_wall",
+      "level": "Level 1",
+      "wall_on": 1364831,
+      "against": "outside",
+      "side": "west",
+      "reason": "The owner: the west side of lecture room 12 is a solid wall; the model has the room open to the outside there for 12.5 m.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Painted one tile thick on the room's side of its west edge wherever the edge is open to the outside; thickness and exact line not given."
+    },
+    {
+      "id": "E6",
+      "kind": "add_wall",
+      "level": "Level 1",
+      "wall_on": 1364835,
+      "against": "outside",
+      "side": "west",
+      "reason": "The owner: the west side of lecture room 13 is a solid wall; the model has the room open to the outside there for 11.5 m.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Painted one tile thick on the room's side of its west edge wherever the edge is open to the outside; thickness and exact line not given."
+    },
+    {
+      "id": "E7",
+      "kind": "add_wall",
+      "level": "Level 1",
+      "wall_on": 1364835,
+      "against": "outside",
+      "side": "north",
+      "reason": "The owner: the north edge of lecture room 13 is a wall with the two doors in it; the model has the edge open to the corridor for 8 m except one glass tile.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Painted one tile thick on the room's side of its north edge wherever the edge had no structure; the two modelled doors (1290933, 1290934) stay as openings in it."
+    },
+    {
+      "id": "E8",
+      "kind": "add_wall",
+      "level": "Level 1",
+      "wall_on": 1364856,
+      "around": "stairs",
+      "door_side": "west",
+      "reason": "Withdrawn 2026-11-06: the owner's markup shows the stair runs are entered from the lobby, so a wall between them blocks the stairs. The gap this edit was meant to close (the stair's open north end) was a rasteriser fault, fixed at the source the same day. Nothing is painted for this edit.",
+      "source": "owner, chat 2026-11-06",
+      "inferred_position": true,
+      "inferred_note": "Painted on the lobby's open tiles that touch a stair tile on their east, one tile thick; a 1 m doorway with a door is cut in the middle of that run (the door's place is assumed). The stair's open north end, where the run had overwritten the wall tiles, is closed by the rasteriser fix of the same day, not by this edit.",
+      "sides": [
+        "west"
+      ],
+      "withdrawn": true
+    },
+    {
+      "id": "N1",
+      "kind": "note",
+      "level": "all",
+      "elements": [
+        1267247,
+        1267240,
+        1267233,
+        1265791,
+        1267226
+      ],
+      "reason": "The owner confirms the southern stairwell (south with the plan north up) has an elevator. The model agrees: an Elevator_-_Center_284 piece stands in the south stair core on every level (x 20.6 to 22.9, y -27.3 to -25.1). No change to the model; the pixel views now draw the elevator instead of leaving it to the shaft walls.",
+      "source": "owner, chat 2026-11-06"
+    },
+    {
+      "id": "N2",
+      "kind": "note",
+      "level": "Level 3",
+      "elements": [
+        1232203,
+        1232024,
+        1231820,
+        1231709
+      ],
+      "reason": "The doorless full-height enclosure in the south-west corner of the student lounge (1.5 by 4 m, walls listed) is a service shaft or cavity; the bar stands against its east wall. The model is right to show no door. No change.",
+      "source": "owner, chat 2026-11-06"
+    }
+  ]
+}

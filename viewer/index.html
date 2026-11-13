@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NPC V2</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="stage"><canvas id="gl"></canvas><div id="labels"></div><div id="game"></div><div id="diagram"></div><div id="pane-b" hidden><div id="game-b"></div><div class="pane-title" id="pane-title-b"><select id="pane-view-b" title="the view in this pane"></select></div></div><div class="pane-title" id="pane-title-a"><select id="pane-view-a" title="the view in this pane"></select></div><div id="divider" title="drag to resize the panes" hidden></div><div id="loader" class="win" hidden><div class="bar"><span id="loader-title">LOADING</span><span id="loader-pct">0%</span></div><div class="body"><div id="loader-cells"></div><div id="loader-label"></div></div></div></div>
+
+  <!-- The interface works like a console RPG menu: a command window with the steps in order, one step
+       window open at a time beside it, and a message box along the bottom. Up/Down or the mouse move
+       the cursor, Enter or a click opens a step, Esc closes it. Earlier steps show their choice as a
+       summary. Nothing in steps 2 to 5 runs yet; the ids are the contract for the engine. -->
+  <aside id="side">
+    <div class="win" id="cmd">
+      <div class="bar"><span>NPC V2</span><span><span class="bar-r" id="cmd-where"></span> <button id="tour-btn" class="small tour-btn" title="a short guided tour of the tool">TOUR</button></span></div>
+      <ul class="menu" id="menu">
+        <li data-step="day" class="cur"><span class="n">1</span><span class="name">WHEN</span><span class="sum" id="sum-day"></span></li>
+        <li data-step="run"><span class="n">2</span><span class="name">RUN</span><span class="sum" id="sum-run">not run</span></li>
+        <li data-step="analyse"><span class="n">3</span><span class="name">ANALYSE</span><span class="sum" id="sum-analyse"></span></li>
+        <li data-step="walk" hidden><span class="n">4</span><span class="name">WALK</span><span class="sum" id="sum-walk"></span></li>
+        <li class="rule"></li>
+        <li data-step="agent"><span class="n"></span><span class="name">AGENT</span><span class="sum" id="sum-agent"></span></li>
+      </ul>
+    </div>
+
+    <div id="steps">
+      <!-- 1 VIEW: which floor, which view, how drawn -->
+      <section class="win step pinned" data-step="view">
+        <div class="bar"><span>VIEW</span><span><span class="bar-r" id="view-bar-sum"></span><button class="fold" data-fold title="open or collapse the view">&#9660;</button></span></div>
+        <!-- the view tabs stay in sight through every step, like a modeller's view tabs (owner 2026-11-12) -->
+        <div class="tabs" id="view-tabs"></div>
+        <!-- a second pane (owner 2026-11-13): two views side by side, the second a floor on its own -->
+        <div class="tabs b" id="view-tabs-b" hidden></div>
+        <div class="body">
+          <div class="sub">FLOOR</div>
+          <div id="levels" class="menu-rows"></div>
+          <div class="sub">VIEW</div>
+          <div class="row menu-rows">
+            <button id="mode-iso" class="on">ISOMETRIC</button><button id="mode-game">PLAN VIEW</button>
+            <button id="rot-l" hidden title="turn a quarter left (Q)">TURN L</button><button id="rot-r" hidden title="turn a quarter right (E)">TURN R</button>
+          </div>
+          <!-- DRAWING: kept for the code (the scene reads these), off the interface (owner 2026-11-12) -->
+          <div id="drawing" hidden>
+          <div class="sub">DRAWING</div>
+          <div class="row">
+            <label class="chk"><input type="checkbox" id="edges" checked /><span>Pixel edges</span></label>
+            <label class="chk"><input type="checkbox" id="dither" /><span>Palette + dither</span></label>
+            <label class="chk"><input type="checkbox" id="labels-on" checked /><span>Room labels</span></label>
+          </div>
+          <div class="row">
+            <label class="chk"><input type="checkbox" id="stack" checked /><span>Floors below and surroundings</span></label>
+          </div>
+          <div class="row"><label class="slider"><span>Pixel size</span><input type="range" id="pixel" min="1" max="6" value="3" /><b id="pixel-v">3</b></label></div>
+          <div class="row"><label class="slider"><span>Wall height</span><input type="range" id="wallh" min="0.1" max="1" step="0.05" value="0.5" /><b id="wallh-v">0.5</b></label></div>
+          <div class="row"><label class="slider"><span>Placeholder people</span><input type="range" id="people" min="0" max="24" value="0" /><b id="people-v">0</b></label></div>
+          <div class="row"><label class="chk"><input type="checkbox" id="clip" /><span>Lower cut at the cut height</span></label></div>
+          <div class="row"><label class="slider"><span>Cut height</span><input type="range" id="cut" min="0.5" max="5" step="0.1" value="2.6" /><b id="cut-v">2.6</b></label></div>
+          </div>
+          <div class="row"><b id="view-name" class="now"></b></div>
+        </div>
+      </section>
+
+      <!-- 2 DAY or SITUATION: one or the other. A day runs as the calendar has it; a situation is an
+           event or a stress that attaches itself to a day (which can then be changed). -->
+      <section class="win step main" data-step="day">
+        <div class="bar step-bar" title="open this step"><span>1 &middot; WHEN: A DAY, A SITUATION OR A PERIOD</span><span><span class="bar-r" id="bar-sum-day"></span><button class="close" data-close title="close (Esc)">&times;</button></span></div>
+        <div class="body">
+          <div class="row menu-rows switch"><button id="mode-day" class="on">A DAY</button><button id="mode-sit">A SITUATION</button><button id="mode-period">A PERIOD</button></div>
+
+          <!-- A PERIOD (owner 2026-11-12): a span inside the semester picked on the calendar, first day then last; built day by day with a
+               weekly snapshot, read in ANALYSE's timeline; the floor then plays the span's last day -->
+          <div id="pane-period" hidden>
+            <div class="sub">THE SPAN</div>
+            <div class="row menu-rows"><button id="span-term" class="small">WHOLE TERM</button><button id="span-mid" class="small">TO THE MIDTERM</button><button id="span-final" class="small">MIDTERM TO FINAL</button></div>
+            <div class="row"><label class="slider"><span>From</span><b id="span-from" class="wide">click the first day</b></label></div>
+            <div class="row"><label class="slider"><span>To</span><b id="span-to" class="wide">then the last</b></label></div>
+            <div id="period-note" class="hint">Every day of the span, a snapshot each week; the floor then plays the last day. A projection for long-term use, not a prediction; slower to build. Read it in ANALYSE's timeline.</div>
+          </div>
+          <div id="pane-sit" hidden>
+            <div class="sub">WHAT TO TEST</div>
+            <div class="row"><label class="slider"><span>Situation</span><select id="sit-kind">
+              <option value="none" selected>pick one&hellip;</option>
+              <optgroup label="Events from the calendar">
+                <option value="review">a review day: every section presents</option>
+                <option value="pinup">a pin-up in the crit rooms</option>
+                <option value="lastcrit">the last desk crit before a review</option>
+                <option value="good_times">Good Times in the lounge</option>
+                <option value="waffle">Waffle Wednesday in the lounge</option>
+                <option value="deadline">a deadline in another course</option>
+              </optgroup>
+              <optgroup label="Stresses on the floor">
+                <option value="paper">plotter paper runs out</option>
+                <option value="lift">lift out of service</option>
+                <option value="cohort">fifteen more students on the floor</option>
+                <option value="clash">deadline clash: two courses the same day</option>
+                <option value="weekend">a weekend day before a review</option>
+              </optgroup>
+              <option value="other" id="sit-other-opt">other: describe it</option>
+            </select></label></div>
+            <div id="sit-key-row" class="row"><label class="slider"><span>Key</span><input type="password" id="sit-key" class="wide" placeholder="your Claude API key, for OTHER" autocomplete="off" /><button id="sit-key-save" class="small">SAVE</button><button id="sit-key-clear" class="small" hidden>CLEAR</button></label></div>
+            <div id="sit-key-note" class="hint">OTHER needs your own key. It stays in this browser and is billed to you.</div>
+            <div id="sit-other" hidden>
+              <textarea id="sit-text" rows="4" placeholder="Describe the situation."></textarea>
+              <div class="row"><button id="sit-interpret" class="small" disabled>INTERPRET</button><span class="hint">reads it as a known event, or untested</span></div>
+              <div id="sit-reading" class="hint">&mdash;</div>
+            </div>
+            <div class="row"><label class="slider"><span>On</span><b id="sit-day" class="wide">&hellip;</b><button id="sit-change" class="small">CHANGE DAY</button></label></div>
+            <div class="row"><label class="slider"><span>When</span><input type="time" id="sit-from" value="13:30" disabled /><span>to</span><input type="time" id="sit-to" value="18:00" disabled /></label></div>
+            <div class="rule"><span class="lbl">Where</span><span class="choice" data-for="sit-room"><button data-v="event" class="on" disabled>AS THE EVENT</button><button data-v="room" disabled>A ROOM</button></span><input type="hidden" id="sit-room" value="event" /></div>
+            <div id="sit-note" class="hint">Attaches to a day that fits. CHANGE DAY moves it.</div>
+          </div>
+
+          <div id="pane-day">
+            <div class="row"><label class="slider"><span>Term</span><b id="term-name" class="wide">&hellip;</b></label></div>
+            <div class="row"><label class="slider"><span>Seed</span><input type="number" id="seed" value="2026" min="0" step="1" /><button id="seed-new" class="small" title="draw a new seed: a new set of people">NEW</button></label></div>
+            <div class="sub">SUGGESTED TEST CASES</div>
+            <div id="cases" class="cases"></div>
+            <div class="sub">OR PICK A DAY</div>
+            <div id="cal"></div>
+            <div class="hint legend"><i class="sw weekday"></i> weekday <i class="sw weekend"></i> weekend <i class="sw case"></i> a suggested test case <i class="sw span"></i> the period <i class="sw off"></i> outside the term</div>
+            <div class="picked"><b id="day-pick">&hellip;</b><div id="day-note" class="hint" hidden></div></div>
+            <div class="row"><label class="slider"><span>Hours</span><input type="time" id="run-from" value="07:00" disabled /><span>to</span><input type="time" id="run-to" value="02:00" disabled /></label></div>
+            <div class="sub">ON THIS DAY</div>
+            <div id="sc-events" class="hint">&mdash;</div>
+          </div>
+
+          <!-- A PERIOD (owner 2026-11-12): the term, the year or several terms, built day by day with a weekly snapshot, read in ANALYSE's
+               timeline; the floor then plays the last day, the final review. It replaces the RUN step's "horizon" row. -->
+          <div class="sub">OCCUPANTS</div>
+          <div id="occupants" class="hint">&hellip;</div>
+          <div class="row"><button id="sc-load" class="small" disabled>LOAD</button><button id="sc-save" class="small" disabled>SAVE</button></div>
+          <div class="row next"><span></span><button data-next="run">NEXT &#9654; RUN</button></div>
+        </div>
+      </section>
+
+      <!-- 3 RUN -->
+      <section class="win step main" data-step="run">
+        <div class="bar step-bar" title="open this step"><span>2 &middot; RUN</span><span><span class="bar-r" id="bar-sum-run"></span><button class="close" data-close title="close (Esc)">&times;</button></span></div>
+        <div class="body">
+          <div class="sub">RULES</div>
+          <div class="rule"><span class="lbl">Agents</span><b id="run-agents" class="wide">&hellip;</b></div>
+          <div class="rule"><span class="lbl">Movement</span><span class="choice groups" data-for="run-movement"><span class="grp"><button data-v="everyday" class="on">EVERYDAY USE</button></span><span class="grp"><span class="glbl">agents rearrange</span><button data-v="agents">WITHIN LIMITS</button><button data-v="free">WITHOUT LIMITS</button></span></span><input type="hidden" id="run-movement" value="everyday" /></div>
+          <div id="run-movement-note" class="hint">Chairs and boards move for crits and pin-ups and return. Desks stay put.</div>
+          <!-- POLICY: off the interface (owner 2026-11-12): 24/7 access is a fact, the shop keeps its hours, the plotter runs while it has paper; the inputs stay for the code and the headless runner -->
+          <div class="rule" hidden>
+            <span class="lbl">Policy</span><span>
+            <label class="chk"><input type="checkbox" id="sc-access" checked /><span>24/7 card access</span></label>
+            <label class="chk"><input type="checkbox" id="sc-paper" /><span>plotter paper at all hours</span></label>
+            <label class="chk"><input type="checkbox" id="sc-shop" checked /><span>basement shop open</span></label></span>
+          </div>
+          <!-- HORIZON: off the interface (owner 2026-11-12); step 1's A PERIOD sets these inputs -->
+          <div class="rule" hidden><span class="lbl">Horizon</span><span class="choice" data-for="run-horizon"><button data-v="day" class="on">A DAY</button><button data-v="term">THE TERM</button><button data-v="year">THE YEAR</button><button data-v="terms">N TERMS</button><input type="number" id="run-terms" value="3" min="2" max="9" hidden /></span><input type="hidden" id="run-horizon" value="day" /><input type="hidden" id="run-span-from" value="" /><input type="hidden" id="run-span-to" value="" /></div>
+          <div id="run-horizon-note" class="hint" hidden>The picked day, on the grid.</div>
+          <div class="rule"><span class="lbl">Seeds</span><span><input type="number" id="run-seeds" value="1" min="1" max="200" /> <span class="hint">more seeds, a spread</span></span></div>
+          <div class="sub">RUN</div>
+          <div class="clock"><b id="run-clock-date">&hellip;</b><b id="run-clock-time">00:00</b></div>
+          <div class="bar-day" id="run-bar" tabindex="0" title="click or drag to a time; arrow keys skip 10 minutes, space plays and pauses"><i id="run-ghost"></i><i id="run-progress" style="width: 0%"></i><span id="run-scrub" hidden></span></div>
+          <div class="row goto"><span class="lbl">Go to</span><input type="text" id="run-goto" placeholder="14:30" size="7" autocomplete="off" /><button id="run-goto-btn" class="small">GO</button><span class="hint" id="run-goto-hint">a time of day, or drag the bar</span></div>
+          <div class="row menu-rows">
+            <button id="run-play" disabled>PLAY</button><button id="run-pause" disabled>PAUSE</button><button id="run-step" disabled title="one minute">STEP</button><button id="run-reset" disabled>RESET</button>
+          </div>
+          <div class="rule"><span class="lbl">Speed</span><span class="choice" data-for="run-speed"><button data-v="1" disabled>1x</button><button data-v="10" disabled>10x</button><button data-v="60" class="on" disabled>60x</button><button data-v="600" disabled>600x</button></span><input type="hidden" id="run-speed" value="60" /></div>
+          <div class="counts">
+            <span><b id="cnt-floor">&mdash;</b> on the floor</span><span><b id="cnt-building">&mdash;</b> in the building</span><span><b id="cnt-crit">&mdash;</b> in crits</span><span><b id="cnt-plot">&mdash;</b> at the plotters</span><span><b id="cnt-lift">&mdash;</b> at the lift</span>
+          </div>
+          <div id="run-stat" class="hint">&mdash;</div>
+          <!-- the agents' moves (owner 2026-11-13): numbered as on the plan; a click finds one -->
+          <div id="run-moves" class="run-moves" hidden></div>
+          <div class="row next"><button class="back" data-next="day">&#9664; BACK &middot; WHEN</button><button data-next="analyse">NEXT &#9654; ANALYSE</button></div>
+        </div>
+      </section>
+
+      <!-- 4 ANALYSE -->
+      <section class="win step main" data-step="analyse">
+        <div class="bar step-bar" title="open this step"><span>3 &middot; ANALYSE</span><span><span class="bar-r" id="bar-sum-analyse"></span><button class="close" data-close title="close (Esc)">&times;</button></span></div>
+        <div class="body">
+          <div class="sub">SUMMARY</div>
+          <ol id="an-summary" class="sug"><li class="hint">Suggestions appear after a run, in two groups: what to improve for collaboration, and the other design suggestions. Each has a TRACE to its situation, its metric (a click goes to the card), the events, the agents who remarked on it and the spots on the plan.</li></ol>
+          <div class="sub">OVERLAY ON THE PLAN</div>
+          <div class="row menu-rows disabled" id="an-layers">
+            <button data-l="none" class="on">NONE</button><button data-l="activity">ACTIVITY</button><button data-l="encounters">ENCOUNTERS</button><button data-l="paths">PATHS</button><button data-l="queues">QUEUES</button><button data-l="noise">NOISE</button><button data-l="years">BY YEAR</button><button data-l="drift">DRIFT</button>
+          </div>
+          <div class="row disabled"><label class="slider"><span>Hours</span><input type="time" id="an-from" value="07:00" /><span>to</span><input type="time" id="an-to" value="02:00" /><label class="chk" style="margin-left:8px"><input type="checkbox" id="an-diffmode" /><span>B minus A</span></label></label></div>
+          <details id="an-details"><summary>DETAILS</summary><div class="d hint">What the layer measures, how it is computed, its registry IDs and references. Fills with the layer.</div></details>
+          <div class="sub">METRICS AT THIS WEEK</div>
+          <div id="metrics"></div>
+          <div class="rule"><span class="lbl">B</span><span class="choice" data-for="an-b"><button data-v="none" class="on" disabled>NONE</button><button data-v="saved" disabled>A SAVED RUN</button></span><input type="hidden" id="an-b" value="none" /></div>
+          <div class="sub">TIMELINE OVER THE PERIOD</div>
+          <div class="hint">One point a week over the period: hours a week per person, the share of students over the high-stress line, comfort and ties. The band is the spread across seeds.</div>
+          <details class="gnote"><summary>MORE</summary><div class="d"><b>HOW</b> The term layer plans every day of the period and takes a snapshot at each week's end; the slider reads one week. <b>WHY</b> A day shows the floor; the period shows the rhythm, the crunch before each review and the recovery after it, which is what the stress rule is calibrated to (about one in five over the line in a normal week, two in five before a review). <b>REFERENCE</b> The calibration in research/studio-culture-school-checklist.md (H1) and parameters.wellbeing.stress.</div></details>
+          <div class="row"><label class="slider"><span>Week</span><input type="range" id="an-week" min="0" max="14" value="14" disabled /><b id="an-week-v" class="wide">&mdash;</b></label></div>
+          <div class="pareto"><canvas id="an-timeline" width="280" height="70"></canvas><div class="hint"><label class="chk"><input type="checkbox" id="an-band" checked disabled /><span>band: the seeds' spread</span></label> <span id="an-runs">&mdash; runs</span></div></div>
+          <div class="sub">CONTACT AGAINST FOCUS</div>
+          <div class="hint">Each run as a point: contact across (C6, interactions between years), focus up (F1, the focus block). Up and to the right is better on both; a run that gains one and loses the other is a trade.</div>
+          <details class="gnote"><summary>MORE</summary><div class="d"><b>HOW</b> A is the current run, B the saved one; the axes are the two metrics as computed for each. <b>WHY</b> Collaboration and focus pull against each other in open plans (Bernstein & Turban 2018; Hillier 1996), so a change should be judged on both at once, not one. <b>REFERENCE</b> research/summary-metrics.md, sections 2 and 3.</div></details>
+          <div class="pareto"><canvas id="an-pareto" width="280" height="90"></canvas></div>
+          <div class="row"><button id="an-export-json" class="small" disabled>EXPORT JSON</button><button id="an-export-csv" class="small" disabled>EXPORT CSV</button></div>
+          <div class="row next"><button class="back" data-next="run">&#9664; BACK &middot; RUN</button><span></span></div>
+        </div>
+      </section>
+
+      <!-- 5 WALK: the avatar -->
+      <section class="win step main" data-step="walk">
+        <div class="bar step-bar" title="open this step"><span>4 &middot; WALK</span><span><span class="bar-r" id="bar-sum-walk"></span><button class="close" data-close title="close (Esc)">&times;</button></span></div>
+        <div class="body">
+          <div class="row disabled"><label class="slider"><span>Name</span><input type="text" id="av-name" value="Visitor" /></label></div>
+          <div class="rule"><span class="lbl">Enter at</span><span class="choice" data-for="av-door"><button data-v="south" class="on" disabled>SOUTH DOOR (24/7)</button><button data-v="north" disabled>NORTH LOBBY</button></span><input type="hidden" id="av-door" value="south" /></div>
+          <div class="row menu-rows"><button id="av-enter" disabled>ENTER</button><button id="av-leave" disabled>LEAVE</button><button id="av-talk" disabled title="talk to the nearest agent (E)">TALK</button></div>
+          <div class="hint">Arrows or WASD move, E talks. Not counted in the metrics.</div>
+          <pre id="av-chat" class="hint mono"></pre>
+          <div class="row next"><button class="back" data-next="analyse">&#9664; BACK &middot; ANALYSE</button><span></span></div>
+        </div>
+      </section>
+
+      <!-- AGENT inspector -->
+      <section class="win step" data-step="agent" hidden>
+        <div class="bar"><span>AGENT</span><span><button class="close back-step" data-back title="back to the step (Esc)">&#9664;</button><button class="close" data-close title="close (Esc)">&times;</button></span></div>
+        <div class="body">
+          <div class="row disabled"><label class="slider"><span>Agent</span><select id="ag-pick"><option>click an agent on the plan</option></select><button id="ag-follow" class="small">FOLLOW</button></label></div>
+          <div class="profile"><b id="ag-name">&mdash;</b><span id="ag-role" class="hint">year &middot; section &middot; desk</span></div>
+          <div id="agent-traits" class="traits"></div>
+          <table class="states"><tbody>
+            <tr><td>Activity</td><td id="ag-act">&mdash;</td></tr>
+            <tr><td>Plan today</td><td id="ag-plan">&mdash;</td></tr>
+            <tr><td>Needs</td><td id="ag-needs">hunger &mdash; &middot; thirst &mdash; &middot; washroom &mdash; &middot; sleep debt &mdash;</td></tr>
+            <tr><td>Stress &middot; mood</td><td id="ag-stress">&mdash; &middot; &mdash;</td></tr>
+            <tr><td>Progress</td><td id="ag-progress">&mdash;</td></tr>
+            <tr><td>Comfort &middot; ties</td><td id="ag-social">&mdash; &middot; &mdash;</td></tr>
+            <tr><td>Availability</td><td id="ag-avail">&mdash; &middot; headphones &mdash;</td></tr>
+            <tr><td>Voice</td><td id="ag-voice">&mdash;</td></tr>
+          </tbody></table>
+          <div class="hint">Click an agent on the plan.</div>
+        </div>
+      </section>
+
+      <!-- MODEL: the model-check tools for the builder, not a command. main.js fills them; add ?model to the address to see them. -->
+      <section class="win" id="model-tools" hidden>
+        <div class="bar"><span>MODEL CHECK (BUILDER)</span></div>
+        <div class="body">
+          <div id="status" class="hint">loading&hellip;</div>
+          <div class="win sub-win"><div class="bar"><span>LAYERS</span><button class="fold" data-fold>&#9660;</button></div><div class="body" id="layers"></div></div>
+          <div class="win sub-win"><div class="bar"><span>ROOMS</span><button class="fold" data-fold>&#9660;</button></div><div class="body list" id="rooms"></div></div>
+          <div class="win sub-win"><div class="bar"><span>CHECKS</span><button class="fold" data-fold>&#9660;</button></div><div class="body list" id="checks"></div></div>
+          <div class="win sub-win"><div class="bar"><span>SELECTED</span><button class="fold" data-fold>&#9660;</button></div><div class="body" id="info">Click an element.</div></div>
+          <div class="win sub-win"><div class="bar"><span>TEST PIECE: STAIRS AND LIFT</span><button class="fold" data-fold>&#9660;</button></div><div class="body">
+            <div class="row menu-rows"><button id="sim-start">START</button><button id="sim-pause" disabled>PAUSE</button><button id="sim-reset" disabled>RESET</button></div>
+            <div class="row"><label class="slider"><span>Speed</span><select id="sim-speed"><option value="1">1x</option><option value="5" selected>5x</option><option value="20">20x</option></select></label></div>
+            <div class="row"><label class="slider"><span>Test agents</span><input type="range" id="sim-agents" min="1" max="60" value="12" /><b id="sim-agents-v">12</b></label></div>
+            <div class="row"><label class="slider"><span>Floors</span><select id="sim-mode"><option value="auto">stairs or lift, by rule</option><option value="elevator">lift only</option><option value="stairs">stairs only</option></select></label></div>
+            <div id="sim-stat" class="hint">A diagnostic: random walkers between floors. Watch in PLAN VIEW.</div>
+            <pre id="sim-log" class="hint mono"></pre>
+          </div></div>
+        </div>
+      </section>
+    </div>
+  </aside>
+
+  <!-- the feed: the agents' remarks as the run plays, the engine's events, and suggestions as their rules fire.
+       Each remark carries a "because" line with the computed fact; a suggestion's TRACE in ANALYSE points back here. -->
+  <aside class="win folded" id="feed">
+    <div class="bar"><span>FEED &middot; AGENTS LIVE</span><span><span class="bar-r" id="feed-count"></span><button class="fold" data-fold title="open or collapse the feed">&#9660;</button></span></div>
+    <div class="body">
+      <div class="row menu-rows"><button class="small on" disabled>ALL</button><button class="small" disabled>REMARKS</button><button class="small" disabled>EVENTS</button><button class="small" disabled>SUGGESTIONS</button><button id="feed-pause" class="small" disabled>PAUSE</button><button id="feed-save" class="small" disabled>SAVE</button></div>
+      <div id="feed-list" class="hint">Fills while the run plays: an agent’s remark at each decision, with the fact behind it; the engine’s events; a suggestion when its rule fires.</div>
+    </div>
+    <div class="feed-grip" title="drag to resize the feed; double-click to reset it"></div>
+  </aside>
+
+  <!-- the message box: what the tool says, one thing at a time -->
+  <div class="win" id="msg"><div class="body"><span id="msg-text">&hellip;</span><i class="more">&#9660;</i></div></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
