@@ -2139,3 +2139,11 @@ The owner: a new intro, both versions as links, newest first; https://fl-79.gith
 Checked with the site assembled and served locally: the front page; V2 loading the building from the compressed file and
 running to 12:30 with 123 people in; V1's title screen and plan files from v1/ (its `/api/status` call misses on any static
 host, as on the old site); the methodology page.
+
+### 2026-11-13, afternoon: a shorter "how it was made" for the site
+
+The owner: the methodology graphic less detailed for the web version, proposed before uploading; approved. Done:
+`research/methodology-web.html`, five short cards (the building, what I added, what research says, the people, what it
+shows) that sit in a row on a wide screen and stack on a phone, with no click-through, no export or question counts, no
+ledger, four plain agent categories and two lines of metrics. The Pages workflow now publishes it as `methodology.html`;
+the detailed click-through stays in `research/methodology.html` and as the presentation artifact.

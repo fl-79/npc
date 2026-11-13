@@ -1,7 +1,8 @@
 name: Deploy to GitHub Pages
 
 # The site (2026-11-13): a front page listing both versions, newest first; V2 at v2/, built from main with its
-# model export and program; V1 at v1/, built from the v1 branch as it was; the methodology page beside them.
+# model export and program; V1 at v1/, built from the v1 branch as it was; the short methodology page beside them
+# (research/methodology-web.html; the detailed presentation stays in research/methodology.html).
 on:
   push:
     branches: [main]
@@ -46,7 +47,7 @@ jobs:
           cp -r program _site/v2/program
           cp -r v1-src/dist/. _site/v1/
           cp pages/index.html _site/index.html
-          cp research/methodology.html _site/methodology.html
+          cp research/methodology-web.html _site/methodology.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
