@@ -2105,3 +2105,21 @@ the views are drawn, and remembers being finished or skipped in this browser (`l
 off means it can show again); `?notour` in the address keeps it closed; a TOUR button in the NPC V2 window replays it.
 Checked at 1366 x 768: it opened on a first visit, every stop lit its part with the note beside it, FINISH stored "done"
 and left WHEN open, a reload kept it closed, TOUR reopened it and Esc skipped it; console clean.
+
+### 2026-11-13, afternoon: V2 on GitHub; the methodology as an artifact
+
+The owner asked for V2 on the GitHub repository V1 used, as a new version, and for the methodology graphic as an artifact
+to present. Done:
+- `fl-79/npc`: V1 kept on the branch `v1` and the tag `v1.0` (commit c4643d2); `main` is now V2 (tag `v2.0`, release
+  "NPC V2"). Tool-V2 is a git working copy of that repository from today. V1's Pages workflow is not in V2, so pushing
+  V2 deployed nothing and https://fl-79.github.io/npc/ still serves V1.
+- Left out by `.gitignore`: `viewer/node_modules`, the published papers in `research/2026-11-03 Collab` and
+  `research/2026-11-03 Practice` and the downloaded reference images in `Graphics/` (copyright; the papers are listed in
+  `research/references.md`), `.claude/`, and `exports/meshes.json` (112 MB, over GitHub's 100 MB limit). The repository
+  keeps `exports/meshes.json.gz` (22 MB); the dev server sends it gzip-encoded when the plain file is absent, with its
+  unpacked size for the loading bar, and `scripts/validate_export.py` reads it too. Checked: the building loaded from the
+  compressed file with the plain one moved aside, and a fresh clone ran `test/run-day.mjs` to the same 3833 events.
+- The README opens with what V2 is and how to run it (Node 18+, no Revit needed, seed 2026, no API key shipped).
+- Ten files carry the owner's local folder path (the pyRevit buttons' export destination and the export logs).
+- `research/methodology.html` gains a FULL SCREEN button (F) for presenting and a 16 px margin round the fitted page;
+  the same page is published as a private artifact, "NPC V2 Methodology".
